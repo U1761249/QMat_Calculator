@@ -23,6 +23,12 @@ namespace QMat_Calculator
         public MainWindow()
         {
             InitializeComponent();
+
+            Circuits.Gates.Hadamard h = new Circuits.Gates.Hadamard(new Circuits.Qubit());
+
+            Console.WriteLine("TEST");
+            h.printMatrix();
+            label.Content = h.ToString();
         }
     }
 }

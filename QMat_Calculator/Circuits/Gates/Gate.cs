@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Matrices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,21 @@ namespace QMat_Calculator.Circuits
     /// </summary>
     abstract class Gate
     {
-        int nodeCount;
-        List<Qubit> qubits;
+        public int nodeCount;
+        public List<Qubit> qubits;
+        public Matrix matrix;
+
+        public void printMatrix()
+        {
+            matrix.printMatrix();
+        }
+
+        override
+        public string ToString()
+        {
+            return matrix.ToString();
+        }
     }
+
+
 }

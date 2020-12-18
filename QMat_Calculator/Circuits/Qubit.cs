@@ -16,5 +16,8 @@ namespace QMat_Calculator.Circuits
     class Qubit
     {
         int id;
+
+        public Qubit() { }
+
     }
 }
