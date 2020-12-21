@@ -26,6 +26,9 @@ namespace QMat_Calculator
 
             Circuits.Gates.Hadamard h = new Circuits.Gates.Hadamard(new Circuits.Qubit());
 
+            Matrices.Matrix matrix = Matrices.Matrix.Multiply(h.matrix, h.matrix);
+            h.matrix = matrix;
+
             Console.WriteLine("TEST");
             h.printMatrix();
             label.Content = h.ToString();

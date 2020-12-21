@@ -20,6 +20,7 @@ namespace QMat_Calculator.Matrices
         double preceder; // Some gates have fractions preceding them - E.G the Hadamard Gate
         double[,] data; // [Rows, Columns]
 
+        public Matrix() { }
         public Matrix(int rows, int columns)
         {
             this.rows = rows;
@@ -78,6 +79,52 @@ namespace QMat_Calculator.Matrices
             }
 
             return s.ToString();
+        }
+
+        /// <summary>
+        /// Multiply two Matrices and their preceders.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Multiply(Matrix x, Matrix y)
+        {
+            Matrix m = new Matrix();
+            if (x.rows == y.rows && x.columns == y.columns // If the matrices are the correct sixe to multiply
+                || x.rows == y.columns)
+            {
+                m.rows = x.rows;
+                m.columns = y.columns;
+                m.data = new double[m.rows, m.columns];
+            }
+            else // Use an identity matrix to make the sizes equal
+            {
+
+            }
+
+            // Calculate the preceder for M.
+            if (x.preceder != -1 && y.preceder != -1) { m.preceder = x.preceder * y.preceder; }
+            else if (x.preceder != -1) { m.preceder = x.preceder; }
+            else if (y.preceder != -1) { m.preceder = y.preceder; }
+            else { m.preceder = -1; }
+
+            //Calculate the data for M.
+            for (int r = 0; r < x.rows; r++)
+            {
+                for (int c = 0; c < y.columns; c++)
+                {
+                    double total = 0;
+                    for (int i = 0; i < x.columns; i++)
+                    {
+                        total += x.data[r, i] * y.data[i, c];
+                    }
+                    m.data[r, c] = total;
+                }
+            }
+
+
+            return m;
+
         }
     }
 }
