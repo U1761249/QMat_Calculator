@@ -159,7 +159,23 @@ namespace QMat_Calculator.Matrices
             else { m.preceder = -1; }
 
             //Calculate the Tensor product
+            for (int r = 0; r < x.rows; r++)
+            {
+                for (int c = 0; c < x.columns; c++)
+                {
+                    Matrix d = Multiply(y, x.data[r, c]); // Calculate the data as Y * the cell value in X
+                    for (int i = 0; i < y.rows; i++)
+                    {
+                        for (int j = 0; j < y.columns; j++)
+                        {
+                            int row = (r * x.rows) + i;
+                            int col = (c * x.columns) + j;
 
+                            m.data[row, col] = d.data[i, j];
+                        }
+                    }
+                }
+            }
 
             return m;
         }
