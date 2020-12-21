@@ -7,9 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel>
-            <Label x:Name="preceder"/>
-            <Label x:Name="label"/>
-        </StackPanel>
+        <ScrollViewer>
+            <StackPanel>
+                <Label x:Name="CNOT"/>
+                <Label x:Name="Hadamard"/>
+                <Label x:Name="PauliX"/>
+                <Label x:Name="PauliY"/>
+                <Label x:Name="PauliZ"/>
+                <Label x:Name="SqrtNOT"/>
+                <Label x:Name="Toffoli"/>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using QMat_Calculator.Circuits.Gates;
+﻿using QMat_Calculator.Circuits;
+using QMat_Calculator.Circuits.Gates;
 using QMat_Calculator.Matrices;
 
 using System;
@@ -28,15 +29,14 @@ namespace QMat_Calculator
         {
             InitializeComponent();
 
-            Hadamard h = new Hadamard(new Circuits.Qubit());
+            CNOT.Content = new CNOT(new Qubit(), new Qubit()).ToString();
+            Hadamard.Content = new Hadamard(new Qubit()).ToString();
+            PauliX.Content = new Pauli(new Qubit(), Pauli.PauliType.X).ToString();
+            PauliY.Content = new Pauli(new Qubit(), Pauli.PauliType.Y).ToString();
+            PauliZ.Content = new Pauli(new Qubit(), Pauli.PauliType.Z).ToString();
+            SqrtNOT.Content = new SqrtNOT(new Qubit()).ToString();
+            Toffoli.Content = new Toffoli(new Qubit(), new Qubit(), new Qubit()).ToString();
 
-            Matrix matrix = Matrix.Tensor(h.getMatrix(), h.getMatrix());
-            h.setMatrix(matrix);
-
-            Console.WriteLine("TEST");
-            h.printMatrix();
-            preceder.Content = h.GetPreceder().ToString();
-            label.Content = h.ToString();
         }
     }
 }
