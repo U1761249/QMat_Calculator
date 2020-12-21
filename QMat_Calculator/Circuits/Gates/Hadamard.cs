@@ -21,8 +21,8 @@ namespace QMat_Calculator.Circuits.Gates
             //   1  |1   1 |
             //   √2 |1   -1|
 
-            this.nodeCount = 1;
-            this.qubits = new List<Qubit> { q }; // Add the provided Qubit as elenent 0 in the list.
+            this.setNodeCount(1);
+            this.setQubits(q);
 
 
             double[,] data = new double[2, 2];
@@ -32,7 +32,7 @@ namespace QMat_Calculator.Circuits.Gates
             data[1, 1] = -1;
 
             Matrices.Matrix m = new Matrices.Matrix(2, 2, data, 1 / Math.Sqrt(2));
-            this.matrix = m;
+            this.setMatrix(m);
 
         }
 

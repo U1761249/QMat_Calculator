@@ -1,4 +1,7 @@
-﻿using System;
+﻿using QMat_Calculator.Circuits.Gates;
+using QMat_Calculator.Matrices;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Matrix = QMat_Calculator.Matrices.Matrix;
 
 namespace QMat_Calculator
 {
@@ -24,10 +28,10 @@ namespace QMat_Calculator
         {
             InitializeComponent();
 
-            Circuits.Gates.Hadamard h = new Circuits.Gates.Hadamard(new Circuits.Qubit());
+            Hadamard h = new Hadamard(new Circuits.Qubit());
 
-            Matrices.Matrix matrix = Matrices.Matrix.Tensor(h.matrix, h.matrix);
-            h.matrix = matrix;
+            Matrix matrix = Matrix.Tensor(h.getMatrix(), h.getMatrix());
+            h.setMatrix(matrix);
 
             Console.WriteLine("TEST");
             h.printMatrix();

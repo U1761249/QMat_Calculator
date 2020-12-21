@@ -41,7 +41,7 @@ namespace QMat_Calculator.Matrices
         /// <summary>
         /// Write the matrix to the console/
         /// </summary>
-        public void printMatrix()
+        public void printMatrix(bool preceder = false)
         {
             Console.Write(ToString());
         }
@@ -50,18 +50,21 @@ namespace QMat_Calculator.Matrices
         /// Write the matrix as a string.
         /// </summary>
         /// <returns> A String of this matrix's data </returns>
-        override
-        public String ToString()
+
+        public String ToString(bool showPreceder)
         {
             bool hasPreceder = false;
             string p = preceder.ToString();
             string space = "";
             double precederRow = Math.Floor((double)rows / 2);
+
             if (preceder != -1)
             {
                 hasPreceder = true;
                 foreach (char c in p) { space += " "; } // Aim to make the space the same length as the preceder.
             }
+
+            if (!showPreceder) { hasPreceder = false; } // Don't show the preceder if it is not wanted.
 
             StringBuilder s = new StringBuilder();
 
@@ -164,7 +167,7 @@ namespace QMat_Calculator.Matrices
                 for (int c = 0; c < x.columns; c++)
                 {
                     Matrix d = Multiply(y, x.data[r, c]); // Calculate the data as Y * the cell value in X
-                    for (int i = 0; i < y.rows; i++)
+                    for (int i = 0; i < y.rows; i++) // Place the data within m.data
                     {
                         for (int j = 0; j < y.columns; j++)
                         {

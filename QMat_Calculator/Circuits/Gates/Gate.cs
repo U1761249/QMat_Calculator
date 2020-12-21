@@ -20,20 +20,32 @@ namespace QMat_Calculator.Circuits
     /// </summary>
     abstract class Gate
     {
-        public int nodeCount;
-        public List<Qubit> qubits;
-        public Matrix matrix;
+        int nodeCount;
+        List<Qubit> qubits;
+        Matrix matrix;
 
-        public void printMatrix()
+        public void setNodeCount(int nodeCount) { this.nodeCount = nodeCount; }
+        public void setQubits(Qubit qubit) { this.qubits = new List<Qubit>() { qubit }; }
+        public void setQubits(List<Qubit> qubits) { this.qubits = qubits; }
+        public void setMatrix(Matrix matrix) { this.matrix = matrix; }
+
+        public int getNodeCount() { return this.nodeCount; }
+        public List<Qubit> getQubits() { return this.qubits; }
+        public Matrix getMatrix() { return this.matrix; }
+
+
+        public void printMatrix(bool preceder = false)
         {
-            matrix.printMatrix();
+            matrix.printMatrix(preceder);
         }
 
-        override
-        public string ToString()
+        public string ToString(bool preceder = false)
         {
-            return matrix.ToString();
+            return matrix.ToString(preceder);
         }
+
+
+
     }
 
 
