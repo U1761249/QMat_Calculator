@@ -84,6 +84,11 @@ namespace QMat_Calculator.Matrices
             return s.ToString();
         }
 
+        public double GetPreceder()
+        {
+            return this.preceder;
+        }
+
         /// <summary>
         /// Multiply a Matrix by a Constant
         /// </summary>

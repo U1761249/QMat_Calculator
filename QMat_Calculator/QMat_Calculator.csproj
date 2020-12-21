@@ -63,8 +63,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Circuits\Gates\CNOT.cs" />
+    <Compile Include="Circuits\Gates\Deutsch.cs" />
     <Compile Include="Circuits\Gates\Gate.cs" />
     <Compile Include="Circuits\Gates\Hadamard.cs" />
+    <Compile Include="Circuits\Gates\Pauli.cs" />
+    <Compile Include="Circuits\Gates\SqrtNOT.cs" />
+    <Compile Include="Circuits\Gates\Toffoli.cs" />
     <Compile Include="Circuits\Qubit.cs" />
     <Compile Include="Interfaces\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

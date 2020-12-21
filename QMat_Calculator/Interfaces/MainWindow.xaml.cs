@@ -35,6 +35,7 @@ namespace QMat_Calculator
 
             Console.WriteLine("TEST");
             h.printMatrix();
+            preceder.Content = h.GetPreceder().ToString();
             label.Content = h.ToString();
         }
     }

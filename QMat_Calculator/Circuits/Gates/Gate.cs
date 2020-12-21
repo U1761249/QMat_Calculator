@@ -44,6 +44,10 @@ namespace QMat_Calculator.Circuits
             return matrix.ToString(preceder);
         }
 
+        public double GetPreceder()
+        {
+            return matrix.GetPreceder();
+        }
 
 
     }
