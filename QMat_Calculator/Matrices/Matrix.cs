@@ -82,6 +82,24 @@ namespace QMat_Calculator.Matrices
         }
 
         /// <summary>
+        /// Multiply a Matrix by a Constant
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static Matrix Multiply(Matrix x, double c)
+        {
+            for (int i = 0; i < x.data.Length; i++)
+            {
+                int row = i / x.rows;
+                int col = i % x.rows;
+                x.data[row, col] *= c;
+            }
+
+            return x;
+        }
+
+        /// <summary>
         /// Multiply two Matrices and their preceders.
         /// </summary>
         /// <param name="x"></param>
@@ -121,10 +139,29 @@ namespace QMat_Calculator.Matrices
                     m.data[r, c] = total;
                 }
             }
+            return m;
+        }
+
+        /// <summary>
+        /// Calculate the Tensor product of two Matrices
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Tensor(Matrix x, Matrix y)
+        {
+            Matrix m = new Matrix(x.rows * y.rows, x.columns * y.columns);
+
+            // Calculate the preceder for M.
+            if (x.preceder != -1 && y.preceder != -1) { m.preceder = x.preceder * y.preceder; }
+            else if (x.preceder != -1) { m.preceder = x.preceder; }
+            else if (y.preceder != -1) { m.preceder = y.preceder; }
+            else { m.preceder = -1; }
+
+            //Calculate the Tensor product
 
 
             return m;
-
         }
     }
 }
