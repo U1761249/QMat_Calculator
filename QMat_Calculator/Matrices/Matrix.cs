@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace QMat_Calculator.Matrices
         int rows;
         int columns;
         double preceder; // Some gates have fractions preceding them - E.G the Hadamard Gate
-        double[,] data; // [Rows, Columns]
+        Complex[,] data; // [Rows, Columns]
 
         public Matrix() { }
         public Matrix(int rows, int columns)
@@ -26,10 +27,10 @@ namespace QMat_Calculator.Matrices
             this.rows = rows;
             this.columns = columns;
 
-            this.data = new double[rows, columns];
+            this.data = new Complex[rows, columns];
             this.preceder = -1;
         }
-        public Matrix(int rows, int columns, double[,] data, double preceder = -1)
+        public Matrix(int rows, int columns, Complex[,] data, double preceder = -1)
         {
             this.rows = rows;
             this.columns = columns;
@@ -95,7 +96,7 @@ namespace QMat_Calculator.Matrices
         /// <param name="x"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static Matrix Multiply(Matrix x, double c)
+        public static Matrix Multiply(Matrix x, Complex c)
         {
             for (int i = 0; i < x.data.Length; i++)
             {
@@ -121,7 +122,7 @@ namespace QMat_Calculator.Matrices
             {
                 m.rows = x.rows;
                 m.columns = y.columns;
-                m.data = new double[m.rows, m.columns];
+                m.data = new Complex[m.rows, m.columns];
             }
             else // Use an identity matrix to make the sizes equal
             {
@@ -139,7 +140,7 @@ namespace QMat_Calculator.Matrices
             {
                 for (int c = 0; c < y.columns; c++)
                 {
-                    double total = 0;
+                    Complex total = 0;
                     for (int i = 0; i < x.columns; i++)
                     {
                         total += x.data[r, i] * y.data[i, c];

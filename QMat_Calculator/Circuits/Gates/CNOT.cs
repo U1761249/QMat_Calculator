@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,7 +38,7 @@ namespace QMat_Calculator.Circuits.Gates
             this.setQubits(q);
 
 
-            double[,] data = new double[4, 4];
+            Complex[,] data = new Complex[4, 4];
             data[0, 0] = 1;
             data[0, 1] = 0;
             data[0, 2] = 0;

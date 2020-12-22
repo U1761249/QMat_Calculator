@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace QMat_Calculator.Circuits.Gates
             this.gateType = type;
 
 
-            double[,] data = new double[2, 2];
+            Complex[,] data = new Complex[2, 2];
 
             switch (type)
             {
@@ -34,8 +35,10 @@ namespace QMat_Calculator.Circuits.Gates
 
                 case (PauliType.Y): // TODO: replace 1 and -1 with the value for the imaginary number "i"
                     data[0, 0] = 0;
-                    data[0, 1] = -1;
-                    data[1, 0] = 1;
+                    data[0, 1] = new Complex(0, -1);
+                    //data[0, 1] = -1;
+                    //data[1, 0] = 1;
+                    data[1, 0] = new Complex(0, 1);
                     data[1, 1] = 0;
                     break;
 

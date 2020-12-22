@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Circuits;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,8 +17,9 @@ namespace QMat_Calculator
     /// <summary>
     /// /// This class stores persistent information throughout the runtime of the program.
     /// </summary>
-    class Manager
+    static class Manager
     {
-
+        public static List<Qubit> qubits = new List<Qubit>();
+        //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.
     }
 }
