@@ -19,7 +19,7 @@ namespace QMat_Calculator.Matrices
         int rows;
         int columns;
         double preceder; // Some gates have fractions preceding them - E.G the Hadamard Gate
-        Complex[,] data; // [Rows, Columns]
+        Complex[,] data; // [Rows, Columns] of complex numbers (Real + Imaginary * i) where i^2 = -1
 
         public Matrix() { }
         public Matrix(int rows, int columns)
@@ -77,7 +77,20 @@ namespace QMat_Calculator.Matrices
 
                 for (int c = 0; c < columns; c++)
                 {
-                    s.Append($" {data[r, c]}");
+                    Complex value = data[r, c];
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.Append(value.Real);
+                    if (value.Imaginary != 0)
+                    {
+                        if (value.Imaginary == 1) { sb.Append("+i"); }
+                        else if (value.Imaginary == -1) { sb.Append("-i"); }
+                        else
+                            sb.Append(value.Imaginary + "i");
+                    }
+                    sb.Append(" ");
+
+                    s.Append(sb.ToString());
                 }
                 s.Append(Environment.NewLine);
             }
