@@ -29,13 +29,20 @@ namespace QMat_Calculator
         {
             InitializeComponent();
 
-            CNOT.Content = new CNOT(new Qubit(), new Qubit()).ToString();
-            Hadamard.Content = new Hadamard(new Qubit()).ToString();
-            PauliX.Content = new Pauli(new Qubit(), Pauli.PauliType.X).ToString();
-            PauliY.Content = new Pauli(new Qubit(), Pauli.PauliType.Y).ToString();
-            PauliZ.Content = new Pauli(new Qubit(), Pauli.PauliType.Z).ToString();
-            SqrtNOT.Content = new SqrtNOT(new Qubit()).ToString();
-            Toffoli.Content = new Toffoli(new Qubit(), new Qubit(), new Qubit()).ToString();
+            // CNOT.Content = new CNOT(new Qubit(), new Qubit()).ToString();
+            // Hadamard.Content = new Hadamard(new Qubit()).ToString();
+            // PauliX.Content = new Pauli(new Qubit(), Pauli.PauliType.X).ToString();
+            // PauliY.Content = new Pauli(new Qubit(), Pauli.PauliType.Y).ToString();
+            // PauliZ.Content = new Pauli(new Qubit(), Pauli.PauliType.Z).ToString();
+            // SqrtNOT.Content = new SqrtNOT(new Qubit()).ToString();
+            // Toffoli.Content = new Toffoli(new Qubit(), new Qubit(), new Qubit()).ToString();
+
+            Pauli pauli = new Pauli(new Qubit(), Pauli.PauliType.Y);
+            Hadamard h = new Hadamard(new Qubit());
+            Matrix m = Matrix.Tensor(pauli.getMatrix(), h.getMatrix());
+            CNOT.Content = pauli.ToString();
+            Hadamard.Content = h.ToString();
+            PauliX.Content = m.ToString();
 
         }
     }

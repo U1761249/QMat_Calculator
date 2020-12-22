@@ -44,7 +44,7 @@ namespace QMat_Calculator.Matrices
         /// </summary>
         public void printMatrix(bool preceder = false)
         {
-            Console.Write(ToString());
+            Console.Write(ToString(preceder));
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace QMat_Calculator.Matrices
         /// </summary>
         /// <returns> A String of this matrix's data </returns>
 
-        public String ToString(bool showPreceder)
+        public String ToString(bool showPreceder = false)
         {
             bool hasPreceder = false;
             string p = preceder.ToString();
@@ -79,8 +79,12 @@ namespace QMat_Calculator.Matrices
                 {
                     Complex value = data[r, c];
                     StringBuilder sb = new StringBuilder();
-
                     sb.Append(value.Real);
+
+                    if (value.Real == 0 && value.Imaginary != 0)
+                    {
+                        sb.Clear();
+                    }
                     if (value.Imaginary != 0)
                     {
                         if (value.Imaginary == 1) { sb.Append("+i"); }
@@ -111,14 +115,24 @@ namespace QMat_Calculator.Matrices
         /// <returns></returns>
         public static Matrix Multiply(Matrix x, Complex c)
         {
-            for (int i = 0; i < x.data.Length; i++)
+            //for (int i = 0; i < x.data.Length; i++)
+            //{
+            //    int row = i / x.rows;
+            //    int col = i % x.rows;
+            //    x.data[row, col] *= c;
+            //}
+            Matrix m = new Matrix(x.rows, x.columns, new Complex[x.rows, x.columns]);
+            for (int r = 0; r < x.rows; r++)
             {
-                int row = i / x.rows;
-                int col = i % x.rows;
-                x.data[row, col] *= c;
+                for (int col = 0; col < x.columns; col++)
+                {
+                    Complex value = x.data[r, col];
+                    value = value * c;
+                    m.data[r, col] = value;
+                }
             }
 
-            return x;
+            return m;
         }
 
         /// <summary>

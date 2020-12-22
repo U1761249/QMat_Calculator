@@ -40,24 +40,9 @@ namespace QMat_Calculator.Circuits.Gates
 
             Complex[,] data = new Complex[4, 4];
             data[0, 0] = 1;
-            data[0, 1] = 0;
-            data[0, 2] = 0;
-            data[0, 3] = 0;
-
-            data[1, 0] = 0;
             data[1, 1] = 1;
-            data[1, 2] = 0;
-            data[1, 3] = 0;
-
-            data[2, 0] = 0;
-            data[2, 1] = 0;
-            data[2, 2] = 0;
             data[2, 3] = 1;
-
-            data[3, 0] = 0;
-            data[3, 1] = 0;
             data[3, 2] = 1;
-            data[3, 3] = 0;
 
             Matrices.Matrix m = new Matrices.Matrix(4, 4, data);
             this.setMatrix(m);
