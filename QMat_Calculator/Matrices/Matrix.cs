@@ -204,8 +204,8 @@ namespace QMat_Calculator.Matrices
                     {
                         for (int j = 0; j < y.columns; j++)
                         {
-                            int row = (r * x.rows) + i;
-                            int col = (c * x.columns) + j;
+                            int row = (r * y.rows) + i;
+                            int col = (c * y.columns) + j;
 
                             m.data[row, col] = d.data[i, j];
                         }

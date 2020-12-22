@@ -40,10 +40,11 @@ namespace QMat_Calculator
             Pauli pauli = new Pauli(new Qubit(), Pauli.PauliType.Y);
             Hadamard h = new Hadamard(new Qubit());
             Matrix m = Matrix.Tensor(pauli.getMatrix(), h.getMatrix());
+            Matrix m1 = Matrix.Tensor(m, h.getMatrix());
             CNOT.Content = pauli.ToString();
             Hadamard.Content = h.ToString();
             PauliX.Content = m.ToString();
-
+            PauliY.Content = m1.ToString();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace QMat_Calculator.Circuits.Gates
                     data[1, 1] = 0;
                     break;
 
-                case (PauliType.Y): // TODO: replace 1 and -1 with the value for the imaginary number "i"
+                case (PauliType.Y):
                     data[0, 0] = 0;
                     data[0, 1] = new Complex(0, -1);
                     data[1, 0] = new Complex(0, 1);
