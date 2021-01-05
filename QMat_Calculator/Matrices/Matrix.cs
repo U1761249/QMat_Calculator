@@ -30,6 +30,20 @@ namespace QMat_Calculator.Matrices
             this.data = new Complex[rows, columns];
             this.preceder = -1;
         }
+
+        /// <summary>
+        /// Update the value in the matrix.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        public void Update(int row, int column, int value)
+        {
+            if (!(row <= rows && column <= columns)) { throw new IndexOutOfRangeException("Row or Column specified was not within the matrix dimensions."); }
+
+            this.data[row, column] = value;
+        }
+
         public Matrix(int rows, int columns, Complex[,] data, double preceder = -1)
         {
             this.rows = rows;
@@ -37,6 +51,21 @@ namespace QMat_Calculator.Matrices
 
             this.data = data;
             this.preceder = preceder;
+        }
+
+        /// <summary>
+        /// Create an identity matrix of the given size.
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static Matrix CreateIdentityMatrix(int size)
+        {
+            Matrix identity = new Matrix(size, size);
+            for (int i = 0; i < size; i++)
+            {
+                identity.data[i, i] = 1;
+            }
+            return identity;
         }
 
         /// <summary>
@@ -137,6 +166,7 @@ namespace QMat_Calculator.Matrices
 
         /// <summary>
         /// Multiply two Matrices and their preceders.
+        /// The Number of Columns in X MUST be the same as the number of Rows in Y.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -144,8 +174,7 @@ namespace QMat_Calculator.Matrices
         public static Matrix Multiply(Matrix x, Matrix y)
         {
             Matrix m = new Matrix();
-            if (x.rows == y.rows && x.columns == y.columns // If the matrices are the correct sixe to multiply
-                || x.rows == y.columns)
+            if (x.columns == y.rows) // If the sizes are correct for the multiplication.
             {
                 m.rows = x.rows;
                 m.columns = y.columns;

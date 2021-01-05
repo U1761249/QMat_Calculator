@@ -29,6 +29,7 @@ namespace QMat_Calculator
         {
             InitializeComponent();
 
+            //// Tests for the values contained within the gates.
             // CNOT.Content = new CNOT(new Qubit(), new Qubit()).ToString();
             // Hadamard.Content = new Hadamard(new Qubit()).ToString();
             // PauliX.Content = new Pauli(new Qubit(), Pauli.PauliType.X).ToString();
@@ -37,14 +38,14 @@ namespace QMat_Calculator
             // SqrtNOT.Content = new SqrtNOT(new Qubit()).ToString();
             // Toffoli.Content = new Toffoli(new Qubit(), new Qubit(), new Qubit()).ToString();
 
-            Pauli pauli = new Pauli(new Qubit(), Pauli.PauliType.Y);
-            Hadamard h = new Hadamard(new Qubit());
-            Matrix m = Matrix.Tensor(pauli.getMatrix(), h.getMatrix());
-            Matrix m1 = Matrix.Tensor(m, h.getMatrix());
-            CNOT.Content = pauli.ToString();
-            Hadamard.Content = h.ToString();
-            PauliX.Content = m.ToString();
-            PauliY.Content = m1.ToString();
+            Qubit off = new Qubit(false);
+            Qubit on = new Qubit(true);
+
+            Matrix tensor = Matrix.Tensor(off.getMatrix(), on.getMatrix());
+
+            CNOT.Content = off.getMatrix().ToString();
+            Hadamard.Content = on.getMatrix().ToString();
+            PauliX.Content = tensor.ToString();
         }
     }
 }

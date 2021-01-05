@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Matrices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,9 +17,21 @@ namespace QMat_Calculator.Circuits
     class Qubit
     {
         int id;
+        Matrix matrix;
         public int getID() { return this.id; }
+        public Matrix getMatrix() { return this.matrix; }
 
-        public Qubit() { }
+        /// <summary>
+        /// Create a Qubit.
+        /// </summary>
+        /// <param name="TrueValue"> Whether the Qubit is |1> or |0>. Default to |0>. </param>
+        public Qubit(bool TrueValue = false)
+        {
+            // Define the matrix size and values.
+            this.matrix = new Matrix(2, 1);
+            if (TrueValue) { matrix.Update(1, 0, 1); }
+            else { matrix.Update(0, 0, 1); }
+        }
 
     }
 }
