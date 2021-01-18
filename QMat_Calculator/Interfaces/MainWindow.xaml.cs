@@ -38,14 +38,21 @@ namespace QMat_Calculator
             // SqrtNOT.Content = new SqrtNOT(new Qubit()).ToString();
             // Toffoli.Content = new Toffoli(new Qubit(), new Qubit(), new Qubit()).ToString();
 
-            Qubit off = new Qubit(false);
-            Qubit on = new Qubit(true);
+            Qubit bit1 = new Qubit(true);
+            Qubit bit2 = new Qubit(false);
 
-            Matrix tensor = Matrix.Tensor(off.getMatrix(), on.getMatrix());
+            Hadamard h = new Hadamard(bit1);
+            Hadamard h2 = new Hadamard(bit1);
+            Hadamard h3 = new Hadamard(bit2);
 
-            CNOT.Content = off.getMatrix().ToString();
-            Hadamard.Content = on.getMatrix().ToString();
-            PauliX.Content = tensor.ToString();
+            Matrix m = Matrix.Tensor(h, h3);
+            Matrix m1 = Matrix.Tensor(bit1, bit2);
+            Matrix m2 = Matrix.Multiply(m, m1);
+            Matrix m3 = Matrix.Multiply(h2, m2);
+
+            CNOT.Content = m3.ToString(true);
+            Hadamard.Content = Matrix.Tensor(bit1, bit2).ToString();
+
         }
     }
 }

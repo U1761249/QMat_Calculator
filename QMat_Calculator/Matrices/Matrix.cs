@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Circuits;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -137,6 +138,19 @@ namespace QMat_Calculator.Matrices
         }
 
         /// <summary>
+        /// Take the matrix from the gate and multiply it by C.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static Matrix Multiply(Gate g, Complex c)
+        {
+            Matrix x = g.getMatrix();
+            return Multiply(x, c);
+        }
+
+
+        /// <summary>
         /// Multiply a Matrix by a Constant
         /// </summary>
         /// <param name="x"></param>
@@ -165,6 +179,54 @@ namespace QMat_Calculator.Matrices
         }
 
         /// <summary>
+        /// Take the matrix from the gate and multiply it by another matrix.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Multiply(Gate g, Matrix y)
+        {
+            Matrix x = g.getMatrix();
+            return Multiply(x, y);
+        }
+        /// <summary>
+        /// Take the matrix from the gate and multiply it by another matrix.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="g"></param>
+        /// <returns></returns>
+        public static Matrix Multiply(Matrix x, Gate g)
+        {
+            Matrix y = g.getMatrix();
+            return Multiply(x, y);
+        }
+        /// <summary>
+        /// Take the matrix from the gate and multiply it by the matrix of another gate.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Multiply(Gate x, Gate y)
+        {
+            Matrix a = x.getMatrix();
+            Matrix b = y.getMatrix();
+            return Multiply(a, b);
+        }
+        /// <summary>
+        /// Take the matrix from the qubit and multiply it by the matrix of another qubit.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Multiply(Qubit x, Qubit y)
+        {
+            Matrix a = x.getMatrix();
+            Matrix b = y.getMatrix();
+            return Multiply(a, b);
+        }
+
+
+        /// <summary>
         /// Multiply two Matrices and their preceders.
         /// The Number of Columns in X MUST be the same as the number of Rows in Y.
         /// </summary>
@@ -174,16 +236,17 @@ namespace QMat_Calculator.Matrices
         public static Matrix Multiply(Matrix x, Matrix y)
         {
             Matrix m = new Matrix();
-            if (x.columns == y.rows) // If the sizes are correct for the multiplication.
-            {
-                m.rows = x.rows;
-                m.columns = y.columns;
-                m.data = new Complex[m.rows, m.columns];
-            }
-            else // Use an identity matrix to make the sizes equal
-            {
 
+            if (x.columns != y.rows) // Use an identity matrix to make the sizes compatible
+            {
+                Matrix[] resized = IdentityMatrix(x, y);
+                x = resized[0];
+                y = resized[1];
             }
+
+            m.rows = x.rows;
+            m.columns = y.columns;
+            m.data = new Complex[m.rows, m.columns];
 
             // Calculate the preceder for M.
             if (x.preceder != -1 && y.preceder != -1) { m.preceder = x.preceder * y.preceder; }
@@ -205,6 +268,91 @@ namespace QMat_Calculator.Matrices
                 }
             }
             return m;
+        }
+
+        /// <summary>
+        /// Resize the smaller matrix using an identity matrix.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private static Matrix[] IdentityMatrix(Matrix x, Matrix y)
+        {
+            Matrix smaller = y;
+            Matrix larger = x;
+            bool smallerX = false;
+
+            if (x.columns < y.rows)
+            {
+                smaller = x;
+                larger = y;
+                smallerX = true;
+            }
+
+
+            // Assuming X < Y and the order is X*Y, X must have the same number of columns as Y has rows.
+
+            if (larger.rows % smaller.columns == 0) // Check if there is a multiple for the number of rows
+            {
+                int size = larger.rows / smaller.columns;
+                Matrix identity = CreateIdentityMatrix(size);
+                smaller = Tensor(smaller, identity); // Increase the size of the Smaller
+            }
+
+            if (smallerX) { x = smaller; }
+            else { y = smaller; }
+
+            Matrix[] output = new Matrix[2] { x, y };
+            return output;
+        }
+
+
+
+        /// <summary>
+        /// Take the matrix from the gate and calculate the Tensor product with another matrix.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Tensor(Gate g, Matrix y)
+        {
+            Matrix x = g.getMatrix();
+            return Tensor(x, y);
+        }
+        /// <summary>
+        /// Take the matrix from the gate and calculate the Tensor product with another matrix.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="g"></param>
+        /// <returns></returns>
+        public static Matrix Tensor(Matrix x, Gate g)
+        {
+            Matrix y = g.getMatrix();
+            return Tensor(x, y);
+        }
+        /// <summary>
+        /// Take the matrix from the gate and calculate the Tensor product with the matrix of another gate.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Tensor(Gate x, Gate y)
+        {
+            Matrix a = x.getMatrix();
+            Matrix b = y.getMatrix();
+            return Tensor(a, b);
+        }
+        /// <summary>
+        /// Take the matrix from the qubit and calculate the Tensor product with the matrix of another qubit.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Matrix Tensor(Qubit x, Qubit y)
+        {
+            Matrix a = x.getMatrix();
+            Matrix b = y.getMatrix();
+            return Tensor(a, b);
         }
 
         /// <summary>
