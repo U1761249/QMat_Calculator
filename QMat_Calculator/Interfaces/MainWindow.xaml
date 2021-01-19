@@ -4,10 +4,68 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QMat_Calculator"
+        xmlns:wpfx="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" CanExecute="CommandBindingOpen_CanExecute" Executed="CommandBindingOpen_Executed"/>
+        <CommandBinding Command="Save" CanExecute="CommandBindingSave_CanExecute" Executed="CommandBindingSave_Executed"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding ExitCommand}" Key="X" Modifiers="Ctrl" />
+    </Window.InputBindings>
+
     <Grid>
-        <ScrollViewer>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Height="20">
+            <MenuItem Header="_File" >
+                <MenuItem Command="Open">
+                    <MenuItem.Icon>
+                        <Image Source="/Icons/Open.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="fileImport" Header="Import">
+                    <MenuItem.Icon>
+                        <Image Source="/Icons/Import.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="Save">
+                    <MenuItem.Icon>
+                        <Image Source="/Icons/Save.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Height="1"/>
+                <MenuItem x:Name="fileClear" Header="Clear">
+                    <MenuItem.Icon>
+                        <Image Source="/Icons/Clear.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Height="1"/>
+                <MenuItem x:Name="fileExit" Command="{Binding ExitCommand}" Header="Exit" InputGestureText="Ctrl+X">
+                    <MenuItem.Icon>
+                        <Image Source="/Icons/Exit.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+            </MenuItem>
+            <MenuItem Header="_View" />
+            <MenuItem Header="_Preferences" />
+        </Menu>
+
+        <Canvas Grid.Row="1" Background="Red">
+
+        </Canvas>
+
+        <ScrollViewer Grid.Row="2" Background="AliceBlue" >
             <StackPanel>
                 <Label x:Name="CNOT"/>
                 <Label x:Name="Hadamard"/>
@@ -16,8 +74,9 @@
                 <Label x:Name="PauliZ"/>
                 <Label x:Name="SqrtNOT"/>
                 <Label x:Name="Toffoli"/>
-
             </StackPanel>
         </ScrollViewer>
+
+
     </Grid>
 </Window>

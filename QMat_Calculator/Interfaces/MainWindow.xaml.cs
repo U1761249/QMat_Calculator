@@ -28,6 +28,7 @@ namespace QMat_Calculator
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new CustomCommandContext();
 
             //// Tests for the values contained within the gates.
             // CNOT.Content = new CNOT(new Qubit(), new Qubit()).ToString();
@@ -53,6 +54,51 @@ namespace QMat_Calculator
             CNOT.Content = m3.ToString(true);
             Hadamard.Content = Matrix.Tensor(bit1, bit2).ToString();
 
+        }
+
+
+
+
+        private void CommandBindingOpen_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+
+        private void CommandBindingOpen_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Open");
+        }
+        private void CommandBindingSave_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+
+        private void CommandBindingSave_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Save");
+        }
+    }
+
+    /// <summary>
+    /// Define getter methods for each custom command.
+    /// </summary>
+    public class CustomCommandContext
+    {
+        public ICommand ExitCommand
+        {
+            get { return new ExitKey(); }
+        }
+    }
+
+    /// <summary>
+    /// Define the function for the Exit key command (Ctrl+X)
+    /// </summary>
+    public class ExitKey : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
