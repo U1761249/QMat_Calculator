@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QMat_Calculator"
-        xmlns:wpfx="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+        xmlns:wpfx="http://schemas.microsoft.com/netfx/2009/xaml/presentation" 
+        xmlns:CR="clr-namespace:QMat_Calculator.Interfaces"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.CommandBindings>
@@ -26,7 +27,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Menu Height="20">
+        <Menu Height="20" Background="AliceBlue">
             <MenuItem Header="_File" >
                 <MenuItem Command="Open">
                     <MenuItem.Icon>
@@ -61,22 +62,13 @@
             <MenuItem Header="_Preferences" />
         </Menu>
 
-        <Canvas Grid.Row="1" Background="Red">
+        <Canvas Background="Aquamarine" x:Name="CircuitCanvas" Grid.Row="1" AllowDrop="True" Drop="CircuitCanvas_Drop">
 
         </Canvas>
 
-        <ScrollViewer Grid.Row="2" Background="AliceBlue" >
-            <StackPanel>
-                <Label x:Name="CNOT"/>
-                <Label x:Name="Hadamard"/>
-                <Label x:Name="PauliX"/>
-                <Label x:Name="PauliY"/>
-                <Label x:Name="PauliZ"/>
-                <Label x:Name="SqrtNOT"/>
-                <Label x:Name="Toffoli"/>
-            </StackPanel>
-        </ScrollViewer>
+        <CR:CompoentRibbon Grid.Row="2" Background="AliceBlue">
 
+        </CR:CompoentRibbon>
 
     </Grid>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using QMat_Calculator.Circuits;
 using QMat_Calculator.Circuits.Gates;
+using QMat_Calculator.Drawable;
 using QMat_Calculator.Matrices;
 
 using System;
@@ -30,35 +31,12 @@ namespace QMat_Calculator
             InitializeComponent();
             DataContext = new CustomCommandContext();
 
-            //// Tests for the values contained within the gates.
-            // CNOT.Content = new CNOT(new Qubit(), new Qubit()).ToString();
-            // Hadamard.Content = new Hadamard(new Qubit()).ToString();
-            // PauliX.Content = new Pauli(new Qubit(), Pauli.PauliType.X).ToString();
-            // PauliY.Content = new Pauli(new Qubit(), Pauli.PauliType.Y).ToString();
-            // PauliZ.Content = new Pauli(new Qubit(), Pauli.PauliType.Z).ToString();
-            // SqrtNOT.Content = new SqrtNOT(new Qubit()).ToString();
-            // Toffoli.Content = new Toffoli(new Qubit(), new Qubit(), new Qubit()).ToString();
-
-            Qubit bit1 = new Qubit(true);
-            Qubit bit2 = new Qubit(false);
-
-            Hadamard h = new Hadamard(bit1);
-            Hadamard h2 = new Hadamard(bit1);
-            Hadamard h3 = new Hadamard(bit2);
-
-            Matrix m = Matrix.Tensor(h, h3);
-            Matrix m1 = Matrix.Tensor(bit1, bit2);
-            Matrix m2 = Matrix.Multiply(m, m1);
-            Matrix m3 = Matrix.Multiply(h2, m2);
-
-            CNOT.Content = m3.ToString(true);
-            Hadamard.Content = Matrix.Tensor(bit1, bit2).ToString();
 
         }
 
 
 
-
+        //Define the functionality for standard Saving and Opening commands.
         private void CommandBindingOpen_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
 
         private void CommandBindingOpen_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -71,6 +49,18 @@ namespace QMat_Calculator
         {
             MessageBox.Show("Save");
         }
+
+        /// <summary>
+        /// Drop the held component to the screen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CircuitCanvas_Drop(object sender, DragEventArgs e)
+        {
+            MessageBox.Show($"Dropped Gate of type {Manager.getHeldGate().GetType()}");
+        }
+
+
     }
 
     /// <summary>

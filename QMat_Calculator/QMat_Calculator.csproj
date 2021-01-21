@@ -71,6 +71,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Drawable\CircuitComponent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Interfaces\CompoentRibbon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Interfaces\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,6 +95,12 @@
     <Compile Include="Circuits\Gates\SqrtNOT.cs" />
     <Compile Include="Circuits\Gates\Toffoli.cs" />
     <Compile Include="Circuits\Qubit.cs" />
+    <Compile Include="Drawable\CircuitComponent.xaml.cs">
+      <DependentUpon>CircuitComponent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\CompoentRibbon.xaml.cs">
+      <DependentUpon>CompoentRibbon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -122,10 +136,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Drawable\" />
+    <Resource Include="Icons\Clear.png" />
+    <Resource Include="Icons\Exit.png" />
+    <Resource Include="Icons\Import.png" />
+    <Resource Include="Icons\Open.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Hadamard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\New.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
