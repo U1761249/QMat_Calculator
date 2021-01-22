@@ -49,5 +49,8 @@ namespace QMat_Calculator.Circuits.Gates
             Matrices.Matrix m = new Matrices.Matrix(4, 4, data);
             this.setMatrix(m);
         }
+
+        public string GetGateLabel() { return "T"; }
+
     }
 }

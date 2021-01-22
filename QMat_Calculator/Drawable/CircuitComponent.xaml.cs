@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QMat_Calculator.Circuits;
+using QMat_Calculator.Circuits.Gates;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +22,31 @@ namespace QMat_Calculator.Drawable
     /// </summary>
     public partial class CircuitComponent : UserControl
     {
+        private Gate gate = null;
         public CircuitComponent()
         {
             InitializeComponent();
         }
 
+        public void setType(Object o)
+        {
+            if (o.GetType().BaseType == typeof(Gate))
+            {
+                string label = "";
+
+                gate = ((Gate)o);
+                if (gate.GetType() == typeof(Hadamard)) { label = ((Hadamard)gate).GetGateLabel(); }
+                else if (gate.GetType() == typeof(Pauli)) { label = ((Pauli)gate).GetGateLabel(); }
+                else if (gate.GetType() == typeof(CNOT)) { label = ((CNOT)gate).GetGateLabel(); }
+                else if (gate.GetType() == typeof(SqrtNOT)) { label = ((SqrtNOT)gate).GetGateLabel(); }
+                //else if (gate.GetType() == typeof(Deutsch)) { label = ((Deutsch)gate).GetGateLabel(); }
+                else if (gate.GetType() == typeof(Toffoli)) { label = ((Toffoli)gate).GetGateLabel(); }
 
 
+                if (!String.IsNullOrWhiteSpace(label)) { componentLabel.Text = label; }
+
+
+            }
+        }
     }
 }

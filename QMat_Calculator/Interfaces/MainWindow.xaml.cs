@@ -57,7 +57,11 @@ namespace QMat_Calculator
         /// <param name="e"></param>
         private void CircuitCanvas_Drop(object sender, DragEventArgs e)
         {
-            MessageBox.Show($"Dropped Gate of type {Manager.getHeldGate().GetType()}");
+            //MessageBox.Show($"Dropped Gate of type {Manager.getHeldGate().GetType()}");
+            CircuitComponent cc = new CircuitComponent();
+            cc.setType(Manager.getHeldGate());
+            CircuitCanvas.Children.Add(cc);
+
         }
 
 

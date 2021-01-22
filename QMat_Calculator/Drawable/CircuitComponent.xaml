@@ -7,6 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Ellipse x:Name="circleUI" Height="100" Width="100" Fill="Blue" />
+        <Border x:Name="component" Height="100" Width="100" BorderThickness="5" BorderBrush="Black">
+            <TextBlock x:Name="componentLabel"  Text="H" FontSize="48" Margin="5"/>
+        </Border>
     </Grid>
 </UserControl>

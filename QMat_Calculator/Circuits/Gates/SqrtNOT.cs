@@ -27,5 +27,8 @@ namespace QMat_Calculator.Circuits.Gates
             Matrices.Matrix m = new Matrices.Matrix(2, 2, data, 1 / Math.Sqrt(2));
             this.setMatrix(m);
         }
+
+        public string GetGateLabel() { return "√NOT"; }
+
     }
 }

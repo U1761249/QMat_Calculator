@@ -37,6 +37,7 @@ namespace QMat_Calculator.Circuits.Gates
 
         }
 
+        public string GetGateLabel() { return "H"; }
 
     }
 }

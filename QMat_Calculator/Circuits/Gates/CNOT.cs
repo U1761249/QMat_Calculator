@@ -48,6 +48,6 @@ namespace QMat_Calculator.Circuits.Gates
             this.setMatrix(m);
         }
 
-
+        public string GetGateLabel() { return "NOT"; }
     }
 }

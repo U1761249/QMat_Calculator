@@ -55,5 +55,17 @@ namespace QMat_Calculator.Circuits.Gates
 
         public PauliType GetPauliType() { return this.gateType; }
 
+        public string GetGateLabel()
+        {
+            switch (gateType)
+            {
+                case (PauliType.X): return "X";
+                case (PauliType.Y): return "Y";
+                case (PauliType.Z): return "Z";
+                default: return "";
+            }
+        }
+
+
     }
 }
