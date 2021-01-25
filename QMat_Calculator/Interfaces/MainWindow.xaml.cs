@@ -1,6 +1,7 @@
 ﻿using QMat_Calculator.Circuits;
 using QMat_Calculator.Circuits.Gates;
 using QMat_Calculator.Drawable;
+using QMat_Calculator.Interfaces;
 using QMat_Calculator.Matrices;
 
 using System;
@@ -26,11 +27,16 @@ namespace QMat_Calculator
     /// </summary>
     public partial class MainWindow : Window
     {
+
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new CustomCommandContext();
 
+            CircuitCanvas cc = new CircuitCanvas();
+            Manager.setCircuitCanvas(cc);
+            circuitCanvasBorder.Child = cc;
 
         }
 
@@ -48,20 +54,6 @@ namespace QMat_Calculator
         private void CommandBindingSave_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             MessageBox.Show("Save");
-        }
-
-        /// <summary>
-        /// Drop the held component to the screen.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CircuitCanvas_Drop(object sender, DragEventArgs e)
-        {
-            //MessageBox.Show($"Dropped Gate of type {Manager.getHeldGate().GetType()}");
-            CircuitComponent cc = new CircuitComponent();
-            cc.setType(Manager.getHeldGate());
-            CircuitCanvas.Children.Add(cc);
-
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using QMat_Calculator.Circuits;
 using QMat_Calculator.Circuits.Gates;
+using QMat_Calculator.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,9 @@ namespace QMat_Calculator.Drawable
         public CircuitComponent()
         {
             InitializeComponent();
+
+            Canvas.SetTop(this, 100);
+            Canvas.SetLeft(this, 100);
         }
 
         public void setType(Object o)
@@ -43,10 +47,28 @@ namespace QMat_Calculator.Drawable
                 else if (gate.GetType() == typeof(Toffoli)) { label = ((Toffoli)gate).GetGateLabel(); }
 
 
-                if (!String.IsNullOrWhiteSpace(label)) { componentLabel.Text = label; }
+                if (!String.IsNullOrWhiteSpace(label))
+                {
+                    componentLabel.Text = label;
+                    if (label.Length > 1)
+                    {
+                        componentLabel.FontSize = 30;
+                    }
+                }
 
 
             }
+        }
+
+        private void component_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CircuitCanvas circuitCanvas = Manager.getCircuitCanvas();
+            Manager.setCCDrag(this);
+            Point offset = e.GetPosition(circuitCanvas.MainCircuitCanvas);
+            offset.Y -= Canvas.GetTop(this);
+            offset.X -= Canvas.GetLeft(this);
+            Manager.setOffsetDrag(offset);
+            circuitCanvas.MainCircuitCanvas.CaptureMouse();
         }
     }
 }

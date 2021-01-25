@@ -1,5 +1,7 @@
 ﻿using QMat_Calculator.Circuits;
 using QMat_Calculator.Circuits.Gates;
+using QMat_Calculator.Drawable;
+using QMat_Calculator.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +23,15 @@ namespace QMat_Calculator
     /// </summary>
     static class Manager
     {
+        private static CircuitCanvas circuitCanvas;
+
         public static List<Qubit> qubits = new List<Qubit>();
         private static Gate heldGate = null;
         private static Dictionary<string, Gate> GateImage = null;
 
-
+        //Drag and Drop components
+        private static UIElement ccDrag = null;
+        private static Point offsetDrag;
         public static void setHeldGate(Gate g) { heldGate = g; }
         public static Gate getHeldGate() { return heldGate; }
 
@@ -59,6 +65,13 @@ namespace QMat_Calculator
             }
             return GateImage;
         }
+
+        public static CircuitCanvas getCircuitCanvas() { return circuitCanvas; }
+        public static void setCircuitCanvas(CircuitCanvas cc) { circuitCanvas = cc; }
+        public static UIElement getCCDrag() { return ccDrag; }
+        public static Point getOffsetDrag() { return offsetDrag; }
+        public static void setCCDrag(UIElement cc) { ccDrag = cc; }
+        public static void setOffsetDrag(Point p) { offsetDrag = p; }
     }
 
     //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.

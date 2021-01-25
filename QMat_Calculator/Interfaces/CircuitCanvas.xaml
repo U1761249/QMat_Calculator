@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="QMat_Calculator.Interfaces.CircuitCanvas"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QMat_Calculator.Interfaces"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Canvas Background="White" x:Name="MainCircuitCanvas" AllowDrop="True" Drop="CircuitCanvas_Drop" PreviewMouseMove="CircuitCanvas_PreviewMouseMove" PreviewMouseUp="CircuitCanvas_PreviewMouseUp"/>
+
+</UserControl>
