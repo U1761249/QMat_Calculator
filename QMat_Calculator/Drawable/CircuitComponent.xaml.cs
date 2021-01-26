@@ -24,12 +24,12 @@ namespace QMat_Calculator.Drawable
     public partial class CircuitComponent : UserControl
     {
         private Gate gate = null;
-        public CircuitComponent()
+        public CircuitComponent(Point p)
         {
             InitializeComponent();
 
-            Canvas.SetTop(this, 100);
-            Canvas.SetLeft(this, 100);
+            Canvas.SetTop(this, p.Y - 50);
+            Canvas.SetLeft(this, p.X - 50);
         }
 
         public void setType(Object o)
@@ -69,6 +69,15 @@ namespace QMat_Calculator.Drawable
             offset.X -= Canvas.GetLeft(this);
             Manager.setOffsetDrag(offset);
             circuitCanvas.MainCircuitCanvas.CaptureMouse();
+        }
+
+        public void Move(Point p)
+        {
+            Canvas.SetTop(this, 0);
+            Canvas.SetLeft(this, 0);
+
+            Canvas.SetTop(this, (p.Y / 2) - 50);
+            Canvas.SetLeft(this, (p.X / 2) - 50);
         }
     }
 }
