@@ -16,9 +16,9 @@ namespace QMat_Calculator.Circuits
 {
     public class Qubit
     {
-        int id;
+        Guid guid = Guid.NewGuid();
         Matrix matrix;
-        public int getID() { return this.id; }
+        public Guid getID() { return this.guid; }
         public Matrix getMatrix() { return this.matrix; }
         List<Gate> gates;
 
@@ -50,8 +50,8 @@ namespace QMat_Calculator.Circuits
 
         public void addGate(Gate gate)
         {
-            if (gates == null) gates = new List<Gate>();
-            gates.Append(gate);
+            if (this.gates == null) this.gates = new List<Gate>();
+            this.gates.Add(gate);
         }
     }
 }

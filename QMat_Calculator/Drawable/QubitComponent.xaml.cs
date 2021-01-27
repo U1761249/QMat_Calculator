@@ -40,6 +40,9 @@ namespace QMat_Calculator.Drawable
 
         }
 
+        /// <summary>
+        /// Update the length of the line based on the canvas size
+        /// </summary>
         private void UpdateSize()
         {
             qubitChannel.X1 = 0;
@@ -48,7 +51,7 @@ namespace QMat_Calculator.Drawable
             qubitChannel.Y2 = point.Y;
         }
 
-        public void AddToManager() { Manager.addQubit(qubit); }
+        public void AddToManager() { Manager.addQubit(ref qubit); }
 
         public Point GetPoint() { return point; }
         public void setPoint(Point p) { point = p; }

@@ -20,6 +20,7 @@ namespace QMat_Calculator.Circuits
     /// </summary>
     public abstract class Gate
     {
+        Guid guid = Guid.NewGuid(); // Each gate has a unique ID so two identical gates can be distinguished.
         int nodeCount;
         Matrix matrix;
 

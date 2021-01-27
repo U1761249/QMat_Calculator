@@ -35,11 +35,19 @@ namespace QMat_Calculator.Drawable
         {
             InitializeComponent();
 
-            Canvas.SetTop(this, p.Y - 50);
-            Canvas.SetLeft(this, p.X - 50);
+            Canvas.SetTop(this, p.Y - (this.ActualHeight / 2));
+            Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
             this.point = p;
         }
+        public ref Gate getGate() { return ref gate; }
+        public void setGate(Gate g) { gate = g; }
+        public Point getPoint() { return point; }
+        public void setPoint(Point p) { point = p; }
 
+        /// <summary>
+        /// Change the component based on the type of gate it contains.
+        /// </summary>
+        /// <param name="o"></param>
         public void setType(Object o)
         {
             if (o.GetType().BaseType == typeof(Gate))
@@ -68,6 +76,11 @@ namespace QMat_Calculator.Drawable
             }
         }
 
+        /// <summary>
+        /// Set this object as the drag component for moving.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void component_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             CircuitCanvas circuitCanvas = Manager.getCircuitCanvas();
@@ -79,18 +92,22 @@ namespace QMat_Calculator.Drawable
             circuitCanvas.MainCircuitCanvas.CaptureMouse();
         }
 
+        /// <summary>
+        /// Move this to the specified point.
+        /// </summary>
+        /// <param name="p"></param>
         public void Move(Point p)
         {
             Canvas.SetTop(this, 0);
             Canvas.SetLeft(this, 0);
 
-            Canvas.SetTop(this, (p.Y / 2) - 50);
-            Canvas.SetLeft(this, (p.X / 2) - 50);
+            Canvas.SetTop(this, (p.Y / 2) - (this.ActualHeight / 2));
+            Canvas.SetLeft(this, (p.X / 2) - (this.ActualHeight / 2));
 
             this.point = p;
         }
 
-        public Gate getGate() { return gate; }
-        public void setGate(Gate g) { gate = g; }
+        public string getLabelText() { return componentLabel.Text; }
+
     }
 }

@@ -78,12 +78,16 @@ namespace QMat_Calculator
         public static List<Qubit> getQubits() { return qubits; }
         public static void setQubits(List<Qubit> q) { qubits = q; }
         public static int getQubitCount() { return qubits.Count; }
-        public static void addQubit(Qubit q) { qubits.Add(q); }
+        public static void addQubit(ref Qubit q) { qubits.Add(q); }
         public static void removeQubit(Qubit q) { qubits.Remove(q); }
         public static void removeQubit(int index) { qubits.RemoveAt(index); }
 
         public static void addQubit() { circuitCanvas.AddQubit(); }
 
+        /// <summary>
+        /// Remove the given gate from all qubits.
+        /// </summary>
+        /// <param name="gate"></param>
         public static void Decouple(Gate gate)
         {
             for (int i = 0; i < qubits.Count; i++)
