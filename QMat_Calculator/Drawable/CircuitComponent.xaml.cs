@@ -16,6 +16,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+/**
+* @author Adam Birch - U1761249
+*
+* @date - 1/24/2021 12:23:11 AM
+*/
+
 namespace QMat_Calculator.Drawable
 {
     /// <summary>
@@ -24,12 +30,14 @@ namespace QMat_Calculator.Drawable
     public partial class CircuitComponent : UserControl
     {
         private Gate gate = null;
+        private Point point;
         public CircuitComponent(Point p)
         {
             InitializeComponent();
 
             Canvas.SetTop(this, p.Y - 50);
             Canvas.SetLeft(this, p.X - 50);
+            this.point = p;
         }
 
         public void setType(Object o)
@@ -78,6 +86,11 @@ namespace QMat_Calculator.Drawable
 
             Canvas.SetTop(this, (p.Y / 2) - 50);
             Canvas.SetLeft(this, (p.X / 2) - 50);
+
+            this.point = p;
         }
+
+        public Gate getGate() { return gate; }
+        public void setGate(Gate g) { gate = g; }
     }
 }

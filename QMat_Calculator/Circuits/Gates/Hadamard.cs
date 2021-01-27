@@ -17,13 +17,12 @@ namespace QMat_Calculator.Circuits.Gates
     class Hadamard : Gate
     {
 
-        public Hadamard(Qubit q)
+        public Hadamard()
         {
             //   1  |1   1 |
             //   √2 |1   -1|
 
             this.setNodeCount(1);
-            this.setQubits(q);
 
 
             Complex[,] data = new Complex[2, 2];

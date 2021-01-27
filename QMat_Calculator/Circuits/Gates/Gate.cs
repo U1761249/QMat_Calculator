@@ -18,19 +18,15 @@ namespace QMat_Calculator.Circuits
     /// Superclass type for all gates.
     /// No "Gate" can ever be created - they must always be a subclass.
     /// </summary>
-    abstract class Gate
+    public abstract class Gate
     {
         int nodeCount;
-        List<Qubit> qubits;
         Matrix matrix;
 
         public void setNodeCount(int nodeCount) { this.nodeCount = nodeCount; }
-        public void setQubits(Qubit qubit) { this.qubits = new List<Qubit>() { qubit }; }
-        public void setQubits(List<Qubit> qubits) { this.qubits = qubits; }
         public void setMatrix(Matrix matrix) { this.matrix = matrix; }
 
         public int getNodeCount() { return this.nodeCount; }
-        public List<Qubit> getQubits() { return this.qubits; }
         public Matrix getMatrix() { return this.matrix; }
 
 

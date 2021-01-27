@@ -54,13 +54,13 @@ namespace QMat_Calculator
             {
                 Qubit q = new Qubit(); // Empty Qubit for definition
                 GateImage = new Dictionary<string, Gate>() {
-                    {"imageHadamard", new Hadamard(q) },
-                    {"imagePauliX", new Pauli(q, Pauli.PauliType.X) },
-                    {"imagePauliY", new Pauli(q, Pauli.PauliType.Y) },
-                    {"imagePauliZ", new Pauli(q, Pauli.PauliType.Z) },
-                    {"imageCNOT", new CNOT(q, q) },
-                    {"imageSqrtNOT", new SqrtNOT(q) },
-                    {"imageToffoli", new Toffoli(q,q,q) }
+                    {"imageHadamard", new Hadamard() },
+                    {"imagePauliX", new Pauli(Pauli.PauliType.X) },
+                    {"imagePauliY", new Pauli(Pauli.PauliType.Y) },
+                    {"imagePauliZ", new Pauli(Pauli.PauliType.Z) },
+                    {"imageCNOT", new CNOT() },
+                    {"imageSqrtNOT", new SqrtNOT() },
+                    {"imageToffoli", new Toffoli() }
                 };
             }
             return GateImage;
@@ -82,7 +82,18 @@ namespace QMat_Calculator
         public static void removeQubit(Qubit q) { qubits.Remove(q); }
         public static void removeQubit(int index) { qubits.RemoveAt(index); }
 
+        public static void addQubit() { circuitCanvas.AddQubit(); }
 
+        public static void Decouple(Gate gate)
+        {
+            for (int i = 0; i < qubits.Count; i++)
+            {
+                if (qubits[i].hasGate(gate))
+                {
+                    qubits[i].removeGate(gate);
+                }
+            }
+        }
     }
 
     //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.

@@ -15,6 +15,7 @@
 
     <Window.InputBindings>
         <KeyBinding Command="{Binding ExitCommand}" Key="X" Modifiers="Ctrl" />
+        <KeyBinding Command="{Binding AddQubitCommand}" Key="A" Modifiers="Ctrl" />
     </Window.InputBindings>
 
     <Grid x:Name="mainGrid">
@@ -57,6 +58,13 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+            </MenuItem>
+            <MenuItem Header="_Circuit">
+                <MenuItem x:Name="circuitAddQubit" Command="{Binding AddQubitCommand}" Header="Add Qubit" InputGestureText="Ctrl+A">
+                    <MenuItem.Icon>
+                        <Image Source="/Icons/New.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_View" />
             <MenuItem Header="_Preferences" />

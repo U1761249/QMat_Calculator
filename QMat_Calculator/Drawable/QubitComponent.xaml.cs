@@ -14,6 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+/**
+* @author Adam Birch - U1761249
+*
+* @date - 1/14/2021 3:05:12 PM 
+*/
+
 namespace QMat_Calculator.Drawable
 {
     /// <summary>
@@ -22,15 +28,13 @@ namespace QMat_Calculator.Drawable
     public partial class QubitComponent : UserControl
     {
         private Qubit qubit;
-        Point start;
-        Point end;
+        Point point;
         public QubitComponent(int width, int height, bool value = false)
         {
             InitializeComponent();
             qubit = new Qubit(value);
 
-            start = new Point(0, height);
-            end = new Point(width, height);
+            point = new Point(width, height);
 
             UpdateSize();
 
@@ -38,12 +42,23 @@ namespace QMat_Calculator.Drawable
 
         private void UpdateSize()
         {
-            qubitChannel.X1 = start.X;
-            qubitChannel.Y1 = start.Y;
-            qubitChannel.X2 = end.X;
-            qubitChannel.Y2 = end.Y;
+            qubitChannel.X1 = 0;
+            qubitChannel.Y1 = point.Y;
+            qubitChannel.X2 = point.X;
+            qubitChannel.Y2 = point.Y;
         }
 
         public void AddToManager() { Manager.addQubit(qubit); }
+
+        public Point GetPoint() { return point; }
+        public void setPoint(Point p) { point = p; }
+
+        public Qubit getQubit() { return qubit; }
+
+        public void AddGate(Gate gate)
+        {
+            qubit.addGate(gate);
+        }
+
     }
 }

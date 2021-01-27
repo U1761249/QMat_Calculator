@@ -9,13 +9,12 @@ namespace QMat_Calculator.Circuits.Gates
 {
     class SqrtNOT : Gate
     {
-        public SqrtNOT(Qubit q)
+        public SqrtNOT()
         {
             //   1  |1   -1 |
             //   √2 |1    1 |
 
             this.setNodeCount(1);
-            this.setQubits(q);
 
 
             Complex[,] data = new Complex[2, 2];

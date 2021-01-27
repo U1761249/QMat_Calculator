@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Matrices
 {
-    class Matrix
+    public class Matrix
     {
         int rows;
         int columns;

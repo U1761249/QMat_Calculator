@@ -14,12 +14,13 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits
 {
-    class Qubit
+    public class Qubit
     {
         int id;
         Matrix matrix;
         public int getID() { return this.id; }
         public Matrix getMatrix() { return this.matrix; }
+        List<Gate> gates;
 
         /// <summary>
         /// Create a Qubit.
@@ -31,7 +32,26 @@ namespace QMat_Calculator.Circuits
             this.matrix = new Matrix(2, 1);
             if (TrueValue) { matrix.Update(1, 0, 1); }
             else { matrix.Update(0, 0, 1); }
+            gates = new List<Gate>();
         }
 
+        public List<Gate> getGates() { return gates; }
+        public void setGates(List<Gate> g) { gates = g; }
+        public bool hasGate(Gate g)
+        {
+            if (gates.Contains(g)) return true;
+            return false;
+        }
+
+        public void removeGate(Gate gate)
+        {
+            if (hasGate(gate)) gates.Remove(gate);
+        }
+
+        public void addGate(Gate gate)
+        {
+            if (gates == null) gates = new List<Gate>();
+            gates.Append(gate);
+        }
     }
 }

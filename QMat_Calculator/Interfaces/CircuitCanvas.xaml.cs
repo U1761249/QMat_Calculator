@@ -1,4 +1,5 @@
-﻿using QMat_Calculator.Drawable;
+﻿using QMat_Calculator.Circuits;
+using QMat_Calculator.Drawable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+/**
+* @author Adam Birch - U1761249
+*
+* @date - 1/25/2021 10:14:54 AM 
+*/
+
 namespace QMat_Calculator.Interfaces
 {
     /// <summary>
@@ -21,8 +28,6 @@ namespace QMat_Calculator.Interfaces
     /// </summary>
     public partial class CircuitCanvas : UserControl
     {
-        double actualWidth = 0;
-        double actualHeight = 0;
 
         public CircuitCanvas()
         {
@@ -62,24 +67,67 @@ namespace QMat_Calculator.Interfaces
 
         private void CircuitCanvas_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Manager.setCCDrag(null);
-            this.MainCircuitCanvas.ReleaseMouseCapture();
+            if (Manager.getCCDrag() != null)
+            {
+                List<QubitComponent> qubits = new List<QubitComponent>();
+                foreach (var line in MainCircuitCanvas.Children)
+                {
+                    if (line.GetType() == typeof(QubitComponent))
+                    {
+                        qubits.Add(((QubitComponent)line));
+                    }
+                }
+
+                double targetY = e.GetPosition(MainCircuitCanvas).Y;
+                double closestY = double.PositiveInfinity;
+                QubitComponent chosen = null;
+                foreach (QubitComponent qc in qubits)
+                {
+                    if (chosen == null) { chosen = qc; }
+
+                    double qcY = Math.Abs(qc.GetPoint().Y - targetY);
+                    if (qcY < closestY)
+                    {
+                        closestY = qcY;
+                        chosen = qc;
+                    }
+                }
+
+                if (chosen != null)
+                {
+                    Gate held = ((CircuitComponent)Manager.getCCDrag()).getGate();
+                    if (!(chosen.getQubit().hasGate(held))) // If the chosen qubit doesn't contain the held gate
+                    {
+                        Manager.Decouple(held);
+                    }
+
+                    chosen.AddGate(held);
+
+                    CircuitComponent cc = (CircuitComponent)Manager.getCCDrag();
+                    Point position = chosen.GetPoint();
+
+                    Canvas.SetTop(cc, position.Y - (cc.ActualHeight / 2));
+
+
+                    cc.setGate(held);
+                    Manager.setCCDrag(cc);
+                }
+
+                Manager.setCCDrag(null);
+                this.MainCircuitCanvas.ReleaseMouseCapture();
+                OrderComponents();
+            }
         }
         private void MainCircuitCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             ResizeQubits();
             MoveGates();
 
-            actualHeight = MainCircuitCanvas.ActualHeight;
-            actualWidth = MainCircuitCanvas.ActualWidth;
         }
 
-        private void AddQubit()
+        public void AddQubit(bool value = false)
         {
-            int width = Convert.ToInt32(MainCircuitCanvas.ActualWidth);
-            int height = Convert.ToInt32(MainCircuitCanvas.ActualHeight / 2);
-
-            QubitComponent q = new QubitComponent(width, height);
+            QubitComponent q = new QubitComponent(0, 0, value);
             MainCircuitCanvas.Children.Add(q);
             q.AddToManager();
 
@@ -103,11 +151,13 @@ namespace QMat_Calculator.Interfaces
                     {
                         qubitIndex += 1;
                         int height = Convert.ToInt32(MainCircuitCanvas.ActualHeight);
-                        double spacing = (height / count) / 2;
+                        double spacing = height / (count + 1);
                         height = Convert.ToInt32(spacing * qubitIndex);
 
                         Point start = new Point(0, height);
                         Point end = new Point(width, height);
+
+                        ((QubitComponent)MainCircuitCanvas.Children[i]).setPoint(end);
 
                         ((QubitComponent)MainCircuitCanvas.Children[i]).qubitChannel.X1 = start.X;
                         ((QubitComponent)MainCircuitCanvas.Children[i]).qubitChannel.Y1 = start.Y;
@@ -117,6 +167,7 @@ namespace QMat_Calculator.Interfaces
                 }
             }
         }
+
 
         private void MoveGates()
         {
@@ -129,6 +180,11 @@ namespace QMat_Calculator.Interfaces
                     ((CircuitComponent)MainCircuitCanvas.Children[i]).Move(p);
                 }
             }
+
+        }
+
+        private void OrderComponents()
+        {
 
         }
     }

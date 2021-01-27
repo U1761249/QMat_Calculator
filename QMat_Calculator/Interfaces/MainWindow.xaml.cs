@@ -20,6 +20,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Matrix = QMat_Calculator.Matrices.Matrix;
 
+/**
+* @author Adam Birch - U1761249
+*
+* @date - 12/18/2020 1:30:12 PM 
+*/
+
 namespace QMat_Calculator
 {
     /// <summary>
@@ -68,6 +74,10 @@ namespace QMat_Calculator
         {
             get { return new ExitKey(); }
         }
+        public ICommand AddQubitCommand
+        {
+            get { return new AddQubitKey(); }
+        }
     }
 
     /// <summary>
@@ -85,6 +95,21 @@ namespace QMat_Calculator
         public void Execute(object parameter)
         {
             Application.Current.Shutdown();
+        }
+    }
+
+    public class AddQubitKey : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            Manager.addQubit();
         }
     }
 }

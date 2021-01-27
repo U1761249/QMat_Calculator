@@ -11,14 +11,13 @@ namespace QMat_Calculator.Circuits.Gates
     {
         public enum PauliType { X, Y, Z };
         private PauliType gateType;
-        public Pauli(Qubit q, PauliType type)
+        public Pauli(PauliType type)
         {
             //      X        Y        Z
             //   |0    1| |0   -i| |1    0|
             //   |1    0| |i    0| |0   -1|
 
             this.setNodeCount(1);
-            this.setQubits(q);
             this.gateType = type;
 
 

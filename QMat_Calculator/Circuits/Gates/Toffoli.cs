@@ -9,17 +9,12 @@ namespace QMat_Calculator.Circuits.Gates
 {
     class Toffoli : Gate
     {
-        public Toffoli(Qubit root, Qubit control1, Qubit control2)
+        public Toffoli()
         {
-            List<Qubit> q = new List<Qubit>() { root, control1, control2 };
-            Setup(q);
-        }
-        public Toffoli(List<Qubit> q)
-        {
-            Setup(q);
+            Setup();
         }
 
-        private void Setup(List<Qubit> q)
+        private void Setup()
         {
 
             //   |1 0 0 0 0 0 0 0|
@@ -32,7 +27,6 @@ namespace QMat_Calculator.Circuits.Gates
             //   |0 0 0 0 0 0 1 0|
 
             this.setNodeCount(3);
-            this.setQubits(q);
 
 
             Complex[,] data = new Complex[8, 8];
