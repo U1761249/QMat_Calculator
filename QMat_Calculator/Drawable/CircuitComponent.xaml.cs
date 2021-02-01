@@ -72,7 +72,6 @@ namespace QMat_Calculator.Drawable
                     }
                 }
 
-
             }
         }
 

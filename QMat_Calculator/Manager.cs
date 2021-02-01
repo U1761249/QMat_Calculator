@@ -27,13 +27,15 @@ namespace QMat_Calculator
 
         private static List<Qubit> qubits = new List<Qubit>();
         private static Gate heldGate = null;
-        private static Dictionary<string, Gate> GateImage = null;
+        private static Dictionary<string, Type> GateImage = null;
 
         //Drag and Drop components
         private static UIElement ccDrag = null;
         private static Point offsetDrag;
         public static void setHeldGate(Gate g) { heldGate = g; }
         public static Gate getHeldGate() { return heldGate; }
+
+        private static double spacing;
 
         /// <summary>
         /// Use an image to define the gate to add.
@@ -44,23 +46,59 @@ namespace QMat_Calculator
             getGateImageDictionary();
             if (GateImage.ContainsKey(i.Name))
             {
-                setHeldGate(GateImage[i.Name]);
+                Gate g = CreateGate(GateImage[i.Name], i.Name);
+                g.newGuid();
+                setHeldGate(g);
+                //GateImage = null;
             }
         }
 
-        public static Dictionary<string, Gate> getGateImageDictionary()
+        private static Gate CreateGate(Type t, string imageName)
+        {
+            if (t == typeof(Hadamard))
+            {
+                return new Hadamard();
+            }
+            else if (t == typeof(Pauli))
+            {
+                switch (imageName.Last()) // Use the last letter of the name to get the Pauli Type.
+                {
+                    case ('X'): return new Pauli(Pauli.PauliType.X);
+                    case ('Y'): return new Pauli(Pauli.PauliType.Y);
+                    case ('Z'): return new Pauli(Pauli.PauliType.Z);
+                }
+            }
+            else if (t == typeof(CNOT))
+            {
+                return new CNOT();
+            }
+            else if (t == typeof(SqrtNOT))
+            {
+                return new SqrtNOT();
+            }
+            //else if (t == typeof(Deutsch)) 
+            //{
+
+            //}
+            else if (t == typeof(Toffoli))
+            {
+                return new Toffoli();
+            }
+            return null;
+        }
+
+        public static Dictionary<string, Type> getGateImageDictionary()
         {
             if (GateImage == null) // Create a default dictionary
             {
-                Qubit q = new Qubit(); // Empty Qubit for definition
-                GateImage = new Dictionary<string, Gate>() {
-                    {"imageHadamard", new Hadamard() },
-                    {"imagePauliX", new Pauli(Pauli.PauliType.X) },
-                    {"imagePauliY", new Pauli(Pauli.PauliType.Y) },
-                    {"imagePauliZ", new Pauli(Pauli.PauliType.Z) },
-                    {"imageCNOT", new CNOT() },
-                    {"imageSqrtNOT", new SqrtNOT() },
-                    {"imageToffoli", new Toffoli() }
+                GateImage = new Dictionary<string, Type>() {
+                    {"imageHadamard", typeof(Hadamard) },
+                    {"imagePauliX", typeof(Pauli) },
+                    {"imagePauliY", typeof(Pauli) },
+                    {"imagePauliZ", typeof(Pauli) },
+                    {"imageCNOT", typeof(CNOT) },
+                    {"imageSqrtNOT", typeof(SqrtNOT) },
+                    {"imageToffoli", typeof(Toffoli) }
                 };
             }
             return GateImage;
@@ -72,7 +110,8 @@ namespace QMat_Calculator
         public static Point getOffsetDrag() { return offsetDrag; }
         public static void setCCDrag(UIElement cc) { ccDrag = cc; }
         public static void setOffsetDrag(Point p) { offsetDrag = p; }
-
+        public static void setSpacing(double d) { spacing = d; }
+        public static double getSpacing() { return spacing; }
 
 
         public static List<Qubit> getQubits() { return qubits; }
@@ -98,8 +137,54 @@ namespace QMat_Calculator
                 }
             }
         }
-    }
 
-    //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.
+
+        public static void SortComponents(List<CircuitComponent> components)
+        {
+            // Get each unique Y value from the list of components
+            List<double> qubitHeightValues = components.GroupBy(x => x.getPoint().Y).Select(x => x.First().getPoint().Y).ToList();
+
+            for (int currentQubitIndex = 0; currentQubitIndex < qubitHeightValues.Count; currentQubitIndex++)
+            {
+                for (int i = 0; i < qubits.Count; i++)
+                {
+                    // Get a list of all components with the Y value of the current element in qubitHeightValues
+                    List<CircuitComponent> qubitComponents = components.Where(x => x.getPoint().Y == qubitHeightValues[currentQubitIndex]).Select(x => (CircuitComponent)x).ToList();
+                    if (qubitComponents.Count != qubits[i].getGates().Count) { continue; } // Skip this iteration.
+
+                    // Sort the list by X position (Ascending)
+                    qubitComponents = qubitComponents.OrderBy(x => x.getPoint().X).ToList();
+                    // Get a list of gates;
+                    List<Gate> qubitGates = qubitComponents.Select(x => x.getGate()).ToList();
+                    qubits[i].setGates(qubitGates);
+
+                }
+            }
+
+        }
+
+
+        public static string PrintGateLayout()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Qubit q in qubits)
+            {
+                sb.Append($"Qubit: {q.getGates().Count} gates\r\n");
+                foreach (Gate g in q.getGates())
+                {
+                    sb.Append(g.GetType());
+                    if (g.GetType() == typeof(Pauli))
+                    {
+                        sb.Append(((Pauli)g).GetPauliType().ToString());
+                    }
+                    sb.Append("\r\n");
+                }
+                sb.Append("\r\n");
+            }
+            return sb.ToString();
+        }
+
+        //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.
+    }
 }
 

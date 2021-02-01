@@ -29,7 +29,8 @@ namespace QMat_Calculator.Circuits
 
         public int getNodeCount() { return this.nodeCount; }
         public Matrix getMatrix() { return this.matrix; }
-
+        public Guid getGuid() { return this.guid; }
+        public void newGuid() { this.guid = Guid.NewGuid(); }
 
         public void printMatrix(bool preceder = false)
         {

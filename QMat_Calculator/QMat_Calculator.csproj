@@ -96,6 +96,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Circuits\Gates\CNOT.cs" />
+    <Compile Include="Circuits\Gates\ControlBit.cs" />
     <Compile Include="Circuits\Gates\Deutsch.cs" />
     <Compile Include="Circuits\Gates\Gate.cs" />
     <Compile Include="Circuits\Gates\Hadamard.cs" />

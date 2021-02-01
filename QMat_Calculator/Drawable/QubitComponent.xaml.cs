@@ -60,7 +60,10 @@ namespace QMat_Calculator.Drawable
 
         public void AddGate(Gate gate)
         {
-            qubit.addGate(gate);
+            if (!qubit.getGates().Contains(gate))
+            {
+                qubit.addGate(gate);
+            }
         }
 
     }

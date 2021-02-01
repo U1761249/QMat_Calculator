@@ -108,13 +108,9 @@ namespace QMat_Calculator.Interfaces
                 // Update the Qubits with the new association.
                 if (chosen != null)
                 {
-                    Gate held = ((CircuitComponent)Manager.getCCDrag()).getGate();
-                    if (!(chosen.getQubit().hasGate(held))) // If the chosen qubit doesn't contain the held gate.
-                    {
-                        Manager.Decouple(held);
-                    }
-
-                    chosen.AddGate(held);
+                    Gate held = ((CircuitComponent)Manager.getCCDrag()).getGate();  // Get the gate
+                    Manager.Decouple(held);                                         // Remove the gate from any qubits
+                    chosen.AddGate(held);                                           // Add the gate to the chosen qubit
 
                     // Set the height of the gate based on the qubit it is associated with.
                     CircuitComponent cc = (CircuitComponent)Manager.getCCDrag();
@@ -133,9 +129,12 @@ namespace QMat_Calculator.Interfaces
                 Manager.setCCDrag(null);
                 this.MainCircuitCanvas.ReleaseMouseCapture();
 
+                //MessageBox.Show($"{Manager.getQubits()[0].getGates().Count} gates on the first Qubit");
+
                 OrderComponents();
             }
         }
+
         /// <summary>
         /// Perform the changes when the canvas size changes
         /// </summary>
@@ -219,116 +218,27 @@ namespace QMat_Calculator.Interfaces
         /// </summary>
         private void OrderComponents()
         {
-            double spacing = 0;
-            int mostPopulated = 0;
-            // Find how many gates are in the most populated Qubit.
-            foreach (Qubit q in Manager.getQubits())
-            {
-                int population = q.getGates().Count();
-                if (population > mostPopulated) mostPopulated = population;
-            }
-            if (mostPopulated <= 0) { return; } // Exit if the population is 0.
 
-            spacing = MainCircuitCanvas.ActualWidth / (mostPopulated + 1);
+            List<CircuitComponent> components = new List<CircuitComponent>();
 
-            ComponentSorter components = new ComponentSorter(); // Create a 2D list of components
-
-            // Insert the CircuitComponetns into the components list based on it's Point using an insert sort.
             for (int i = 0; i < MainCircuitCanvas.Children.Count; i++)
             {
                 if (MainCircuitCanvas.Children[i].GetType() == typeof(CircuitComponent))
                 {
-                    components.addComponent((CircuitComponent)MainCircuitCanvas.Children[i]);
+                    components.Add((CircuitComponent)MainCircuitCanvas.Children[i]);
                 }
             }
-            //MessageBox.Show(components.ToString());
+
+            if (components.Count > 0)
+            {
+                Manager.SortComponents(components);
+            }
+
+            MessageBox.Show(Manager.PrintGateLayout());
         }
 
-        private class ComponentSorter
-        {
-            int rows;
-            List<List<CircuitComponent>> components;
-            public ComponentSorter()
-            {
-                components = new List<List<CircuitComponent>>();
-                rows = 0;
-            }
-
-            /// <summary>
-            /// Add the given component into the 2D list based on its point.
-            /// </summary>
-            /// <param name="c"></param>
-            public void addComponent(CircuitComponent c)
-            {
-                Point p = c.getPoint();
-                bool added = false;
-                for (int i = 0; i < rows; i++)
-                {
-                    if (components[i][0].getPoint().Y == p.Y) // If the current row is where the component should be
-                    {
-                        for (int j = 0; j < components[i].Count; j++)
-                        {
-                            if (components[i][j].getPoint().X > p.X)
-                            {
-                                components[i].Insert(j, c);
-                                added = true;
-                            }
-                        }
-                        if (!added)
-                        {
-                            components[i].Add(c);
-                            added = true;
-                        }
-                    }
-                    else //if (components[i][0].getPoint().Y < p.Y)
-                    {
-                        addRow(i);
-                        components[i].Add(c);
-                        added = true;
-                    }
-
-                    if (added) break; // Exit the loop if it has been added.
-                }
-                if (!added)
-                {
-                    addRow();
-                    components[rows - 1].Add(c);
-                }
-            }
-
-            /// <summary>
-            /// Add a new row (Qubit) at the specified index
-            /// </summary>
-            /// <param name="index"></param>
-            private void addRow(int index = -1)
-            {
-                if (index == -1) components.Add(new List<CircuitComponent>());
-                else components.Insert(index, new List<CircuitComponent>());
-
-                rows += 1;
-            }
-
-            public String ToString()
-            {
-                StringBuilder s = new StringBuilder();
-
-                foreach (List<CircuitComponent> row in components)
-                {
-
-                    foreach (CircuitComponent c in row)
-                    {
-                        Point p = c.getPoint();
-                        string point = $"({p.X}, {p.Y})";
-                        string value = $"{c.getLabelText()}-{point} ";
-                        s.Append(value);
-                    }
-                    s.Append(Environment.NewLine);
-                }
-
-                return s.ToString();
-            }
-        }
     }
-
-
 }
+
+
+
