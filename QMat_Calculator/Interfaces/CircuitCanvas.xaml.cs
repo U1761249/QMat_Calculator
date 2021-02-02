@@ -63,9 +63,13 @@ namespace QMat_Calculator.Interfaces
 
             if (ccDrag == null) return;
 
-            var position = e.GetPosition(sender as IInputElement);
-            Canvas.SetTop(ccDrag, position.Y - offset.Y);
-            Canvas.SetLeft(ccDrag, position.X - offset.X);
+            Point position = e.GetPosition(sender as IInputElement);
+            position.X -= offset.X;
+            position.Y -= offset.Y;
+
+            Canvas.SetTop(ccDrag, position.Y);
+            Canvas.SetLeft(ccDrag, position.X);
+            ((CircuitComponent)ccDrag).setPoint(position);
 
             Manager.setCCDrag(ccDrag);
         }

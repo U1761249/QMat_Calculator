@@ -167,11 +167,14 @@ namespace QMat_Calculator
         public static string PrintGateLayout()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (Qubit q in qubits)
+            for (int i = 0; i < qubits.Count; i++)
             {
+                Qubit q = qubits[i];
                 sb.Append($"Qubit: {q.getGates().Count} gates\r\n");
-                foreach (Gate g in q.getGates())
+                List<Gate> gates = q.getGates();
+                for (int j = 0; j < gates.Count; j++)
                 {
+                    Gate g = gates[j];
                     sb.Append(g.GetType());
                     if (g.GetType() == typeof(Pauli))
                     {
