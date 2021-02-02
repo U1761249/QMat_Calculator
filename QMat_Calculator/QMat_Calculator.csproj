@@ -168,5 +168,8 @@
   <ItemGroup>
     <Resource Include="Icons\Toffoli.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Remove.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

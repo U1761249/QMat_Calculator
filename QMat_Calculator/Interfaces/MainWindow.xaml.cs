@@ -78,6 +78,10 @@ namespace QMat_Calculator
         {
             get { return new AddQubitKey(); }
         }
+        public ICommand RemoveGateCommand
+        {
+            get { return new RemoveGateKey(); }
+        }
     }
 
     /// <summary>
@@ -110,6 +114,21 @@ namespace QMat_Calculator
         public void Execute(object parameter)
         {
             Manager.addQubit();
+        }
+    }
+
+    public class RemoveGateKey : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            Manager.removeGate();
         }
     }
 }

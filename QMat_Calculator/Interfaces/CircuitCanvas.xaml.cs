@@ -147,7 +147,7 @@ namespace QMat_Calculator.Interfaces
         private void MainCircuitCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             ResizeQubits();
-            MoveGates();
+            OrderComponents();
 
         }
 
@@ -200,22 +200,6 @@ namespace QMat_Calculator.Interfaces
             }
         }
 
-        /// <summary>
-        /// Move the gates to the correct places when the screen size or number of Qubits changes.
-        /// </summary>
-        private void MoveGates()
-        {
-            Point p = new Point(MainCircuitCanvas.ActualWidth, MainCircuitCanvas.ActualHeight);
-
-            for (int i = 0; i < MainCircuitCanvas.Children.Count; i++)
-            {
-                if (MainCircuitCanvas.Children[i].GetType() == typeof(CircuitComponent))
-                {
-                    ((CircuitComponent)MainCircuitCanvas.Children[i]).Move(p);
-                }
-            }
-
-        }
 
         /// <summary>
         /// Move the gates on the screen and within the Qubit's list so that they are in the correct order.
@@ -235,10 +219,40 @@ namespace QMat_Calculator.Interfaces
 
             if (components.Count > 0)
             {
+                // Get a list of all Qubit Heights
+                List<double> qubitHeightValues = components.GroupBy(x => x.getPoint().Y).Select(x => x.First().getPoint().Y).ToList();
+                int mostPopulated = 0;
+                foreach (Qubit q in Manager.getQubits())
+                {
+                    if (q.getGates().Count > mostPopulated) mostPopulated = q.getGates().Count;
+                }
+                double spacing = MainCircuitCanvas.ActualWidth / (mostPopulated + 1);
+                for (int i = 0; i < qubitHeightValues.Count; i++)
+                {
+                    // Get a list of all components with a Y position in the current qubit (index i) ordered by x value (ASC)
+                    List<CircuitComponent> qubitComponents = components.Where(x => x.getPoint().Y == qubitHeightValues[i]).OrderBy(x => x.getPoint().X).ToList();
+                    for (int x = 0; x < qubitComponents.Count; x++)
+                    {
+                        Point p = qubitComponents[x].getPoint();
+                        p.X = spacing * (x + 1) - (qubitComponents[x].ActualWidth / 2);
+
+                        Canvas.SetTop(qubitComponents[x], p.Y);
+                        Canvas.SetLeft(qubitComponents[x], p.X);
+                        qubitComponents[x].setPoint(p);
+                    }
+                    for (int j = components.Count - 1; j >= 0; j--) // From rear to start, remove all components with the current Y value
+                    {
+                        if (components[j].getPoint().Y == qubitHeightValues[i]) components.RemoveAt(j);
+                    }
+                    components.AddRange(qubitComponents); // Add the modified components to the list
+                }
+
+
+
                 Manager.SortComponents(components);
             }
 
-            MessageBox.Show(Manager.PrintGateLayout());
+            //MessageBox.Show(Manager.PrintGateLayout());
         }
 
     }

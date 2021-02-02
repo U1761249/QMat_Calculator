@@ -83,6 +83,7 @@ namespace QMat_Calculator.Drawable
         private void component_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             CircuitCanvas circuitCanvas = Manager.getCircuitCanvas();
+            Manager.setSelectedGate(this);
             Manager.setCCDrag(this);
             Point offset = e.GetPosition(circuitCanvas.MainCircuitCanvas);
             offset.Y -= Canvas.GetTop(this);

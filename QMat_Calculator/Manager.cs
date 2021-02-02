@@ -24,7 +24,7 @@ namespace QMat_Calculator
     static class Manager
     {
         private static CircuitCanvas circuitCanvas;
-
+        private static CircuitComponent selectedGate = null;
         private static List<Qubit> qubits = new List<Qubit>();
         private static Gate heldGate = null;
         private static Dictionary<string, Type> GateImage = null;
@@ -34,6 +34,8 @@ namespace QMat_Calculator
         private static Point offsetDrag;
         public static void setHeldGate(Gate g) { heldGate = g; }
         public static Gate getHeldGate() { return heldGate; }
+        public static void setSelectedGate(CircuitComponent g) { selectedGate = g; }
+        public static CircuitComponent getSelectedGate() { return selectedGate; }
 
         private static double spacing;
 
@@ -138,7 +140,10 @@ namespace QMat_Calculator
             }
         }
 
-
+        /// <summary>
+        /// Sort the gates on all qubits based on the position of the gate.
+        /// </summary>
+        /// <param name="components"></param>
         public static void SortComponents(List<CircuitComponent> components)
         {
             // Get each unique Y value from the list of components
@@ -185,6 +190,28 @@ namespace QMat_Calculator
                 sb.Append("\r\n");
             }
             return sb.ToString();
+        }
+
+        public static void removeGate()
+        {
+            if (selectedGate == null)
+            {
+                MessageBox.Show("No gate is selected.");
+                return;
+            }
+
+            // Remove the gate from the Qubit
+            for (int i = 0; i < qubits.Count; i++)
+            {
+                if (qubits[i].getGates().Contains(selectedGate.getGate()))
+                {
+                    qubits[i].removeGate(selectedGate.getGate());
+                    break;
+                }
+            }
+            // Remove the gate from the canvas.
+            circuitCanvas.MainCircuitCanvas.Children.Remove(selectedGate);
+            selectedGate = null;
         }
 
         //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.

@@ -16,6 +16,7 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding ExitCommand}" Key="X" Modifiers="Ctrl" />
         <KeyBinding Command="{Binding AddQubitCommand}" Key="A" Modifiers="Ctrl" />
+        <KeyBinding Command="{Binding RemoveGateCommand}" Key="Delete"/>
     </Window.InputBindings>
 
     <Grid x:Name="mainGrid">
@@ -63,6 +64,11 @@
                 <MenuItem x:Name="circuitAddQubit" Command="{Binding AddQubitCommand}" Header="Add Qubit" InputGestureText="Ctrl+A">
                     <MenuItem.Icon>
                         <Image Source="/Icons/New.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="circuitRemoveGate" Command="{Binding RemoveGateCommand}" Header="Remove Gate" InputGestureText="Delete">
+                    <MenuItem.Icon>
+                        <Image Source="/Icons/Remove.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
