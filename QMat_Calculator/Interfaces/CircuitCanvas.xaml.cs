@@ -220,11 +220,8 @@ namespace QMat_Calculator.Interfaces
             {
                 // Get a list of all unique heights (each different Qubit Y value)
                 List<double> qubitHeightValues = components.GroupBy(x => x.getPoint().Y).Select(x => x.First().getPoint().Y).ToList();
-                int mostPopulated = 0;
-                foreach (Qubit q in Manager.getQubits())
-                {
-                    if (q.getGates().Count > mostPopulated) mostPopulated = q.getGates().Count;
-                }
+                int mostPopulated = Manager.getMostPopulated();
+
                 double spacing = MainCircuitCanvas.ActualWidth / (mostPopulated + 1);
 
                 // Create a list of all spaced indexes.

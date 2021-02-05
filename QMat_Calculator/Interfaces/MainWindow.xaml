@@ -17,6 +17,7 @@
         <KeyBinding Command="{Binding ExitCommand}" Key="X" Modifiers="Ctrl" />
         <KeyBinding Command="{Binding AddQubitCommand}" Key="A" Modifiers="Ctrl" />
         <KeyBinding Command="{Binding RemoveGateCommand}" Key="Delete"/>
+        <KeyBinding Command="{Binding SolveCommand}" Key="S"/>
     </Window.InputBindings>
 
     <Grid x:Name="mainGrid">
@@ -61,6 +62,7 @@
 
             </MenuItem>
             <MenuItem Header="_Circuit">
+                <MenuItem x:Name="circuitSolve" Command="{Binding SolveCommand}" Header="Solve Circuit" InputGestureText="S"/>
                 <MenuItem x:Name="circuitAddQubit" Command="{Binding AddQubitCommand}" Header="Add Qubit" InputGestureText="Ctrl+A">
                     <MenuItem.Icon>
                         <Image Source="/Icons/New.png" />

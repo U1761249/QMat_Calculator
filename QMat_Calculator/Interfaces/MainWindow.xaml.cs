@@ -82,6 +82,11 @@ namespace QMat_Calculator
         {
             get { return new RemoveGateKey(); }
         }
+
+        public ICommand SolveCommand
+        {
+            get { return new SolveKey(); }
+        }
     }
 
     /// <summary>
@@ -129,6 +134,21 @@ namespace QMat_Calculator
         public void Execute(object parameter)
         {
             Manager.removeGate();
+        }
+    }
+
+    public class SolveKey : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            Manager.Solve();
         }
     }
 }

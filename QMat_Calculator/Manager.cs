@@ -2,6 +2,7 @@
 using QMat_Calculator.Circuits.Gates;
 using QMat_Calculator.Drawable;
 using QMat_Calculator.Interfaces;
+using QMat_Calculator.Matrices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,6 +108,9 @@ namespace QMat_Calculator
         }
 
         public static CircuitCanvas getCircuitCanvas() { return circuitCanvas; }
+
+
+
         public static void setCircuitCanvas(CircuitCanvas cc) { circuitCanvas = cc; }
         public static UIElement getCCDrag() { return ccDrag; }
         public static Point getOffsetDrag() { return offsetDrag; }
@@ -216,7 +220,64 @@ namespace QMat_Calculator
 
         }
 
-        //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.
+        public static int getMostPopulated()
+        {
+            int mostPopulated = 0;
+            foreach (Qubit q in Manager.getQubits())
+            {
+                if (q.getGates().Count > mostPopulated) mostPopulated = q.getGates().Count;
+            }
+            return mostPopulated;
+        }
+
+        /// <summary>
+        /// Solve the circuit as a Matrix (From Right to Left)
+        /// </summary>
+        public static void Solve()
+        {
+            Console.WriteLine("Solving");
+            Matrix currentVal = null; // Current value of the circuit Matrix.
+
+            List<CircuitComponent> components = new List<CircuitComponent>();
+            foreach (var element in circuitCanvas.MainCircuitCanvas.Children)
+            {
+                if (element.GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)element); }
+            }
+            components = components.OrderBy(x => x.getPoint().X).ToList();
+
+            // Get lists of distinct X and Y values
+            List<double> xValues = components.GroupBy(x => x.getPoint().X).Select(x => x.First().getPoint().X).ToList();
+            List<double> yValues = components.GroupBy(x => x.getPoint().Y).Select(x => x.First().getPoint().Y).ToList();
+
+            if (yValues.Count > qubits.Count || xValues.Count > getMostPopulated()) // Stop solving if there is a problem.
+            {
+                Console.WriteLine("There was a problem with the circuit. \r\n Try re-sorting it and try again.");
+                return;
+            }
+
+            for (int x = xValues.Count - 1; x >= 0; x--)
+            {
+                // Get a list of all gates at the current X value.
+                List<Gate> currentGates = components.Where(c => c.getPoint().X == xValues[x]).Select(c => c.getGate()).ToList();
+                // Calculate the tensor product of all matrices of the current gates.
+                Matrix m = currentGates[0].getMatrix();
+                for (int i = 1; i < currentGates.Count; i++)
+                {
+                    m = Matrix.Tensor(m, currentGates[i].getMatrix());
+                }
+
+                if (currentVal != null)                // Multiply the overall matrix by the current tensor product.
+                {
+                    currentVal = Matrix.Multiply(currentVal, m);
+                }
+                else
+                {
+                    currentVal = m;
+                }
+            }
+
+            Console.Write(currentVal.ToString(true));
+        }
     }
 }
 
