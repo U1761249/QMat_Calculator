@@ -212,6 +212,8 @@ namespace QMat_Calculator
             // Remove the gate from the canvas.
             circuitCanvas.MainCircuitCanvas.Children.Remove(selectedGate);
             selectedGate = null;
+            circuitCanvas.OrderComponents();
+
         }
 
         //TODO: Calculate the number of Qubits used and the appropriate Kronecker product for the gates used.

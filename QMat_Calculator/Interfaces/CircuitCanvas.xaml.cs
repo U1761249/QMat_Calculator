@@ -48,7 +48,6 @@ namespace QMat_Calculator.Interfaces
             CircuitComponent cc = new CircuitComponent(p);
             cc.setType(Manager.getHeldGate());
             MainCircuitCanvas.Children.Add(cc);
-
         }
 
         /// <summary>
@@ -204,7 +203,7 @@ namespace QMat_Calculator.Interfaces
         /// <summary>
         /// Move the gates on the screen and within the Qubit's list so that they are in the correct order.
         /// </summary>
-        private void OrderComponents()
+        public void OrderComponents()
         {
 
             List<CircuitComponent> components = new List<CircuitComponent>();
@@ -219,7 +218,7 @@ namespace QMat_Calculator.Interfaces
 
             if (components.Count > 0)
             {
-                // Get a list of all Qubit Heights
+                // Get a list of all unique heights (each different Qubit Y value)
                 List<double> qubitHeightValues = components.GroupBy(x => x.getPoint().Y).Select(x => x.First().getPoint().Y).ToList();
                 int mostPopulated = 0;
                 foreach (Qubit q in Manager.getQubits())
@@ -227,22 +226,87 @@ namespace QMat_Calculator.Interfaces
                     if (q.getGates().Count > mostPopulated) mostPopulated = q.getGates().Count;
                 }
                 double spacing = MainCircuitCanvas.ActualWidth / (mostPopulated + 1);
-                for (int i = 0; i < qubitHeightValues.Count; i++)
+
+                // Create a list of all spaced indexes.
+                List<double> spaceIndexes = new List<double>();
+                for (int i = 0; i < mostPopulated; i++)
+                {
+                    spaceIndexes.Add(spacing * (i + 1));
+                }
+
+                for (int qubitIndex = 0; qubitIndex < qubitHeightValues.Count; qubitIndex++)
                 {
                     // Get a list of all components with a Y position in the current qubit (index i) ordered by x value (ASC)
-                    List<CircuitComponent> qubitComponents = components.Where(x => x.getPoint().Y == qubitHeightValues[i]).OrderBy(x => x.getPoint().X).ToList();
-                    for (int x = 0; x < qubitComponents.Count; x++)
-                    {
-                        Point p = qubitComponents[x].getPoint();
-                        p.X = spacing * (x + 1) - (qubitComponents[x].ActualWidth / 2);
+                    List<CircuitComponent> qubitComponents = components.Where(x => x.getPoint().Y == qubitHeightValues[qubitIndex]).OrderBy(x => x.getPoint().X).ToList();
 
-                        Canvas.SetTop(qubitComponents[x], p.Y);
-                        Canvas.SetLeft(qubitComponents[x], p.X);
-                        qubitComponents[x].setPoint(p);
+                    Dictionary<CircuitComponent, int> componentSpacing = new Dictionary<CircuitComponent, int>(); // Store the component and the index of the nearest spaceIndex
+
+                    // Create a dictionary matching a component to an X position index.
+                    for (int i = 0; i < spaceIndexes.Count; i++)
+                    {
+                        double target = spaceIndexes[i];
+                        double closestDistance = double.PositiveInfinity;
+                        CircuitComponent closest = null;
+
+                        foreach (CircuitComponent qc in qubitComponents) // Calculate the component closest to a point.
+                        {
+                            double x = qc.getPoint().X;
+                            double distance = Math.Abs(target - x);
+                            if (distance < closestDistance)
+                            {
+                                closestDistance = distance;
+                                closest = qc;
+                            }
+                        }
+                        if (closest != null) // Add or update the component in the dictionary.
+                        {
+                            if (componentSpacing.ContainsKey(closest))
+                            {
+                                double x = closest.getPoint().X;
+                                double originalDistance = Math.Abs(spaceIndexes[componentSpacing[closest]] - x);
+                                if (Math.Abs(target - x) < originalDistance)
+                                {
+                                    componentSpacing[closest] = i;
+                                }
+                            }
+                            else
+                            {
+                                componentSpacing.Add(closest, i);
+                            }
+                        }
+
                     }
+
+                    // Update the points for each of the components.
+                    for (int i = 0; i < qubitComponents.Count; i++)
+                    {
+                        if (componentSpacing.ContainsKey(qubitComponents[i]))
+                        {
+                            Point p = qubitComponents[i].getPoint();
+                            p.X = spaceIndexes[componentSpacing[qubitComponents[i]]];
+                            qubitComponents[i].setPoint(p);
+
+                            Canvas.SetTop(qubitComponents[i], p.Y);
+                            Canvas.SetLeft(qubitComponents[i], p.X);
+                        }
+                    }
+
+
+
+                    //for (int x = 0; x < qubitComponents.Count; x++)
+                    //{
+                    //    Point p = qubitComponents[x].getPoint();
+                    //    p.X = spacing * (x + 1) - (qubitComponents[x].ActualWidth / 2);
+
+                    //    Canvas.SetTop(qubitComponents[x], p.Y);
+                    //    Canvas.SetLeft(qubitComponents[x], p.X);
+                    //    qubitComponents[x].setPoint(p);
+                    //}
+
+
                     for (int j = components.Count - 1; j >= 0; j--) // From rear to start, remove all components with the current Y value
                     {
-                        if (components[j].getPoint().Y == qubitHeightValues[i]) components.RemoveAt(j);
+                        if (components[j].getPoint().Y == qubitHeightValues[qubitIndex]) components.RemoveAt(j);
                     }
                     components.AddRange(qubitComponents); // Add the modified components to the list
                 }
