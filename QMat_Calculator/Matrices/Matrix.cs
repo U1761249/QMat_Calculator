@@ -102,7 +102,7 @@ namespace QMat_Calculator.Matrices
             for (int r = 0; r < rows; r++)
             {
                 // Add the preceder or space if there is a preceder.
-                if (hasPreceder && r == precederRow) s.Append(p);
+                if (hasPreceder && r == precederRow) s.Append(FractionConverter.Convert(Convert.ToDouble(p)));
                 else if (hasPreceder && r != precederRow) s.Append(space);
 
                 for (int c = 0; c < columns; c++)
