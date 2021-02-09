@@ -32,6 +32,10 @@ namespace QMat_Calculator.Matrices
             this.preceder = -1;
         }
 
+        public int getRows() { return rows; }
+        public int getColumns() { return columns; }
+        public Complex[,] getData() { return data; }
+
         /// <summary>
         /// Update the value in the matrix.
         /// </summary>

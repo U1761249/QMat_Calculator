@@ -25,6 +25,7 @@ namespace QMat_Calculator
     static class Manager
     {
         private static CircuitCanvas circuitCanvas;
+        private static MatrixCanvas matrixCanvas;
         private static CircuitComponent selectedGate = null;
         private static List<Qubit> qubits = new List<Qubit>();
         private static Gate heldGate = null;
@@ -108,10 +109,9 @@ namespace QMat_Calculator
         }
 
         public static CircuitCanvas getCircuitCanvas() { return circuitCanvas; }
-
-
-
         public static void setCircuitCanvas(CircuitCanvas cc) { circuitCanvas = cc; }
+        public static MatrixCanvas getMatrixCanvas() { return matrixCanvas; }
+        public static void setMatrixCanvas(MatrixCanvas mc) { matrixCanvas = mc; }
         public static UIElement getCCDrag() { return ccDrag; }
         public static Point getOffsetDrag() { return offsetDrag; }
         public static void setCCDrag(UIElement cc) { ccDrag = cc; }
@@ -276,7 +276,10 @@ namespace QMat_Calculator
                 }
             }
 
-            Console.Write(currentVal.ToString(true));
+            //Console.Write(currentVal.ToString(true));
+
+            if (currentVal != null)
+                matrixCanvas.DisplayMatrix(currentVal);
         }
     }
 }

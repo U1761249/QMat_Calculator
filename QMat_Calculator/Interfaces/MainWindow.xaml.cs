@@ -43,7 +43,9 @@ namespace QMat_Calculator
             CircuitCanvas cc = new CircuitCanvas();
             Manager.setCircuitCanvas(cc);
             circuitCanvasBorder.Child = cc;
-
+            MatrixCanvas mc = new MatrixCanvas();
+            Manager.setMatrixCanvas(mc);
+            matrixCanvasBorder.Child = mc;
         }
 
 
@@ -62,7 +64,11 @@ namespace QMat_Calculator
             MessageBox.Show("Save");
         }
 
-
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabControl.SelectedIndex == 1)
+                Manager.Solve();
+        }
     }
 
     /// <summary>
@@ -149,6 +155,7 @@ namespace QMat_Calculator
         public void Execute(object parameter)
         {
             Manager.Solve();
+
         }
     }
 }

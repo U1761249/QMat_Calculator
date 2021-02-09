@@ -22,6 +22,8 @@ namespace QMat_Calculator.Matrices
         /// <returns></returns>
         public static string Convert(double value)
         {
+            if (value == -1) return "";
+
             // \u221A is the Unicode character for √
 
             // Round to 14 chars as the root2 value is 17 chars long, while the normal is 15. 
@@ -59,16 +61,16 @@ namespace QMat_Calculator.Matrices
         /// <returns></returns>
         private static string Powerof(int power, double value)
         {
-            if (power % 2 == 0)
+            if (power % 2 == 0) // Even values can be converted to a standard fraction (1/2, 1/4, etc)
             {
                 double denominator = Math.Pow(2, (power / 2));
                 return $"1/{denominator}";
             }
 
-            else if (power == 3) { return "\u221A2/4"; } // anything past 3 and is odd cannot be simplified to a power of √2/x
+            else if (power == 3) { return "\u221A2/4"; } // 3 can be simplified to √2/4
 
 
-            return value.ToString();
+            return value.ToString();// any odd value past 3 cannot be simplified to a power of √2/x
 
         }
     }

@@ -120,8 +120,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Interfaces\MatrixCanvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\MatrixCanvas.xaml.cs">
+      <DependentUpon>MatrixCanvas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Manager.cs" />
     <Compile Include="Matrices\FractionConverter.cs" />
     <Compile Include="Matrices\Matrix.cs" />

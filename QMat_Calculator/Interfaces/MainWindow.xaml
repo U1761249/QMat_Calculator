@@ -78,9 +78,15 @@
             <MenuItem Header="_Preferences" />
         </Menu>
 
-        <ScrollViewer Grid.Row="1">
-            <Border x:Name="circuitCanvasBorder" />
-        </ScrollViewer>
+        <TabControl x:Name="tabControl" Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
+
+            <TabItem Header="Design" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
+                <Border x:Name="circuitCanvasBorder" />
+            </TabItem>
+            <TabItem Header="Matrix" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
+                <Border x:Name="matrixCanvasBorder" />
+            </TabItem>
+        </TabControl>
 
         <CR:CompoentRibbon Grid.Row="2" Background="AliceBlue">
 
