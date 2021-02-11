@@ -31,6 +31,8 @@ namespace QMat_Calculator.Drawable
     {
         private Gate gate = null;
         private Point point;
+
+        public string getMatrix { get { return gate.getMatrix().ToString(true); } } // Create a value to bind in Xaml
         public CircuitComponent(Point p)
         {
             InitializeComponent();
@@ -38,6 +40,7 @@ namespace QMat_Calculator.Drawable
             Canvas.SetTop(this, p.Y - (this.ActualHeight / 2));
             Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
             this.point = p;
+            this.DataContext = this;
         }
         public ref Gate getGate() { return ref gate; }
         public void setGate(Gate g) { gate = g; }

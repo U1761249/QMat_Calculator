@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:QMat_Calculator.Drawable"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100">
-    <Border x:Name="component" Height="100" Width="100" BorderThickness="5" Background="White" BorderBrush="Black" PreviewMouseDown="component_PreviewMouseDown">
+
+    <Border x:Name="component" Height="100" Width="100" BorderThickness="5" Background="White" BorderBrush="Black" PreviewMouseDown="component_PreviewMouseDown" ToolTip="{Binding getMatrix}">
         <TextBlock x:Name="componentLabel"  Text="" FontSize="48" Margin="5"/>
     </Border>
 </UserControl>
