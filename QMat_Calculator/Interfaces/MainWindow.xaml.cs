@@ -84,6 +84,12 @@ namespace QMat_Calculator
         {
             get { return new AddQubitKey(); }
         }
+
+        public ICommand RemoveLastQubitCommand
+        {
+            get { return new RemoveLastQubitKey(); }
+        }
+
         public ICommand RemoveGateCommand
         {
             get { return new RemoveGateKey(); }
@@ -125,6 +131,21 @@ namespace QMat_Calculator
         public void Execute(object parameter)
         {
             Manager.addQubit();
+        }
+    }
+
+    public class RemoveLastQubitKey : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            Manager.removeQubit();
         }
     }
 

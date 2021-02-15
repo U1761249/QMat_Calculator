@@ -29,6 +29,8 @@ namespace QMat_Calculator.Interfaces
     public partial class CircuitCanvas : UserControl
     {
 
+        private List<QubitComponent> qubitComponents = new List<QubitComponent>();
+
         public CircuitCanvas()
         {
             InitializeComponent();
@@ -48,6 +50,19 @@ namespace QMat_Calculator.Interfaces
             CircuitComponent cc = new CircuitComponent(p);
             cc.setType(Manager.getHeldGate());
             MainCircuitCanvas.Children.Add(cc);
+
+            int nodes = cc.getGate().getNodeCount();
+            if (nodes > Manager.getMinQubitCount())
+            {
+                Manager.setMinQubitCount(nodes);
+            }
+            if (nodes > Manager.getQubitCount())
+            {
+                while (nodes > Manager.getQubitCount()) // Add a qubit for each node.
+                {
+                    Manager.addQubit();
+                }
+            }
         }
 
         /// <summary>
@@ -159,10 +174,21 @@ namespace QMat_Calculator.Interfaces
             QubitComponent q = new QubitComponent(0, 0, value);
             MainCircuitCanvas.Children.Add(q);
             q.AddToManager();
-
+            qubitComponents.Add(q);
             ResizeQubits();
             //MessageBox.Show($"Width: {width}");
             //MessageBox.Show($"Height: {height}");
+        }
+
+        public void RemoveLastQubit()
+        {
+            if (qubitComponents.Count() > 1)
+            {
+                MainCircuitCanvas.Children.Remove(qubitComponents.Last());
+                qubitComponents.Remove(qubitComponents.Last());
+
+                ResizeQubits();
+            }
         }
 
         /// <summary>

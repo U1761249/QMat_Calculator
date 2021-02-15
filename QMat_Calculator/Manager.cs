@@ -24,6 +24,8 @@ namespace QMat_Calculator
     /// </summary>
     static class Manager
     {
+        private static int minQubitCount = 1;
+
         private static CircuitCanvas circuitCanvas;
         private static MatrixCanvas matrixCanvas;
         private static CircuitComponent selectedGate = null;
@@ -38,6 +40,9 @@ namespace QMat_Calculator
         public static Gate getHeldGate() { return heldGate; }
         public static void setSelectedGate(CircuitComponent g) { selectedGate = g; }
         public static CircuitComponent getSelectedGate() { return selectedGate; }
+
+        public static int getMinQubitCount() { return minQubitCount; }
+        public static void setMinQubitCount(int val) { minQubitCount = val; }
 
         private static double spacing;
 
@@ -124,7 +129,6 @@ namespace QMat_Calculator
         public static void setQubits(List<Qubit> q) { qubits = q; }
         public static int getQubitCount() { return qubits.Count; }
         public static void addQubit(ref Qubit q) { qubits.Add(q); }
-        public static void removeQubit(Qubit q) { qubits.Remove(q); }
         public static void removeQubit(int index) { qubits.RemoveAt(index); }
 
         public static void addQubit() { circuitCanvas.AddQubit(); }
@@ -196,6 +200,22 @@ namespace QMat_Calculator
             return sb.ToString();
         }
 
+        public static void removeQubit()
+        {
+            int lastIndex = qubits.Count() - 1;
+            if (qubits[lastIndex].getGates().Count == 0 && qubits.Count() > minQubitCount + 1)
+            {
+                //qubits.RemoveAt(lastIndex);
+                circuitCanvas.RemoveLastQubit();
+            }
+            else
+            {
+                MessageBox.Show($"Unable to remove the last qubit. \r\nCheck it is empty and no gate uses {minQubitCount} qubits.");
+            }
+        }
+
+
+
         public static void removeGate()
         {
             if (selectedGate == null)
@@ -213,6 +233,15 @@ namespace QMat_Calculator
                     break;
                 }
             }
+
+            // Update the minQubitCount value;
+            List<Gate> gates = new List<Gate>();
+            foreach (Qubit q in qubits) gates.AddRange(q.getGates());
+            if (gates.Count() > 0)
+                minQubitCount = gates.GroupBy(x => x.getNodeCount()).Select(x => x.First().getNodeCount()).ToList().Max(); // Set the minQubitCount to the largest NodeCount of all gates.
+            else minQubitCount = 1;
+
+
             // Remove the gate from the canvas.
             circuitCanvas.MainCircuitCanvas.Children.Remove(selectedGate);
             selectedGate = null;
