@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:QMat_Calculator.Drawable"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Line x:Name="qubitChannel" Stroke="Black" StrokeThickness="5"/>
+    <Line x:Name="qubitChannel" Stroke="Gray" StrokeThickness="1"/>
 
 </UserControl>

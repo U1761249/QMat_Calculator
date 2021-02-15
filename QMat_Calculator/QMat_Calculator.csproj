@@ -174,10 +174,19 @@
     <Resource Include="Icons\New.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\Toffoli.png" />
+    <Resource Include="Icons\Remove.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\Remove.png" />
+    <Resource Include="Icons\Hadamard%28New%29.png" />
+    <Resource Include="Icons\PauliX.png" />
+    <Resource Include="Icons\PauliY.png" />
+    <Resource Include="Icons\PauliZ.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Toffoli-CNOT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\RootNOT.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

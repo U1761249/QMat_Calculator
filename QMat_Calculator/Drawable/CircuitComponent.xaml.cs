@@ -32,7 +32,10 @@ namespace QMat_Calculator.Drawable
         private Gate gate = null;
         private Point point;
 
-        public string getMatrix { get { return gate.getMatrix().ToString(true); } } // Create a value to bind in Xaml
+        public string getMatrix
+        {
+            get { if (gate == null) return ""; return gate.getMatrix().ToString(true); }
+        } // Create a value to bind in Xaml
         public CircuitComponent(Point p)
         {
             InitializeComponent();
@@ -55,26 +58,41 @@ namespace QMat_Calculator.Drawable
         {
             if (o.GetType().BaseType == typeof(Gate))
             {
-                string label = "";
-
                 gate = ((Gate)o);
-                if (gate.GetType() == typeof(Hadamard)) { label = ((Hadamard)gate).GetGateLabel(); }
-                else if (gate.GetType() == typeof(Pauli)) { label = ((Pauli)gate).GetGateLabel(); }
-                else if (gate.GetType() == typeof(CNOT)) { label = ((CNOT)gate).GetGateLabel(); }
-                else if (gate.GetType() == typeof(SqrtNOT)) { label = ((SqrtNOT)gate).GetGateLabel(); }
-                //else if (gate.GetType() == typeof(Deutsch)) { label = ((Deutsch)gate).GetGateLabel(); }
-                else if (gate.GetType() == typeof(Toffoli)) { label = ((Toffoli)gate).GetGateLabel(); }
+                //string label = "";
+                //
 
+                //if (gate.GetType() == typeof(Hadamard)) { label = ((Hadamard)gate).GetGateLabel(); }
+                //else if (gate.GetType() == typeof(Pauli)) { label = ((Pauli)gate).GetGateLabel(); }
+                //else if (gate.GetType() == typeof(CNOT)) { label = ((CNOT)gate).GetGateLabel(); }
+                //else if (gate.GetType() == typeof(SqrtNOT)) { label = ((SqrtNOT)gate).GetGateLabel(); }
+                ////else if (gate.GetType() == typeof(Deutsch)) { label = ((Deutsch)gate).GetGateLabel(); }
+                //else if (gate.GetType() == typeof(Toffoli)) { label = ((Toffoli)gate).GetGateLabel(); }
+                //
+                //
+                //if (!String.IsNullOrWhiteSpace(label))
+                //{
+                //    componentLabel.Text = label;
+                //    if (label.Length > 1)
+                //    {
+                //        componentLabel.FontSize = 30;
+                //    }
+                //}
 
-                if (!String.IsNullOrWhiteSpace(label))
+                if (gate.GetType() == typeof(Hadamard)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Hadamard(New).png", UriKind.Relative)); }
+                else if (gate.GetType() == typeof(Pauli))
                 {
-                    componentLabel.Text = label;
-                    if (label.Length > 1)
+                    switch (((Pauli)gate).GetPauliType())
                     {
-                        componentLabel.FontSize = 30;
+                        case (Pauli.PauliType.X): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliX.png", UriKind.Relative)); break;
+                        case (Pauli.PauliType.Y): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliY.png", UriKind.Relative)); break;
+                        case (Pauli.PauliType.Z): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliZ.png", UriKind.Relative)); break;
                     }
                 }
-
+                else if (gate.GetType() == typeof(CNOT)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Toffoli-CNOT.png", UriKind.Relative)); }
+                else if (gate.GetType() == typeof(SqrtNOT)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/RootNOT.png", UriKind.Relative)); }
+                //else if (gate.GetType() == typeof(Deutsch)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Hadamard.png", UriKind.Relative)); }
+                else if (gate.GetType() == typeof(Toffoli)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Toffoli-CNOT.png", UriKind.Relative)); }
             }
         }
 
@@ -110,7 +128,7 @@ namespace QMat_Calculator.Drawable
             this.point = p;
         }
 
-        public string getLabelText() { return componentLabel.Text; }
+        //public string getLabelText() { return componentLabel.Text; }
 
     }
 }

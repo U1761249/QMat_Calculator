@@ -18,13 +18,13 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Image Grid.Column="0" x:Name="imageHadamard" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard.png"/>
-        <Image Grid.Column="1" x:Name="imagePauliX" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard.png"/>
-        <Image Grid.Column="2" x:Name="imagePauliY" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard.png"/>
-        <Image Grid.Column="3" x:Name="imagePauliZ" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard.png"/>
-        <Image Grid.Column="4" x:Name="imageCNOT" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard.png"/>
-        <Image Grid.Column="5" x:Name="imageSqrtNOT" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard.png"/>
-        <Image Grid.Column="6" x:Name="imageToffoli" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard.png"/>
+        <Image Grid.Column="0" x:Name="imageHadamard" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Hadamard(New).png"/>
+        <Image Grid.Column="1" x:Name="imagePauliX" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/PauliX.png"/>
+        <Image Grid.Column="2" x:Name="imagePauliY" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/PauliY.png"/>
+        <Image Grid.Column="3" x:Name="imagePauliZ" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/PauliZ.png"/>
+        <Image Grid.Column="4" x:Name="imageCNOT" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Toffoli-CNOT.png"/>
+        <Image Grid.Column="5" x:Name="imageSqrtNOT" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/RootNOT.png"/>
+        <Image Grid.Column="6" x:Name="imageToffoli" PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" Source="/Icons/Toffoli-CNOT.png"/>
 
         <Button Grid.Column="7" Margin="5,5" x:Name="imageNewGate">
             <Image Source="/Icons/New.png"/>
