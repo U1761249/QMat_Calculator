@@ -13,8 +13,13 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits.Gates
 {
-    class ControlBit : Gate
+    public class ControlBit : Gate
     {
+        public ControlBit()
+        {
+
+        }
+
         //TODO: Implement a control bit to populate a column when a multi-bit gate is used.
     }
 }

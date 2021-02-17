@@ -75,6 +75,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Drawable\ControlQubit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Drawable\QubitComponent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -106,6 +110,9 @@
     <Compile Include="Circuits\Qubit.cs" />
     <Compile Include="Drawable\CircuitComponent.xaml.cs">
       <DependentUpon>CircuitComponent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawable\ControlQubit.xaml.cs">
+      <DependentUpon>ControlQubit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawable\QubitComponent.xaml.cs">
       <DependentUpon>QubitComponent.xaml</DependentUpon>

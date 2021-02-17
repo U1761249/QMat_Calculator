@@ -31,7 +31,7 @@ namespace QMat_Calculator.Drawable
     {
         private Gate gate = null;
         private Point point;
-
+        List<ControlQubit> controlQubits = new List<ControlQubit>();
         public string getMatrix
         {
             get { if (gate == null) return ""; return gate.getMatrix().ToString(true); }
@@ -49,6 +49,14 @@ namespace QMat_Calculator.Drawable
         public void setGate(Gate g) { gate = g; }
         public Point getPoint() { return point; }
         public void setPoint(Point p) { point = p; }
+        public List<ControlQubit> getControlQubits() { return controlQubits; }
+        public void setControlQubits(List<ControlQubit> q) { controlQubits = q; }
+        public void addControlQubit(ControlQubit q)
+        {
+            if (controlQubits == null)
+                controlQubits = new List<ControlQubit>();
+            controlQubits.Add(q);
+        }
 
         /// <summary>
         /// Change the component based on the type of gate it contains.

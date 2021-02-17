@@ -29,6 +29,7 @@ namespace QMat_Calculator
         private static CircuitCanvas circuitCanvas;
         private static MatrixCanvas matrixCanvas;
         private static CircuitComponent selectedGate = null;
+        private static ControlQubit selectedControl = null;
         private static List<Qubit> qubits = new List<Qubit>();
         private static Gate heldGate = null;
         private static Dictionary<string, Type> GateImage = null;
@@ -40,6 +41,8 @@ namespace QMat_Calculator
         public static Gate getHeldGate() { return heldGate; }
         public static void setSelectedGate(CircuitComponent g) { selectedGate = g; }
         public static CircuitComponent getSelectedGate() { return selectedGate; }
+        public static void setSelectedControl(ControlQubit g) { selectedControl = g; }
+        public static ControlQubit getSelectedControl() { return selectedControl; }
 
         public static int getMinQubitCount() { return minQubitCount; }
         public static void setMinQubitCount(int val) { minQubitCount = val; }
@@ -114,8 +117,50 @@ namespace QMat_Calculator
         }
 
         public static CircuitCanvas getCircuitCanvas() { return circuitCanvas; }
+
+        /// <summary>
+        /// Return the QubitComponent closest to the given Y coordinate.
+        /// </summary>
+        /// <param name="targetY"></param>
+        /// <param name="qubits"></param>
+        /// <returns></returns>
+        public static QubitComponent getClosestQubitComponent(double targetY, List<QubitComponent> qubits)
+        {
+            double closestY = double.PositiveInfinity;
+            QubitComponent chosen = null;
+            foreach (QubitComponent qc in qubits)
+            {
+                if (chosen == null) { chosen = qc; }
+
+                double qcY = Math.Abs(qc.GetPoint().Y - targetY);
+                if (qcY < closestY)
+                {
+                    closestY = qcY;
+                    chosen = qc;
+                }
+            }
+
+            return chosen;
+        }
+
         public static void setCircuitCanvas(CircuitCanvas cc) { circuitCanvas = cc; }
         public static MatrixCanvas getMatrixCanvas() { return matrixCanvas; }
+
+        public static void UpdateHeight(CircuitComponent component, double height)
+        {
+            Canvas.SetTop(component, height - (component.ActualHeight / 2));
+            Point circuitPoint = component.getPoint();
+            circuitPoint.Y = height - (component.ActualHeight / 2);
+            component.setPoint(circuitPoint);
+        }
+        public static void UpdateHeight(ControlQubit component, double height)
+        {
+            Canvas.SetTop(component, height - (component.ActualHeight / 2));
+            Point circuitPoint = component.getPoint();
+            circuitPoint.Y = height - (component.ActualHeight / 2);
+            component.setPoint(circuitPoint);
+        }
+
         public static void setMatrixCanvas(MatrixCanvas mc) { matrixCanvas = mc; }
         public static UIElement getCCDrag() { return ccDrag; }
         public static Point getOffsetDrag() { return offsetDrag; }
@@ -132,6 +177,54 @@ namespace QMat_Calculator
         public static void removeQubit(int index) { qubits.RemoveAt(index); }
 
         public static void addQubit() { circuitCanvas.AddQubit(); }
+
+        public static void AssignControlBits()
+        {
+            Gate gate = ((CircuitComponent)ccDrag).getGate();
+            List<ControlQubit> controlBits = ((CircuitComponent)ccDrag).getControlQubits();
+            List<int> blackListIndexes = new List<int>();
+
+            foreach (ControlQubit bit in controlBits)
+            {
+                bool assigned = false;
+
+                ControlBit control = bit.getControlBit();
+                for (int i = 0; i < qubits.Count; i++)
+                {
+                    if (qubits[i].hasGate(gate))// Detect the primary gate and blacklist the index.
+                    {
+                        if (!blackListIndexes.Contains(i)) blackListIndexes.Add(i);
+
+                        if (qubits[i].hasGate(control)) // Detect if the control bit is assigned and invalid.
+                        {
+                            qubits[i].removeGate(control);
+                            assigned = false;
+                        }
+                    }
+                    else if (qubits[i].hasGate(control)) // Detect if the control bit is assigned and valid.
+                    {
+                        assigned = true;
+                        blackListIndexes.Add(i);
+                    }
+                }
+
+                if (!assigned) // Assign the unassigned control bits to the first available qubit.
+                {
+                    for (int i = 0; i < qubits.Count; i++)
+                    {
+                        if (!blackListIndexes.Contains(i))
+                        {
+                            blackListIndexes.Add(i);
+                            qubits[i].addGate(control);
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+
+        }
 
         /// <summary>
         /// Remove the given gate from all qubits.
@@ -244,6 +337,11 @@ namespace QMat_Calculator
 
             // Remove the gate from the canvas.
             circuitCanvas.MainCircuitCanvas.Children.Remove(selectedGate);
+            for (int i = 0; i < selectedGate.getControlQubits().Count; i++)
+            {
+                // Remove all control bits associated with the gate
+                circuitCanvas.MainCircuitCanvas.Children.Remove(selectedGate.getControlQubits()[i]);
+            }
             selectedGate = null;
             circuitCanvas.OrderComponents();
 
@@ -281,6 +379,8 @@ namespace QMat_Calculator
             if (yValues.Count > qubits.Count || xValues.Count > getMostPopulated()) // Stop solving if there is a problem.
             {
                 Console.WriteLine("There was a problem with the circuit. \r\n Try re-sorting it and try again.");
+                MessageBox.Show(PrintGateLayout());
+
                 return;
             }
 
@@ -309,6 +409,7 @@ namespace QMat_Calculator
 
             if (currentVal != null)
                 matrixCanvas.DisplayMatrix(currentVal);
+            MessageBox.Show(PrintGateLayout());
         }
     }
 }
