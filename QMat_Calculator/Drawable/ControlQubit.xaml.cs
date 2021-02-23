@@ -61,8 +61,8 @@ namespace QMat_Calculator.Drawable
             Canvas.SetTop(this, 0);
             Canvas.SetLeft(this, 0);
 
-            Canvas.SetTop(this, (p.Y / 2) - (this.ActualHeight / 2));
-            Canvas.SetLeft(this, (p.X / 2) - (this.ActualHeight / 2));
+            Canvas.SetTop(this, p.Y - (this.ActualHeight / 2));
+            Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
         }
 
     }

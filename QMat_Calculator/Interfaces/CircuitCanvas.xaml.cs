@@ -375,8 +375,7 @@ namespace QMat_Calculator.Interfaces
                 if (controlledGates > 0 && nonControlledGates > 0) { requiredColumns += controlledGates; }
                 else if (controlledGates > 0 && nonControlledGates == 0)
                 {
-                    if (controlledGates == 1) { requiredColumns += 1; }
-                    else
+                    if (controlledGates > 1)
                     {
                         requiredColumns += controlledGates - 1;
                     }
@@ -387,69 +386,89 @@ namespace QMat_Calculator.Interfaces
 
             // Create a final array with a new column for each 
             UserControl[,] finalAlignment = new UserControl[qubitHeightValues.Count, requiredColumns];
-            int colOffset = 0;
-            for (int col = 0; col < Manager.getMostPopulated(); col++)
+            if (finalAlignment.Length == alignment.Length) { finalAlignment = alignment; }
+            else
             {
-                int controlledGates = 0;
-                int nonControlledGates = 0;
-                bool isFirst = true;
-                int placedControlledIndex = 1;
-
-                for (int row = 0; row < qubitHeightValues.Count; row++) // Analyse the content of the column
+                int colOffset = 0;
+                for (int col = 0; col < Manager.getMostPopulated(); col++)
                 {
-                    if (alignment[row, col] == null) continue;
-                    if (alignment[row, col].GetType() == typeof(CircuitComponent))
+                    int controlledGates = 0;
+                    int nonControlledGates = 0;
+                    bool isFirst = true;
+                    int placedControlledIndex = 1;
+
+                    for (int row = 0; row < qubitHeightValues.Count; row++) // Analyse the content of the column
                     {
-                        if (((CircuitComponent)alignment[row, col]).getGate().getNodeCount() > 1)
+                        if (alignment[row, col] == null) continue;
+                        if (alignment[row, col].GetType() == typeof(CircuitComponent))
                         {
-                            controlledGates++;
-                        }
-                        else nonControlledGates++;
-                    }
-                }
-
-                for (int row = 0; row < qubitHeightValues.Count; row++) // Order the alignment column into the final column(s)
-                {
-                    if (alignment[row, col] == null) continue;
-                    if (alignment[row, col].GetType() == typeof(CircuitComponent))
-                    {
-                        CircuitComponent value = (CircuitComponent)alignment[row, col];
-                        bool isControlled = value.getGate().getNodeCount() > 1;
-
-                        if (!isControlled) // The gate goes to it's default column
-                        {
-                            finalAlignment[row, col + colOffset] = alignment[row, col];
-                        }
-
-                        else // The gate needs to be moved
-                        {
-                            if (controlledGates > 0 && nonControlledGates == 0 && isFirst) // All bar the first controlled gates are in a new column.
+                            if (((CircuitComponent)alignment[row, col]).getGate().getNodeCount() > 1)
                             {
-                                if (colOffset > 0)
-                                { colOffset -= 1; }
-                                isFirst = false;
+                                controlledGates++;
+                            }
+                            else nonControlledGates++;
+                        }
+                    }
+
+                    for (int row = 0; row < qubitHeightValues.Count; row++) // Order the alignment column into the final column(s)
+                    {
+                        if (alignment[row, col] == null) continue;
+                        if (alignment[row, col].GetType() == typeof(CircuitComponent))
+                        {
+                            CircuitComponent value = (CircuitComponent)alignment[row, col];
+                            bool isControlled = value.getGate().getNodeCount() > 1;
+
+                            if (!isControlled) // The gate goes to it's default column
+                            {
+                                finalAlignment[row, col + colOffset] = alignment[row, col];
                             }
 
-                            finalAlignment[row, col + colOffset + placedControlledIndex] = alignment[row, col];
-                            placedControlledIndex += 1;
+                            else // The gate needs to be moved
+                            {
+                                if (controlledGates > 0 && nonControlledGates == 0 && isFirst) // All bar the first controlled gates are in a new column.
+                                {
+                                    if (colOffset > 0)
+                                    { colOffset -= 1; }
+                                    isFirst = false;
+                                }
 
-                            //else if (controlledGates > 0 && nonControlledGates > 0) // All controlled gates are in new columns.
-                            //{
-                            //    if (isControlled)
-                            //    {
-                            //        finalAlignment[row, col + colOffset] = alignment[row, col];
-                            //
-                            //    }
-                            //}
+                                while (placedControlledIndex >= requiredColumns)
+                                {
+                                    placedControlledIndex--;
+                                }
+
+                                finalAlignment[row, col + colOffset + placedControlledIndex] = alignment[row, col];
+                                placedControlledIndex += 1;
+                            }
                         }
                     }
-                }
-                colOffset += controlledGates;
+                    colOffset += controlledGates;
 
+                }
             }
 
-            Console.WriteLine("");
+            MoveAll(ref finalAlignment, qubitHeightValues, qubitHeightValues.Count, requiredColumns);
+        }
 
+        /// <summary>
+        /// Move the components into the structure defined in OrderComponents();
+        /// </summary>
+        /// <param name="alignment"></param>
+        private void MoveAll(ref UserControl[,] alignment, List<double> qubitHeightValues, double rowCount, double colCount)
+        {
+            double spacing = MainCircuitCanvas.ActualWidth / (colCount + 1);
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int col = 0; col < colCount; col++)
+                {
+                    Point point = new Point(spacing * (col + 1), qubitHeightValues[row]);
+
+                    UserControl component = alignment[row, col];
+                    if (component == null) continue; // Skip this elemet if it is null.
+                    else if (component.GetType() == typeof(CircuitComponent)) { ((CircuitComponent)component).Move(point); }
+                    else if (component.GetType() == typeof(ControlQubit)) { ((ControlQubit)component).Move(point); }
+                }
+            }
         }
 
         /// <summary>
