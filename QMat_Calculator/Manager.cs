@@ -347,6 +347,49 @@ namespace QMat_Calculator
 
         }
 
+        /// <summary>
+        /// Sort the contents of the components list on the X coordinate.
+        /// </summary>
+        /// <param name="components"></param>
+        /// <returns></returns>
+        public static List<UserControl> SortX(List<UserControl> components)
+        {
+            Dictionary<Point, UserControl> mapping = new Dictionary<Point, UserControl>();
+            List<Point> sortedPoints = new List<Point>();
+            List<UserControl> sorted = new List<UserControl>();
+
+            foreach (UserControl component in components)
+            {
+                Point p = new Point();
+                if (component.GetType() == typeof(CircuitComponent))
+                {
+                    p = ((CircuitComponent)component).getPoint();
+                }
+                else if (component.GetType() == typeof(ControlQubit))
+                {
+                    p = ((ControlQubit)component).getPoint();
+                }
+
+                if (p == new Point()) continue;
+                mapping.Add(p, component);
+                sortedPoints.Add(p);
+            }
+
+            // Sort the points by X ascending, with Y ascending for each X.
+            sortedPoints = sortedPoints.OrderBy(x => x.X).ThenBy(x => x.Y).ToList();
+            // Add the mapped controls to the list based on the order of the points.
+            for (int i = 0; i < sortedPoints.Count; i++)
+            {
+                if (mapping.ContainsKey(sortedPoints[i]))
+                {
+                    sorted.Add(mapping[sortedPoints[i]]);
+                }
+            }
+
+
+            return sorted;
+        }
+
         public static int getMostPopulated()
         {
             int mostPopulated = 0;

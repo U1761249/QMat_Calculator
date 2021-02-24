@@ -48,7 +48,16 @@ namespace QMat_Calculator.Drawable
         public ref Gate getGate() { return ref gate; }
         public void setGate(Gate g) { gate = g; }
         public Point getPoint() { return point; }
-        public void setPoint(Point p) { point = p; }
+        public void setPoint(Point p)
+        {
+            point = p;
+            // Update all controlQubits to have the same X coordinate.
+            foreach (ControlQubit cq in controlQubits)
+            {
+                cq.setPoint(
+                    new Point(p.X, cq.getPoint().Y));
+            }
+        }
         public List<ControlQubit> getControlQubits() { return controlQubits; }
         public void setControlQubits(List<ControlQubit> q) { controlQubits = q; }
         public void addControlQubit(ControlQubit q)

@@ -315,38 +315,52 @@ namespace QMat_Calculator.Interfaces
             List<double> qubitHeightValues = qubitComponents.GroupBy(x => x.GetPoint().Y).Select(x => x.First().GetPoint().Y).ToList(); // Get a list of all unique Qubit heights
 
             UserControl[,] alignment = new UserControl[qubitHeightValues.Count, mostPopulated]; // Create an array based on the order of each component on each qubit.
-
-            for (int row = 0; row < qubitHeightValues.Count; row++)
+            List<UserControl> OrderedComponents = Manager.SortX(components);
+            int currentComponent = 0;
+            for (int col = 0; col < mostPopulated; col++)
             {
-                List<UserControl> OrderedQubitComponents = new List<UserControl>(); // A sorted list of all components on qubit i.
-                foreach (UserControl component in components)
+                for (int row = 0; row < qubitHeightValues.Count; row++)
                 {
-                    Point p = getComponentPoint(component); // Get the point of the component
+                    if (ClosestQubit(OrderedComponents[currentComponent], qubitHeightValues) != qubitHeightValues[row]) continue;
 
-                    if (p == new Point(-1, -1)) continue;      // Skip this component if the point value wasn't updated.
-                    if (ClosestQubit(component, qubitHeightValues) != qubitHeightValues[row]) continue; // Skip this component if the height doesn't match the current Qubit target.
-
-                    // Add the current component into the ordered list based on the X value.
-                    bool added = false;
-                    for (int c = 0; c < OrderedQubitComponents.Count; c++)
-                    {
-                        if (p.X < getComponentPoint(OrderedQubitComponents[c]).X)
-                        {
-                            OrderedQubitComponents.Insert(c, component);
-                            added = true;
-                            break;
-                        }
-                    }
-                    if (!added) { OrderedQubitComponents.Add(component); }
-                }
-
-                if (OrderedQubitComponents.Count > mostPopulated) break; // Don't add the values if there are too many to fit (Something went wrong).
-                // Add the ordered list into the array.
-                for (int col = 0; col < OrderedQubitComponents.Count; col++)
-                {
-                    alignment[row, col] = OrderedQubitComponents[col];
+                    alignment[row, col] = OrderedComponents[currentComponent];
+                    currentComponent++;
+                    if (currentComponent == OrderedComponents.Count) break;
                 }
             }
+
+
+            //for (int row = 0; row < qubitHeightValues.Count; row++)
+            //{
+            //    List<UserControl> OrderedQubitComponents = new List<UserControl>(); // A sorted list of all components on qubit i.
+            //    foreach (UserControl component in components)
+            //    {
+            //        Point p = getComponentPoint(component); // Get the point of the component
+
+            //        if (p == new Point(-1, -1)) continue;      // Skip this component if the point value wasn't updated.
+            //        if (ClosestQubit(component, qubitHeightValues) != qubitHeightValues[row]) continue; // Skip this component if the height doesn't match the current Qubit target.
+
+            //        // Add the current component into the ordered list based on the X value.
+            //        bool added = false;
+            //        for (int c = 0; c < OrderedQubitComponents.Count; c++)
+            //        {
+            //            if (p.X < getComponentPoint(OrderedQubitComponents[c]).X)
+            //            {
+            //                OrderedQubitComponents.Insert(c, component);
+            //                added = true;
+            //                break;
+            //            }
+            //        }
+            //        if (!added) { OrderedQubitComponents.Add(component); }
+            //    }
+
+            //    if (OrderedQubitComponents.Count > mostPopulated) break; // Don't add the values if there are too many to fit (Something went wrong).
+            //    // Add the ordered list into the array.
+            //    for (int col = 0; col < OrderedQubitComponents.Count; col++)
+            //    {
+            //        alignment[row, col] = OrderedQubitComponents[col];
+            //    }
+            //}
 
             int requiredColumns = 1;
 
@@ -380,6 +394,7 @@ namespace QMat_Calculator.Interfaces
                         requiredColumns += controlledGates - 1;
                     }
                 }
+                else if (controlledGates == 0 && nonControlledGates == 0) { } // Do nothing
                 else { requiredColumns += 1; }
             }
 
@@ -445,9 +460,68 @@ namespace QMat_Calculator.Interfaces
                     colOffset += controlledGates;
 
                 }
+
+                finalAlignment = MigrateControlBits(alignment, finalAlignment, qubitHeightValues);
             }
 
             MoveAll(ref finalAlignment, qubitHeightValues, qubitHeightValues.Count, requiredColumns);
+        }
+
+        /// <summary>
+        /// Move the control bits from the alignment array to the finalAlignment array.
+        /// </summary>
+        /// <param name="alignment"></param>
+        /// <param name="finalAlignment"></param>
+        private UserControl[,] MigrateControlBits(UserControl[,] alignment, UserControl[,] finalAlignment, List<double> qubitHeightValues)
+        {
+            // Create a dictionary mapping the locations of control bits in the alignment array.
+            Dictionary<ControlQubit, Point> mapping = new Dictionary<ControlQubit, Point>(); // Point X, Y = Row, Col of the control Qubit.
+            for (int row = 0; row < qubitHeightValues.Count; row++)
+            {
+                for (int col = 0; col < Manager.getMostPopulated(); col++)
+                {
+                    UserControl component = alignment[row, col];
+                    if (component == null) continue;
+
+                    else if (component.GetType() == typeof(ControlQubit))
+                    {
+                        Point p = new Point(row, col);
+                        mapping.Add((ControlQubit)component, p);
+                    }
+                }
+            }
+
+            // Move the mapped control bits to the same column as their parent gate.
+            if (mapping.Count > 0)
+            {
+                for (int row = 0; row < qubitHeightValues.Count; row++)
+                {
+                    for (int col = 0; col < Manager.getMostPopulated(); col++)
+                    {
+                        UserControl component = alignment[row, col];
+                        if (component == null) continue;
+
+                        else if (component.GetType() == typeof(CircuitComponent))
+                        {
+                            List<ControlQubit> controlled = ((CircuitComponent)component).getControlQubits();
+                            foreach (ControlQubit cont in controlled)
+                            {
+                                if (mapping.ContainsKey(cont))
+                                {
+                                    Point p = mapping[cont];
+                                    int r = Convert.ToInt32(p.X);
+                                    int c = Convert.ToInt32(p.Y);
+
+                                    if (finalAlignment[r, col] == null)
+                                        finalAlignment[r, col] = alignment[r, c]; // Copy the value directly from alignment into finalAlignment if the cell is null.
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return finalAlignment;
         }
 
         /// <summary>
