@@ -31,6 +31,7 @@ namespace QMat_Calculator
         private static CircuitComponent selectedGate = null;
         private static ControlQubit selectedControl = null;
         private static List<Qubit> qubits = new List<Qubit>();
+        private static List<SolutionStep> solutionSteps = new List<SolutionStep>();
         private static Gate heldGate = null;
         private static Dictionary<string, Type> GateImage = null;
 
@@ -172,6 +173,8 @@ namespace QMat_Calculator
 
         public static List<Qubit> getQubits() { return qubits; }
         public static void setQubits(List<Qubit> q) { qubits = q; }
+        public static List<SolutionStep> GetSolutionSteps() { return solutionSteps; }
+        public static void setSolutionSteps(List<SolutionStep> ss) { solutionSteps = ss; }
         public static int getQubitCount() { return qubits.Count; }
         public static void addQubit(ref Qubit q) { qubits.Add(q); }
         public static void removeQubit(int index) { qubits.RemoveAt(index); }
@@ -405,8 +408,9 @@ namespace QMat_Calculator
         /// </summary>
         public static void Solve()
         {
-            Console.WriteLine("Solving");
+            //Console.WriteLine("Solving");
             Matrix currentVal = null; // Current value of the circuit Matrix.
+            solutionSteps = new List<SolutionStep>();
 
             List<CircuitComponent> components = new List<CircuitComponent>();
             foreach (var element in circuitCanvas.MainCircuitCanvas.Children)
@@ -422,7 +426,7 @@ namespace QMat_Calculator
             if (yValues.Count > qubits.Count || xValues.Count > getMostPopulated()) // Stop solving if there is a problem.
             {
                 Console.WriteLine("There was a problem with the circuit. \r\n Try re-sorting it and try again.");
-                MessageBox.Show(PrintGateLayout());
+                //MessageBox.Show(PrintGateLayout());
 
                 return;
             }
@@ -435,12 +439,16 @@ namespace QMat_Calculator
                 Matrix m = currentGates[0].getMatrix();
                 for (int i = 1; i < currentGates.Count; i++)
                 {
-                    m = Matrix.Tensor(m, currentGates[i].getMatrix());
+                    Matrix result = Matrix.Tensor(m, currentGates[i].getMatrix());
+                    solutionSteps.Add(new SolutionStep(m, SolutionStep.MatrixFunction.Tensor, currentGates[i].getMatrix(), result));
+                    m = result;
                 }
 
                 if (currentVal != null)                // Multiply the overall matrix by the current tensor product.
                 {
-                    currentVal = Matrix.Multiply(currentVal, m);
+                    Matrix result = Matrix.Multiply(currentVal, m);
+                    solutionSteps.Add(new SolutionStep(currentVal, SolutionStep.MatrixFunction.Multiply, m, result));
+                    currentVal = m;
                 }
                 else
                 {
@@ -452,7 +460,7 @@ namespace QMat_Calculator
 
             if (currentVal != null)
                 matrixCanvas.DisplayMatrix(currentVal);
-            MessageBox.Show(PrintGateLayout());
+            //MessageBox.Show(PrintGateLayout());
         }
     }
 }

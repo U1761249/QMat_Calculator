@@ -139,6 +139,7 @@
     <Compile Include="Manager.cs" />
     <Compile Include="Matrices\FractionConverter.cs" />
     <Compile Include="Matrices\Matrix.cs" />
+    <Compile Include="Matrices\SolutionStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

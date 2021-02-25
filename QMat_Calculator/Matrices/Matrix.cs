@@ -106,14 +106,14 @@ namespace QMat_Calculator.Matrices
             for (int r = 0; r < rows; r++)
             {
                 // Add the preceder or space if there is a preceder.
-                if (hasPreceder && r == precederRow) s.Append(FractionConverter.Convert(Convert.ToDouble(p)));
-                else if (hasPreceder && r != precederRow) s.Append(space);
+                if (hasPreceder && r == precederRow) s.Append(String.Format("{0, -5}", FractionConverter.Convert(Convert.ToDouble(p))));
+                else if (hasPreceder && r != precederRow) s.Append(String.Format("{0, -5}", space));
 
                 for (int c = 0; c < columns; c++)
                 {
                     Complex value = data[r, c];
                     StringBuilder sb = new StringBuilder();
-                    sb.Append(value.Real);
+                    sb.Append(String.Format("{0, -2}", value.Real));
 
                     if (value.Real == 0 && value.Imaginary != 0)
                     {
@@ -121,14 +121,14 @@ namespace QMat_Calculator.Matrices
                     }
                     if (value.Imaginary != 0)
                     {
-                        if (value.Imaginary == 1) { sb.Append("+i"); }
-                        else if (value.Imaginary == -1) { sb.Append("-i"); }
+                        if (value.Imaginary == 1) { sb.Append(String.Format("{0, -2}", "+i")); }
+                        else if (value.Imaginary == -1) { sb.Append(String.Format("{0, -2}", "-i")); }
                         else
-                            sb.Append(value.Imaginary + "i");
+                            sb.Append(String.Format("{0, -2}", value.Imaginary + "i"));
                     }
-                    sb.Append(" ");
+                    sb.Append(String.Format("{0, -2}", " "));
 
-                    s.Append(sb.ToString());
+                    s.Append(String.Format("{0, -2}", sb.ToString()));
                 }
                 s.Append(Environment.NewLine);
             }
