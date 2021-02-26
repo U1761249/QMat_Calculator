@@ -22,7 +22,7 @@ namespace QMat_Calculator.Matrices
         /// <returns></returns>
         public static string Convert(double value)
         {
-            if (value == -1) return "";
+            if (value == -1) return String.Format("{0, -5}", " ");
 
             // \u221A is the Unicode character for √
 
@@ -33,7 +33,7 @@ namespace QMat_Calculator.Matrices
 
             value = Math.Round(value, significantFigures);
             double root2 = Math.Round(1 / Math.Sqrt(2), significantFigures, MidpointRounding.AwayFromZero);
-            if (value == root2) return "1/\u221A2";
+            if (value == root2) return String.Format("{0, -5}", "1/\u221A2");
 
             if (value < root2)
             {
@@ -51,7 +51,7 @@ namespace QMat_Calculator.Matrices
                     else { power++; }
                 }
             }
-            return "";
+            return String.Format("{0, -5}", " ");
         }
 
         /// <summary>
@@ -64,13 +64,13 @@ namespace QMat_Calculator.Matrices
             if (power % 2 == 0) // Even values can be converted to a standard fraction (1/2, 1/4, etc)
             {
                 double denominator = Math.Pow(2, (power / 2));
-                return $"1/{denominator}";
+                return String.Format("{0, -5}", $"1/{denominator}");
             }
 
-            else if (power == 3) { return "\u221A2/4"; } // 3 can be simplified to √2/4
+            else if (power == 3) { return String.Format("{0, -5}", "\u221A2/4"); } // 3 can be simplified to √2/4
 
 
-            return value.ToString();// any odd value past 3 cannot be simplified to a power of √2/x
+            return String.Format("{0, -5}", value.ToString());// any odd value past 3 cannot be simplified to a power of √2/x
 
         }
     }

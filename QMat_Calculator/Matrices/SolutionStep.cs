@@ -39,36 +39,71 @@ namespace QMat_Calculator.Matrices
             this.answer = answer;
         }
 
-        override public string ToString()
+        /// <summary>
+        /// Print the contents of the step - including inputs, outputs and functions - in a formatted layout.
+        /// </summary>
+        /// <returns></returns>
+        public string ToString(bool showPreceeder = false)
         {
             StringBuilder s = new StringBuilder();
 
             int m1rows = input1.getRows();
             int m2rows = input2.getRows();
+            string m1Preceeder = FractionConverter.Convert(input1.GetPreceder());
+            string m1Spacer = "";
+            string m2Preceeder = FractionConverter.Convert(input2.GetPreceder());
+            string m2Spacer = "";
+
+            foreach (char c in m1Preceeder) { m1Spacer += "  "; }
+            foreach (char c in m2Preceeder) { m2Spacer += "  "; }
+
 
             int midrow = Convert.ToInt32(Math.Round(Convert.ToDouble(Math.Max(m1rows, m2rows) / 2))); // The middle row of the matrix with more rows.
 
             for (int row = 0; row < Math.Max(m1rows, m2rows); row++)
             {
                 StringBuilder sb = new StringBuilder();
+
+                if (showPreceeder)
+                {
+                    // Add the preceeder, or space for one, to the start of the first matrix
+                    if (row == m1rows / 2) { String.Format("{0, -5}", sb.Append(m1Preceeder)); }
+                    else { sb.Append(String.Format("{0, -5}", m1Spacer)); }
+                }
+
                 // Add the first matrix row.
                 if (row < m1rows)
                 {
-                    sb.Append(GetRowString(input1, row));
+                    sb.Append(String.Format("{0, -10}", GetRowString(input1, row)));
                 }
 
                 if (row == midrow) sb.Append(String.Format("{0, -2}", $" {FunctionString()} "));
-                else sb.Append(String.Format("{0, -3}", "   "));
+                else
+                {
+                    string spacer = "";
+                    foreach (char c in FunctionString()) { spacer += " "; }
+                    sb.Append(String.Format("{0, -3}", spacer));
+                }
+
+                if (showPreceeder)
+                {
+                    // Add the preceeder, or space for one, to the start of the second matrix
+                    if (row == m2rows / 2) { String.Format("{0, -5}", sb.Append(m2Preceeder)); }
+                    else { sb.Append(String.Format("{0, -5}", m2Spacer)); }
+                }
 
                 // Add the second matrix row
                 if (row < m2rows)
                 {
-                    sb.Append(GetRowString(input2, row));
+                    sb.Append(String.Format("{0, -10}", GetRowString(input2, row)));
 
                 }
                 s.AppendLine(sb.ToString());
             }
 
+            string seperator = "";
+            for (int i = 0; i < (input1.getColumns() + input2.getColumns() + 3); i++) { seperator += "-"; }
+            s.AppendLine(seperator);
             s.AppendLine(answer.ToString());
 
             return s.ToString();

@@ -90,7 +90,9 @@
                 <Border x:Name="circuitCanvasBorder" />
             </TabItem>
             <TabItem Header="Matrix" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
-                <Border x:Name="matrixCanvasBorder" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Border x:Name="matrixCanvasBorder" />
+                </ScrollViewer>
             </TabItem>
         </TabControl>
 

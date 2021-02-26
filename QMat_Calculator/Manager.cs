@@ -448,7 +448,7 @@ namespace QMat_Calculator
                 {
                     Matrix result = Matrix.Multiply(currentVal, m);
                     solutionSteps.Add(new SolutionStep(currentVal, SolutionStep.MatrixFunction.Multiply, m, result));
-                    currentVal = m;
+                    currentVal = result;
                 }
                 else
                 {
@@ -459,7 +459,7 @@ namespace QMat_Calculator
             //Console.Write(currentVal.ToString(true));
 
             if (currentVal != null)
-                matrixCanvas.DisplayMatrix(currentVal);
+                matrixCanvas.DisplaySolution(currentVal);
             //MessageBox.Show(PrintGateLayout());
         }
     }
