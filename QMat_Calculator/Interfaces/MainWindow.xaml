@@ -85,14 +85,11 @@
         </Menu>
 
         <TabControl x:Name="tabControl" Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
-
             <TabItem Header="Design" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Border x:Name="circuitCanvasBorder" />
             </TabItem>
             <TabItem Header="Matrix" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <Border x:Name="matrixCanvasBorder" />
-                </ScrollViewer>
+                <Border x:Name="matrixCanvasBorder" />
             </TabItem>
         </TabControl>
 

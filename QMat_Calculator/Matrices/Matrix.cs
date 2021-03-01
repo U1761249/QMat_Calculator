@@ -58,6 +58,8 @@ namespace QMat_Calculator.Matrices
             this.preceder = preceder;
         }
 
+
+
         /// <summary>
         /// Create an identity matrix of the given size.
         /// </summary>
@@ -136,7 +138,7 @@ namespace QMat_Calculator.Matrices
             return s.ToString();
         }
 
-        public double GetPreceder()
+        public double getPreceder()
         {
             return this.preceder;
         }

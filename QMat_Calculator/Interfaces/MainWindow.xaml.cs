@@ -1,5 +1,6 @@
 ﻿using QMat_Calculator.Circuits;
 using QMat_Calculator.Circuits.Gates;
+using QMat_Calculator.Data;
 using QMat_Calculator.Drawable;
 using QMat_Calculator.Interfaces;
 using QMat_Calculator.Matrices;
@@ -61,7 +62,7 @@ namespace QMat_Calculator
 
         private void CommandBindingSave_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBox.Show("Save");
+            Saving.Save();
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

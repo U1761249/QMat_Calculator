@@ -1,4 +1,5 @@
-﻿using QMat_Calculator.Matrices;
+﻿using Newtonsoft.Json;
+using QMat_Calculator.Matrices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,11 @@ namespace QMat_Calculator.Circuits
     {
         Guid guid = Guid.NewGuid();
         Matrix matrix;
+        List<Gate> gates;
+
         public Guid getID() { return this.guid; }
         public Matrix getMatrix() { return this.matrix; }
-        List<Gate> gates;
+
 
         /// <summary>
         /// Create a Qubit.
@@ -53,5 +56,6 @@ namespace QMat_Calculator.Circuits
             if (this.gates == null) this.gates = new List<Gate>();
             this.gates.Add(gate);
         }
+
     }
 }

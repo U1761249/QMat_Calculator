@@ -49,9 +49,9 @@ namespace QMat_Calculator.Matrices
 
             int m1rows = input1.getRows();
             int m2rows = input2.getRows();
-            string m1Preceeder = FractionConverter.Convert(input1.GetPreceder());
+            string m1Preceeder = FractionConverter.Convert(input1.getPreceder());
             string m1Spacer = "";
-            string m2Preceeder = FractionConverter.Convert(input2.GetPreceder());
+            string m2Preceeder = FractionConverter.Convert(input2.getPreceder());
             string m2Spacer = "";
 
             foreach (char c in m1Preceeder) { m1Spacer += "  "; }

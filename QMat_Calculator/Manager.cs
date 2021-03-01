@@ -46,6 +46,8 @@ namespace QMat_Calculator
         public static ControlQubit getSelectedControl() { return selectedControl; }
 
         public static int getMinQubitCount() { return minQubitCount; }
+
+
         public static void setMinQubitCount(int val) { minQubitCount = val; }
 
         private static double spacing;
@@ -65,6 +67,8 @@ namespace QMat_Calculator
                 //GateImage = null;
             }
         }
+
+
 
         private static Gate CreateGate(Type t, string imageName)
         {

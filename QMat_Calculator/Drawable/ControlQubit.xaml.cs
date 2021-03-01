@@ -65,5 +65,6 @@ namespace QMat_Calculator.Drawable
             Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
         }
 
+
     }
 }
