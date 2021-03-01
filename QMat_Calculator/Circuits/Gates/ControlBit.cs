@@ -20,14 +20,6 @@ namespace QMat_Calculator.Circuits.Gates
 
         }
 
-        public string CreateJson()
-        {
-            string s =
-                "{\n" +
-                "\n}\n";
-
-            return s;
-        }
 
         //TODO: Implement a control bit to populate a column when a multi-bit gate is used.
     }

@@ -23,7 +23,6 @@ namespace QMat_Calculator.Data
     {
         private static List<QubitComponent> qubits;
         private static List<CircuitComponent> components;
-        private static List<ControlQubit> controlBits;
 
         /// <summary>
         /// Perform the main saving functionality.
@@ -34,7 +33,6 @@ namespace QMat_Calculator.Data
 
             qubits = new List<QubitComponent>();
             components = new List<CircuitComponent>();
-            controlBits = new List<ControlQubit>();
 
 
             foreach (UserControl component in ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children)
@@ -42,7 +40,6 @@ namespace QMat_Calculator.Data
                 if (component == null) continue;
 
                 if (component.GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)component); }
-                if (component.GetType() == typeof(ControlQubit)) { controlBits.Add((ControlQubit)component); }
                 if (component.GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)component); }
             }
 
@@ -65,8 +62,6 @@ namespace QMat_Calculator.Data
             s.AppendLine(QubitComponentJson());
             s.AppendLine("],\n\"CircuitComponents\":[");
             s.AppendLine(CircuitComponentJson());
-            s.AppendLine("],\n\"ControlQubits\":[");
-            s.AppendLine(ControlQubitJson());
             s.AppendLine("]}\n");
 
             return s.ToString();
@@ -79,7 +74,7 @@ namespace QMat_Calculator.Data
 
             for (int i = 0; i < qubits.Count; i++)
             {
-                s.AppendLine($"\"Qubit{i}\":[{{");
+                s.AppendLine($"\"Qubit_{i}\":[{{");
 
                 QubitComponent q = qubits[i];
 
@@ -93,22 +88,52 @@ namespace QMat_Calculator.Data
             s.AppendLine("}");
             return s.ToString();
         }
-        // TODO:
+
         private static string CircuitComponentJson()
         {
             StringBuilder s = new StringBuilder();
-            s.AppendLine("{}");
+            s.AppendLine("{");
+
+            for (int i = 0; i < components.Count; i++)
+            {
+                CircuitComponent c = components[i];
+                s.AppendLine($"\n\"Gate_{i}\":[{GateJson(c.getGate())}],");
+                s.AppendLine($"\n\"Point_{i}\":[{PointJson(c.getPoint())}]");
+
+                if (c.getControlQubits().Count > 0)
+                {
+                    s.Append(",");
+                    s.AppendLine($"\n\"ControlQubits\":[{ControlQubitJson(c.getControlQubits())}]");
+                }
+                if (i < components.Count - 1) { s.Append(","); }
+            }
+
+            s.AppendLine("}");
             return s.ToString();
         }
-        // TODO:
-        private static string ControlQubitJson()
+
+
+        private static string ControlQubitJson(List<ControlQubit> qubits)
         {
+            if (qubits == null) { return "{}"; }
             StringBuilder s = new StringBuilder();
-            s.AppendLine("{}");
+            s.AppendLine("{");
+
+            for (int i = 0; i < qubits.Count; i++)
+            {
+                s.AppendLine($"\"ControlQubit_{i}\":[{{}}]");
+
+
+                s.AppendLine("}]");
+                if (i < qubits.Count - 1) { s.Append(","); }
+            }
+
+            s.AppendLine("}");
             return s.ToString();
         }
         private static string QubitJson(Qubit q)
         {
+            if (q == null) { return "{}"; }
             StringBuilder s = new StringBuilder();
             List<Gate> gates = q.getGates();
             s.AppendLine("{");
@@ -127,16 +152,18 @@ namespace QMat_Calculator.Data
             return s.ToString();
         }
 
-        // TODO:
+
         private static string MatrixJson(Matrix m)
         {
-            StringBuilder s = new StringBuilder();
-            s.AppendLine("{");
-            s.AppendLine($"\n\"Columns\":\"{m.getColumns()}\",");
-            s.AppendLine($"\n\"Rows\":\"{m.getRows()}\",");
-            s.AppendLine($"\n\"Preceder\":\"{m.getPreceder()}\",");
+            if (m == null) { return "{}"; }
 
-            s.AppendLine($"\n\"Data\":[");
+            StringBuilder s = new StringBuilder();
+            s.AppendLine("\n{");
+            s.AppendLine($"\"Columns\":\"{m.getColumns()}\",");
+            s.AppendLine($"\"Rows\":\"{m.getRows()}\",");
+            s.AppendLine($"\"Preceder\":\"{m.getPreceder()}\",");
+
+            s.AppendLine($"\"Data\":[");
 
             for (int r = 0; r < m.getRows(); r++)
             {
@@ -144,31 +171,34 @@ namespace QMat_Calculator.Data
                 for (int c = 0; c < m.getColumns(); c++)
                 {
                     Complex value = m.getData()[r, c];
-                    s.AppendLine($"\n\"Cell{r}-{c}\":[{{");
-                    s.AppendLine($"\n\"Real\":\"{value.Real}\",");
-                    s.AppendLine($"\n\"Imaginary\":\"{value.Imaginary}\"");
+                    s.AppendLine($"\n\"Cell_{r}-{c}\":[{{");
+                    s.AppendLine($"\"Real\":\"{value.Real}\",");
+                    s.AppendLine($"\"Imaginary\":\"{value.Imaginary}\"");
                     s.AppendLine("}]");
+                    if (c < m.getColumns() - 1) s.Append(",");
                 }
                 s.AppendLine("}");
                 if (r < m.getRows() - 1) s.Append(",");
             }
 
-
-
             s.AppendLine("]\n}");
             return s.ToString();
         }
 
-        // TODO:
         private static string GateJson(Gate g)
         {
+            if (g == null) { return "{}"; }
             StringBuilder s = new StringBuilder();
-            s.AppendLine("{}");
+            s.AppendLine("{");
+            s.AppendLine($"\"NodeCount\":\"{g.getNodeCount()}\",");
+            s.AppendLine($"\"Matrix\":[{MatrixJson(g.getMatrix())}]");
+            s.AppendLine("}");
             return s.ToString();
         }
 
         private static string PointJson(Point p)
         {
+            if (p == null) { return "{}"; }
             StringBuilder s = new StringBuilder();
             s.AppendLine("{");
             s.AppendLine($"\"X\":\"{p.X}\",");
