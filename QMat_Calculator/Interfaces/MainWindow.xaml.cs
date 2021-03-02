@@ -56,7 +56,7 @@ namespace QMat_Calculator
 
         private void CommandBindingOpen_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBox.Show("Open");
+            Loading.Load();
         }
         private void CommandBindingSave_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
 

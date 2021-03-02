@@ -111,6 +111,7 @@
     <Compile Include="Circuits\Gates\SqrtNOT.cs" />
     <Compile Include="Circuits\Gates\Toffoli.cs" />
     <Compile Include="Circuits\Qubit.cs" />
+    <Compile Include="Data\Loading.cs" />
     <Compile Include="Data\Saving.cs" />
     <Compile Include="Drawable\CircuitComponent.xaml.cs">
       <DependentUpon>CircuitComponent.xaml</DependentUpon>

@@ -59,7 +59,7 @@ namespace QMat_Calculator.Data
 
             WriteFile(directory, jsonText);
 
-            MessageBox.Show("Saved");
+            //MessageBox.Show("Saved");
         }
 
         /// <summary>
