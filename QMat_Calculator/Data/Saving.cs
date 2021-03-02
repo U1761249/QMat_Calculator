@@ -97,14 +97,11 @@ namespace QMat_Calculator.Data
             for (int i = 0; i < components.Count; i++)
             {
                 CircuitComponent c = components[i];
-                s.AppendLine($"\n\"Gate_{i}\":[{GateJson(c.getGate())}],");
-                s.AppendLine($"\n\"Point_{i}\":[{PointJson(c.getPoint())}]");
 
-                if (c.getControlQubits().Count > 0)
-                {
-                    s.Append(",");
-                    s.AppendLine($"\n\"ControlQubits\":[{ControlQubitJson(c.getControlQubits())}]");
-                }
+                s.AppendLine($"\n\"Gate_{i}\":[{GateJson(c.getGate())}],");
+                s.AppendLine($"\n\"Point_{i}\":[{PointJson(c.getPoint())}],");
+                s.AppendLine($"\n\"ControlQubits_{i}\":[{ControlQubitJson(c.getControlQubits())}]");
+
                 if (i < components.Count - 1) { s.Append(","); }
             }
 
@@ -123,8 +120,6 @@ namespace QMat_Calculator.Data
             {
                 s.AppendLine($"\"ControlQubit_{i}\":[{{}}]");
 
-
-                s.AppendLine("}]");
                 if (i < qubits.Count - 1) { s.Append(","); }
             }
 
