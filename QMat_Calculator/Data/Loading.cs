@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,14 +22,20 @@ namespace QMat_Calculator.Data
         /// </summary>
         public static void Load()
         {
-
+            List<UIElement> elements = new List<UIElement>();
             Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
             ofd.Filter = "JSON File (.json)|*.json|All(*.*)|*";
 
             if (ofd.ShowDialog() == false) return;
 
             string JsonData = File.ReadAllText(ofd.FileName);
-            MessageBox.Show(JsonData);
+            elements = JsonConvert.DeserializeObject<List<UIElement>>(JsonData);
+
+            MessageBox.Show(elements.Count.ToString());
+
+
+            //string JsonData = File.ReadAllText(ofd.FileName);
+            //MessageBox.Show(JsonData);
         }
     }
 }

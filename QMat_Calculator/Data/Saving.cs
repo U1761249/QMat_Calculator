@@ -1,4 +1,5 @@
-﻿using QMat_Calculator.Circuits;
+﻿using Newtonsoft.Json;
+using QMat_Calculator.Circuits;
 using QMat_Calculator.Drawable;
 using QMat_Calculator.Interfaces;
 using QMat_Calculator.Matrices;
@@ -47,19 +48,21 @@ namespace QMat_Calculator.Data
             components = new List<CircuitComponent>();
 
 
-            foreach (UserControl component in ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children)
-            {
-                if (component == null) continue;
+            //foreach (UserControl component in ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children)
+            //{
+            //    if (component == null) continue;
+            //
+            //    if (component.GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)component); }
+            //    if (component.GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)component); }
+            //}
 
-                if (component.GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)component); }
-                if (component.GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)component); }
-            }
+            string jsonText = JsonConvert.SerializeObject(((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
-            string jsonText = CreateJSON();
+            WriteFile(directory, jsonText.ToString());
 
-            WriteFile(directory, jsonText);
+            //string jsonText = CreateJSON();
+            //WriteFile(directory, jsonText);
 
-            //MessageBox.Show("Saved");
         }
 
         /// <summary>
@@ -225,7 +228,7 @@ namespace QMat_Calculator.Data
             { File.Delete(path); }
 
             File.WriteAllText(path, data);
-            //Process.Start("notepad.exe", path);
+            Process.Start("notepad.exe", path);
         }
     }
 }
