@@ -2,8 +2,10 @@
 using QMat_Calculator.Drawable;
 using QMat_Calculator.Interfaces;
 using QMat_Calculator.Matrices;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Numerics;
 using System.Text;
@@ -29,8 +31,18 @@ namespace QMat_Calculator.Data
         /// </summary>
         public static void Save()
         {
-            string testDir = "F:\\Users\\Adam\\Desktop\\JsonText.txt";
+            //string directory = "F:\\Users\\Adam\\Desktop\\JsonText.txt";
 
+            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+
+            sfd.FileName = $"Project";
+            sfd.Filter = "JSON File (.json)|*.json|All(*.*)|*";
+            sfd.DefaultExt = ".json"; // Default file extension
+
+            bool result = (bool)sfd.ShowDialog();
+            if (!result) return;
+
+            string directory = sfd.FileName;
             qubits = new List<QubitComponent>();
             components = new List<CircuitComponent>();
 
@@ -45,7 +57,7 @@ namespace QMat_Calculator.Data
 
             string jsonText = CreateJSON();
 
-            WriteFile(testDir, jsonText);
+            WriteFile(directory, jsonText);
 
             MessageBox.Show("Saved");
         }
@@ -213,7 +225,7 @@ namespace QMat_Calculator.Data
             { File.Delete(path); }
 
             File.WriteAllText(path, data);
-            Process.Start("notepad.exe", path);
+            //Process.Start("notepad.exe", path);
         }
     }
 }
