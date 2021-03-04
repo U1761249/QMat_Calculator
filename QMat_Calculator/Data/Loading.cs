@@ -24,7 +24,6 @@ namespace QMat_Calculator.Data
         /// </summary>
         public static void Load()
         {
-            List<CircuitComponent> elements = new List<CircuitComponent>();
             Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
             ofd.Filter = "JSON File (.json)|*.json|All(*.*)|*";
 
@@ -32,15 +31,10 @@ namespace QMat_Calculator.Data
 
             string JsonData = File.ReadAllText(ofd.FileName);
             //elements = JsonConvert.DeserializeObject<List<CircuitComponent>>(JsonData);
-            var details = JObject.Parse(JsonData);
 
-
-            var qc = details["QubitComponents"];
-            MessageBox.Show(qc.ToString());
-
-
-            //string JsonData = File.ReadAllText(ofd.FileName);
-            //MessageBox.Show(JsonData);
+            JObject jObj = JObject.Parse(JsonData);
+            var qubit = jObj["CircuitComponents"][0];
+            MessageBox.Show(qubit.ToString());
         }
     }
 }

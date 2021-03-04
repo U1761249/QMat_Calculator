@@ -72,11 +72,11 @@ namespace QMat_Calculator.Data
         {
             StringBuilder s = new StringBuilder();
 
-            s.AppendLine("{\n\"QubitComponents\":[");
+            s.AppendLine("{\n\"QubitComponents\":");
             s.AppendLine(QubitComponentJson());
-            s.AppendLine("],\n\"CircuitComponents\":[");
+            s.AppendLine(",\n\"CircuitComponents\":");
             s.AppendLine(CircuitComponentJson());
-            s.AppendLine("]}\n");
+            s.AppendLine("}\n");
 
             return s.ToString();
         }
@@ -84,11 +84,12 @@ namespace QMat_Calculator.Data
         private static string QubitComponentJson()
         {
             StringBuilder s = new StringBuilder();
-            s.AppendLine("{");
+            s.AppendLine("[");
 
             for (int i = 0; i < qubits.Count; i++)
             {
-                s.AppendLine($"\"Qubit{i}\":{{");
+                //s.AppendLine($"\"Qubit{i}\":{{");
+                s.AppendLine("{");
 
                 QubitComponent q = qubits[i];
 
@@ -99,27 +100,31 @@ namespace QMat_Calculator.Data
                 if (i < qubits.Count - 1) { s.Append(","); }
             }
 
-            s.AppendLine("}");
+            s.AppendLine("]");
             return s.ToString();
         }
 
         private static string CircuitComponentJson()
         {
             StringBuilder s = new StringBuilder();
-            s.AppendLine("{");
+            s.AppendLine("[");
 
             for (int i = 0; i < components.Count; i++)
             {
                 CircuitComponent c = components[i];
+                s.AppendLine($"{{\n\"Gate\":{GateJson(c.getGate())},");
+                s.AppendLine($"\n\"ImageSource\":\"{c.getImagePath()}\",");
+                s.AppendLine($"\n\"Point\":{PointJson(c.getPoint())},");
+                s.AppendLine($"\n\"ControlQubits\":[{ControlQubitJson(c.getControlQubits())}]}}");
 
-                s.AppendLine($"\n\"Gate{i}\":{GateJson(c.getGate())},");
-                s.AppendLine($"\n\"Point{i}\":{PointJson(c.getPoint())},");
-                s.AppendLine($"\n\"ControlQubits{i}\":[{ControlQubitJson(c.getControlQubits())}]");
+                //s.AppendLine($"\n\"Gate{i}\":{GateJson(c.getGate())},");
+                //s.AppendLine($"\n\"Point{i}\":{PointJson(c.getPoint())},");
+                //s.AppendLine($"\n\"ControlQubits{i}\":[{ControlQubitJson(c.getControlQubits())}]");
 
                 if (i < components.Count - 1) { s.Append(","); }
             }
 
-            s.AppendLine("}");
+            s.AppendLine("]");
             return s.ToString();
         }
 
@@ -199,6 +204,7 @@ namespace QMat_Calculator.Data
             if (g == null) { return "{}"; }
             StringBuilder s = new StringBuilder();
             s.AppendLine("{");
+            s.AppendLine($"\"Type\":\"{g.GetType().ToString()}\",");
             s.AppendLine($"\"NodeCount\":\"{g.getNodeCount()}\",");
             s.AppendLine($"\"Matrix\":{MatrixJson(g.getMatrix())}");
             s.AppendLine("}");

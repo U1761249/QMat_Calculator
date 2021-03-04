@@ -29,6 +29,7 @@ namespace QMat_Calculator.Drawable
     /// </summary>
     public partial class CircuitComponent : UserControl
     {
+        private string source = null;
         private Gate gate = null;
         private Point point;
         List<ControlQubit> controlQubits = new List<ControlQubit>();
@@ -47,6 +48,8 @@ namespace QMat_Calculator.Drawable
             this.DataContext = this;
         }
         public CircuitComponent() { }
+        public string getImagePath() { return source; }
+        public void setImage(string s) { source = s; }
         public ref Gate getGate() { return ref gate; }
         public void setGate(Gate g) { gate = g; }
         public Point getPoint() { return point; }
@@ -99,20 +102,25 @@ namespace QMat_Calculator.Drawable
                 //    }
                 //}
 
-                if (gate.GetType() == typeof(Hadamard)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Hadamard(New).png", UriKind.Relative)); }
-                else if (gate.GetType() == typeof(Pauli))
+                if (source != null) { componentImage.Source = new BitmapImage(new Uri(source, UriKind.Relative)); }
+                else
                 {
-                    switch (((Pauli)gate).GetPauliType())
+
+                    if (gate.GetType() == typeof(Hadamard)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Hadamard(New).png", UriKind.Relative)); }
+                    else if (gate.GetType() == typeof(Pauli))
                     {
-                        case (Pauli.PauliType.X): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliX.png", UriKind.Relative)); break;
-                        case (Pauli.PauliType.Y): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliY.png", UriKind.Relative)); break;
-                        case (Pauli.PauliType.Z): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliZ.png", UriKind.Relative)); break;
+                        switch (((Pauli)gate).GetPauliType())
+                        {
+                            case (Pauli.PauliType.X): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliX.png", UriKind.Relative)); break;
+                            case (Pauli.PauliType.Y): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliY.png", UriKind.Relative)); break;
+                            case (Pauli.PauliType.Z): componentImage.Source = new BitmapImage(new Uri(@"/Icons/PauliZ.png", UriKind.Relative)); break;
+                        }
                     }
+                    else if (gate.GetType() == typeof(CNOT)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Toffoli-CNOT.png", UriKind.Relative)); }
+                    else if (gate.GetType() == typeof(SqrtNOT)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/RootNOT.png", UriKind.Relative)); }
+                    //else if (gate.GetType() == typeof(Deutsch)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Hadamard.png", UriKind.Relative)); }
+                    else if (gate.GetType() == typeof(Toffoli)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Toffoli-CNOT.png", UriKind.Relative)); }
                 }
-                else if (gate.GetType() == typeof(CNOT)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Toffoli-CNOT.png", UriKind.Relative)); }
-                else if (gate.GetType() == typeof(SqrtNOT)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/RootNOT.png", UriKind.Relative)); }
-                //else if (gate.GetType() == typeof(Deutsch)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Hadamard.png", UriKind.Relative)); }
-                else if (gate.GetType() == typeof(Toffoli)) { componentImage.Source = new BitmapImage(new Uri(@"/Icons/Toffoli-CNOT.png", UriKind.Relative)); }
             }
         }
 
