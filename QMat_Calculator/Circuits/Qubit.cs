@@ -37,6 +37,7 @@ namespace QMat_Calculator.Circuits
             else { matrix.Update(0, 0, 1); }
             gates = new List<Gate>();
         }
+        public Qubit() { }
 
         public List<Gate> getGates() { return gates; }
         public void setGates(List<Gate> g) { gates = g; }

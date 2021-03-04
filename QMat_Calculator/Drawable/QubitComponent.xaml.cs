@@ -39,6 +39,7 @@ namespace QMat_Calculator.Drawable
             UpdateSize();
 
         }
+        public QubitComponent() { }
 
         /// <summary>
         /// Update the length of the line based on the canvas size

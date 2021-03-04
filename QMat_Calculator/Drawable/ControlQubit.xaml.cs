@@ -43,6 +43,7 @@ namespace QMat_Calculator.Drawable
             this.point = p;
             this.control = new ControlBit();
         }
+        public ControlQubit() { }
 
         private void Dot_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {

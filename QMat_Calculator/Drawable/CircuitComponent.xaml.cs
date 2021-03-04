@@ -46,6 +46,7 @@ namespace QMat_Calculator.Drawable
             this.point = p;
             this.DataContext = this;
         }
+        public CircuitComponent() { }
         public ref Gate getGate() { return ref gate; }
         public void setGate(Gate g) { gate = g; }
         public Point getPoint() { return point; }

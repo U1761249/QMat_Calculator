@@ -20,7 +20,7 @@ namespace QMat_Calculator.Matrices
         int rows;
         int columns;
         double preceder; // Some gates have fractions preceding them - E.G the Hadamard Gate
-        Complex[,] data; // [Rows, Columns] of complex numbers (Real + Imaginary * i) where i^2 = -1
+        Complex[,] values; // [Rows, Columns] of complex numbers (Real + Imaginary * i) where i^2 = -1
 
         public Matrix() { }
         public Matrix(int rows, int columns)
@@ -28,13 +28,13 @@ namespace QMat_Calculator.Matrices
             this.rows = rows;
             this.columns = columns;
 
-            this.data = new Complex[rows, columns];
+            this.values = new Complex[rows, columns];
             this.preceder = -1;
         }
 
         public int getRows() { return rows; }
         public int getColumns() { return columns; }
-        public Complex[,] getData() { return data; }
+        public Complex[,] getData() { return values; }
 
         /// <summary>
         /// Update the value in the matrix.
@@ -46,7 +46,7 @@ namespace QMat_Calculator.Matrices
         {
             if (!(row <= rows && column <= columns)) { throw new IndexOutOfRangeException("Row or Column specified was not within the matrix dimensions."); }
 
-            this.data[row, column] = value;
+            this.values[row, column] = value;
         }
 
         public Matrix(int rows, int columns, Complex[,] data, double preceder = -1)
@@ -54,7 +54,7 @@ namespace QMat_Calculator.Matrices
             this.rows = rows;
             this.columns = columns;
 
-            this.data = data;
+            this.values = data;
             this.preceder = preceder;
         }
 
@@ -70,7 +70,7 @@ namespace QMat_Calculator.Matrices
             Matrix identity = new Matrix(size, size);
             for (int i = 0; i < size; i++)
             {
-                identity.data[i, i] = 1;
+                identity.values[i, i] = 1;
             }
             return identity;
         }
@@ -113,7 +113,7 @@ namespace QMat_Calculator.Matrices
 
                 for (int c = 0; c < columns; c++)
                 {
-                    Complex value = data[r, c];
+                    Complex value = values[r, c];
                     StringBuilder sb = new StringBuilder();
                     sb.Append(String.Format("{0, -2}", value.Real));
 
@@ -175,9 +175,9 @@ namespace QMat_Calculator.Matrices
             {
                 for (int col = 0; col < x.columns; col++)
                 {
-                    Complex value = x.data[r, col];
+                    Complex value = x.values[r, col];
                     value = value * c;
-                    m.data[r, col] = value;
+                    m.values[r, col] = value;
                 }
             }
 
@@ -252,7 +252,7 @@ namespace QMat_Calculator.Matrices
 
             m.rows = x.rows;
             m.columns = y.columns;
-            m.data = new Complex[m.rows, m.columns];
+            m.values = new Complex[m.rows, m.columns];
 
             // Calculate the preceder for M.
             if (x.preceder != -1 && y.preceder != -1) { m.preceder = x.preceder * y.preceder; }
@@ -268,9 +268,9 @@ namespace QMat_Calculator.Matrices
                     Complex total = 0;
                     for (int i = 0; i < x.columns; i++)
                     {
-                        total += x.data[r, i] * y.data[i, c];
+                        total += x.values[r, i] * y.values[i, c];
                     }
-                    m.data[r, c] = total;
+                    m.values[r, c] = total;
                 }
             }
             return m;
@@ -382,7 +382,7 @@ namespace QMat_Calculator.Matrices
             {
                 for (int c = 0; c < x.columns; c++)
                 {
-                    Matrix d = Multiply(y, x.data[r, c]); // Calculate the data as Y * the cell value in X
+                    Matrix d = Multiply(y, x.values[r, c]); // Calculate the data as Y * the cell value in X
                     for (int i = 0; i < y.rows; i++) // Place the data within m.data
                     {
                         for (int j = 0; j < y.columns; j++)
@@ -390,7 +390,7 @@ namespace QMat_Calculator.Matrices
                             int row = (r * y.rows) + i;
                             int col = (c * y.columns) + j;
 
-                            m.data[row, col] = d.data[i, j];
+                            m.values[row, col] = d.values[i, j];
                         }
                     }
                 }

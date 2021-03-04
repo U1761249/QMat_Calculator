@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using QMat_Calculator.Drawable;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,16 +24,19 @@ namespace QMat_Calculator.Data
         /// </summary>
         public static void Load()
         {
-            List<UIElement> elements = new List<UIElement>();
+            List<CircuitComponent> elements = new List<CircuitComponent>();
             Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
             ofd.Filter = "JSON File (.json)|*.json|All(*.*)|*";
 
             if (ofd.ShowDialog() == false) return;
 
             string JsonData = File.ReadAllText(ofd.FileName);
-            elements = JsonConvert.DeserializeObject<List<UIElement>>(JsonData);
+            //elements = JsonConvert.DeserializeObject<List<CircuitComponent>>(JsonData);
+            var details = JObject.Parse(JsonData);
 
-            MessageBox.Show(elements.Count.ToString());
+
+            var qc = details["QubitComponents"];
+            MessageBox.Show(qc.ToString());
 
 
             //string JsonData = File.ReadAllText(ofd.FileName);

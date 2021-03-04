@@ -48,20 +48,19 @@ namespace QMat_Calculator.Data
             components = new List<CircuitComponent>();
 
 
-            //foreach (UserControl component in ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children)
-            //{
-            //    if (component == null) continue;
-            //
-            //    if (component.GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)component); }
-            //    if (component.GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)component); }
-            //}
+            foreach (UserControl component in ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children)
+            {
+                if (component == null) continue;
 
-            string jsonText = JsonConvert.SerializeObject(((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                if (component.GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)component); }
+                if (component.GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)component); }
+            }
 
-            WriteFile(directory, jsonText.ToString());
+            //string jsonText = JsonConvert.SerializeObject(components, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            //WriteFile(directory, jsonText.ToString());
 
-            //string jsonText = CreateJSON();
-            //WriteFile(directory, jsonText);
+            string jsonText = CreateJSON();
+            WriteFile(directory, jsonText);
 
         }
 
@@ -89,14 +88,14 @@ namespace QMat_Calculator.Data
 
             for (int i = 0; i < qubits.Count; i++)
             {
-                s.AppendLine($"\"Qubit_{i}\":[{{");
+                s.AppendLine($"\"Qubit{i}\":{{");
 
                 QubitComponent q = qubits[i];
 
-                s.AppendLine($"\"Qubit\":[{QubitJson(qubits[i].getQubit())}],");
-                s.AppendLine($"\n\"Point\":[{PointJson(q.GetPoint())}]");
+                s.AppendLine($"\"Qubit\":{QubitJson(qubits[i].getQubit())},");
+                s.AppendLine($"\n\"Point\":{PointJson(q.GetPoint())}");
 
-                s.AppendLine("}]");
+                s.AppendLine("}");
                 if (i < qubits.Count - 1) { s.Append(","); }
             }
 
@@ -113,9 +112,9 @@ namespace QMat_Calculator.Data
             {
                 CircuitComponent c = components[i];
 
-                s.AppendLine($"\n\"Gate_{i}\":[{GateJson(c.getGate())}],");
-                s.AppendLine($"\n\"Point_{i}\":[{PointJson(c.getPoint())}],");
-                s.AppendLine($"\n\"ControlQubits_{i}\":[{ControlQubitJson(c.getControlQubits())}]");
+                s.AppendLine($"\n\"Gate{i}\":{GateJson(c.getGate())},");
+                s.AppendLine($"\n\"Point{i}\":{PointJson(c.getPoint())},");
+                s.AppendLine($"\n\"ControlQubits{i}\":[{ControlQubitJson(c.getControlQubits())}]");
 
                 if (i < components.Count - 1) { s.Append(","); }
             }
@@ -133,7 +132,7 @@ namespace QMat_Calculator.Data
 
             for (int i = 0; i < qubits.Count; i++)
             {
-                s.AppendLine($"\"ControlQubit_{i}\":[{{}}]");
+                s.AppendLine($"\"ControlQubit{i}\":{{}}");
 
                 if (i < qubits.Count - 1) { s.Append(","); }
             }
@@ -148,8 +147,8 @@ namespace QMat_Calculator.Data
             List<Gate> gates = q.getGates();
             s.AppendLine("{");
 
-            s.AppendLine($"\n\"Matrix\":[{MatrixJson(q.getMatrix())}]");
-            if (gates.Count > 0) s.Append(",");
+            s.AppendLine($"\n\"Matrix\":{MatrixJson(q.getMatrix())},");
+            s.AppendLine("\"Gates\":[{");
 
             for (int i = 0; i < gates.Count; i++)
             {
@@ -158,7 +157,7 @@ namespace QMat_Calculator.Data
             }
 
 
-            s.AppendLine("}");
+            s.AppendLine("}]}");
             return s.ToString();
         }
 
@@ -181,10 +180,10 @@ namespace QMat_Calculator.Data
                 for (int c = 0; c < m.getColumns(); c++)
                 {
                     Complex value = m.getData()[r, c];
-                    s.AppendLine($"\n\"Cell_{r}-{c}\":[{{");
+                    s.AppendLine($"\n\"Cell_{r}-{c}\":{{");
                     s.AppendLine($"\"Real\":\"{value.Real}\",");
                     s.AppendLine($"\"Imaginary\":\"{value.Imaginary}\"");
-                    s.AppendLine("}]");
+                    s.AppendLine("}");
                     if (c < m.getColumns() - 1) s.Append(",");
                 }
                 s.AppendLine("}");
@@ -201,7 +200,7 @@ namespace QMat_Calculator.Data
             StringBuilder s = new StringBuilder();
             s.AppendLine("{");
             s.AppendLine($"\"NodeCount\":\"{g.getNodeCount()}\",");
-            s.AppendLine($"\"Matrix\":[{MatrixJson(g.getMatrix())}]");
+            s.AppendLine($"\"Matrix\":{MatrixJson(g.getMatrix())}");
             s.AppendLine("}");
             return s.ToString();
         }
