@@ -204,7 +204,8 @@ namespace QMat_Calculator.Data
             if (g == null) { return "{}"; }
             StringBuilder s = new StringBuilder();
             s.AppendLine("{");
-            s.AppendLine($"\"Type\":\"{g.GetType().ToString()}\",");
+            s.AppendLine($"\"Type\":\"{g.GetType()}\",");
+            s.AppendLine($"\"GUID\":\"{g.getGuid()}\",");
             s.AppendLine($"\"NodeCount\":\"{g.getNodeCount()}\",");
             s.AppendLine($"\"Matrix\":{MatrixJson(g.getMatrix())}");
             s.AppendLine("}");

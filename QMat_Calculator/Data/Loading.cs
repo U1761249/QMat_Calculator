@@ -33,8 +33,20 @@ namespace QMat_Calculator.Data
             //elements = JsonConvert.DeserializeObject<List<CircuitComponent>>(JsonData);
 
             JObject jObj = JObject.Parse(JsonData);
-            var qubit = jObj["CircuitComponents"][0];
-            MessageBox.Show(qubit.ToString());
+
+            int qubitCount = jObj["QubitComponents"].Count();
+            for (int i = 0; i < qubitCount; i++)
+            {
+                var qubit = jObj["QubitComponents"][i];
+                MessageBox.Show(qubit.ToString());
+            }
+
+            int componentCount = jObj["CircuitComponents"].Count();
+            for (int i = 0; i < componentCount; i++)
+            {
+                var comp = jObj["CircuitComponents"][i];
+                MessageBox.Show(comp.ToString());
+            }
         }
     }
 }
