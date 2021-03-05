@@ -62,9 +62,13 @@ namespace QMat_Calculator.Data
         {
             ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children.Clear();
 
+            double canvasHeight = ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.ActualHeight;
+            double canvasWidth = ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.ActualWidth;
+
             List<Qubit> qubits = new List<Qubit>();
 
             int qubitCount = jObj["QubitComponents"].Count();
+
             for (int i = 0; i < qubitCount; i++)
             {
                 //MessageBox.Show(jObj["QubitComponents"][i]["Qubit"]["Matrix"].ToString());
@@ -72,7 +76,10 @@ namespace QMat_Calculator.Data
 
                 Matrix m = GetMatrix(jObj["QubitComponents"][i]["Qubit"]["Matrix"]);
                 List<Gate> gates = GetGates(jObj["QubitComponents"][i]["Qubit"]["Gates"]);
-                Point p = GetPoint(jObj["QubitComponents"][i]["Point"]);
+                //Point p = GetPoint(jObj["QubitComponents"][i]["Point"]);
+
+                double height = (canvasHeight / (qubitCount + 1)) * (i + 1);
+                Point p = new Point(canvasWidth, height);
 
                 QubitComponent qc = new QubitComponent(new Qubit(m, gates), p);
 
