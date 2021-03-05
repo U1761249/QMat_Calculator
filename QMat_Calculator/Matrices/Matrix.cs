@@ -31,6 +31,14 @@ namespace QMat_Calculator.Matrices
             this.values = new Complex[rows, columns];
             this.preceder = -1;
         }
+        public Matrix(int rows, int columns, int preceder, Complex[,] data)
+        {
+            this.rows = rows;
+            this.columns = columns;
+
+            this.values = data;
+            this.preceder = preceder;
+        }
 
         public int getRows() { return rows; }
         public int getColumns() { return columns; }

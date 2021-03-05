@@ -38,6 +38,11 @@ namespace QMat_Calculator.Circuits
             gates = new List<Gate>();
         }
         public Qubit() { }
+        public Qubit(Matrix m, List<Gate> gates)
+        {
+            this.matrix = m;
+            this.gates = gates;
+        }
 
         public List<Gate> getGates() { return gates; }
         public void setGates(List<Gate> g) { gates = g; }

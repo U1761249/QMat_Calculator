@@ -219,7 +219,7 @@ namespace QMat_Calculator.Interfaces
         /// <summary>
         /// Change the size of the Qubits when the screen size changes.
         /// </summary>
-        private void ResizeQubits()
+        public void ResizeQubits()
         {
             int width = Convert.ToInt32(MainCircuitCanvas.ActualWidth);
 

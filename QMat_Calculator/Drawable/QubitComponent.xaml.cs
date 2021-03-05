@@ -40,6 +40,13 @@ namespace QMat_Calculator.Drawable
 
         }
         public QubitComponent() { }
+        public QubitComponent(Qubit q, Point p)
+        {
+            InitializeComponent();
+            this.qubit = q;
+            this.point = p;
+            UpdateSize();
+        }
 
         /// <summary>
         /// Update the length of the line based on the canvas size
