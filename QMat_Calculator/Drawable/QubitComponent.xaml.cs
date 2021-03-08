@@ -33,7 +33,6 @@ namespace QMat_Calculator.Drawable
         {
             InitializeComponent();
             qubit = new Qubit(value);
-
             point = new Point(width, height);
 
             UpdateSize();
@@ -45,6 +44,7 @@ namespace QMat_Calculator.Drawable
             InitializeComponent();
             this.qubit = q;
             this.point = p;
+
             UpdateSize();
         }
 

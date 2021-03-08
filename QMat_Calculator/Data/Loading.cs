@@ -81,8 +81,10 @@ namespace QMat_Calculator.Data
                 double height = (canvasHeight / (qubitCount + 1)) * (i + 1);
                 Point p = new Point(canvasWidth, height);
 
-                QubitComponent qc = new QubitComponent(new Qubit(m, gates), p);
+                Qubit q = new Qubit(m, gates);
+                QubitComponent qc = new QubitComponent(q, p);
 
+                qubits.Add(q);
                 ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children.Add(qc);
 
                 // var qubit = jObj["QubitComponents"][i];
