@@ -31,6 +31,11 @@ namespace QMat_Calculator.Interfaces
 
         private List<QubitComponent> qubitComponents = new List<QubitComponent>();
 
+
+        public void setQubitComponents(List<QubitComponent> qubits) { qubitComponents = qubits; }
+        public void addQubitComponents(QubitComponent qubit) { qubitComponents.Add(qubit); }
+        public List<QubitComponent> getQubitComponents() { return qubitComponents; }
+
         public CircuitCanvas()
         {
             InitializeComponent();
@@ -303,20 +308,22 @@ namespace QMat_Calculator.Interfaces
             int mostPopulated = Manager.getMostPopulated();
 
             List<UserControl> components = new List<UserControl>();
-            List<QubitComponent> qubitComponents = new List<QubitComponent>();
+            List<QubitComponent> qubits = new List<QubitComponent>();
 
             for (int i = 0; i < MainCircuitCanvas.Children.Count; i++)
             {
                 if (MainCircuitCanvas.Children[i].GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)MainCircuitCanvas.Children[i]); }
                 else if (MainCircuitCanvas.Children[i].GetType() == typeof(ControlQubit)) { components.Add((ControlQubit)MainCircuitCanvas.Children[i]); }
-                else if (MainCircuitCanvas.Children[i].GetType() == typeof(QubitComponent)) { qubitComponents.Add((QubitComponent)MainCircuitCanvas.Children[i]); }
+                else if (MainCircuitCanvas.Children[i].GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)MainCircuitCanvas.Children[i]); }
             }
 
-            List<double> qubitHeightValues = qubitComponents.GroupBy(x => x.GetPoint().Y).Select(x => x.First().GetPoint().Y).ToList(); // Get a list of all unique Qubit heights
+            List<double> qubitHeightValues = qubits.GroupBy(x => x.GetPoint().Y).Select(x => x.First().GetPoint().Y).ToList(); // Get a list of all unique Qubit heights
 
             UserControl[,] alignment = new UserControl[qubitHeightValues.Count, mostPopulated]; // Create an array based on the order of each component on each qubit.
             List<UserControl> OrderedComponents = Manager.SortX(components);
             int currentComponent = 0;
+            if (components.Count == 0) return;
+
             for (int col = 0; col < mostPopulated; col++)
             {
                 for (int row = 0; row < qubitHeightValues.Count; row++)
@@ -329,38 +336,6 @@ namespace QMat_Calculator.Interfaces
                 }
             }
 
-
-            //for (int row = 0; row < qubitHeightValues.Count; row++)
-            //{
-            //    List<UserControl> OrderedQubitComponents = new List<UserControl>(); // A sorted list of all components on qubit i.
-            //    foreach (UserControl component in components)
-            //    {
-            //        Point p = getComponentPoint(component); // Get the point of the component
-
-            //        if (p == new Point(-1, -1)) continue;      // Skip this component if the point value wasn't updated.
-            //        if (ClosestQubit(component, qubitHeightValues) != qubitHeightValues[row]) continue; // Skip this component if the height doesn't match the current Qubit target.
-
-            //        // Add the current component into the ordered list based on the X value.
-            //        bool added = false;
-            //        for (int c = 0; c < OrderedQubitComponents.Count; c++)
-            //        {
-            //            if (p.X < getComponentPoint(OrderedQubitComponents[c]).X)
-            //            {
-            //                OrderedQubitComponents.Insert(c, component);
-            //                added = true;
-            //                break;
-            //            }
-            //        }
-            //        if (!added) { OrderedQubitComponents.Add(component); }
-            //    }
-
-            //    if (OrderedQubitComponents.Count > mostPopulated) break; // Don't add the values if there are too many to fit (Something went wrong).
-            //    // Add the ordered list into the array.
-            //    for (int col = 0; col < OrderedQubitComponents.Count; col++)
-            //    {
-            //        alignment[row, col] = OrderedQubitComponents[col];
-            //    }
-            //}
 
             int requiredColumns = 1;
 
@@ -464,6 +439,7 @@ namespace QMat_Calculator.Interfaces
                 finalAlignment = MigrateControlBits(alignment, finalAlignment, qubitHeightValues);
             }
 
+            Manager.setFinalAlignment(finalAlignment);
             MoveAll(ref finalAlignment, qubitHeightValues, qubitHeightValues.Count, requiredColumns);
         }
 

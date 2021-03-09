@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Matrices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -47,9 +48,17 @@ namespace QMat_Calculator.Circuits.Gates
                     break;
             }
 
-            Matrices.Matrix m = new Matrices.Matrix(2, 2, data);
+            Matrix m = new Matrix(2, 2, data);
             this.setMatrix(m);
 
+        }
+
+        public Pauli(Guid guid, PauliType type, int nodeCount, Matrix m)
+        {
+            this.setGuid(guid);
+            this.gateType = type;
+            this.setNodeCount(nodeCount);
+            this.setMatrix(m);
         }
 
         public PauliType GetPauliType() { return this.gateType; }

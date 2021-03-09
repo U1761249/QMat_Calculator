@@ -31,6 +31,7 @@ namespace QMat_Calculator.Circuits
         public Matrix getMatrix() { return this.matrix; }
         public Guid getGuid() { return this.guid; }
         public void newGuid() { this.guid = Guid.NewGuid(); }
+        public void setGuid(Guid g) { this.guid = g; }
 
         public void printMatrix(bool preceder = false)
         {

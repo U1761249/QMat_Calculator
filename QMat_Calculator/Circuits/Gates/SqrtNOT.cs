@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Matrices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -23,11 +24,19 @@ namespace QMat_Calculator.Circuits.Gates
             data[1, 0] = 1;
             data[1, 1] = 1;
 
-            Matrices.Matrix m = new Matrices.Matrix(2, 2, data, 1 / Math.Sqrt(2));
+            Matrix m = new Matrix(2, 2, data, 1 / Math.Sqrt(2));
+            this.setMatrix(m);
+        }
+        public SqrtNOT(Guid guid, int nodeCount, Matrix m)
+        {
+            this.setGuid(guid);
+            this.setNodeCount(nodeCount);
             this.setMatrix(m);
         }
 
         public string GetGateLabel() { return "√NOT"; }
 
     }
+
+
 }

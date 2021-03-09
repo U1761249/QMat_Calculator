@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Matrices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -40,7 +41,14 @@ namespace QMat_Calculator.Circuits.Gates
             data[6, 7] = 1;
             data[7, 6] = 1;
 
-            Matrices.Matrix m = new Matrices.Matrix(4, 4, data);
+            Matrix m = new Matrix(4, 4, data);
+            this.setMatrix(m);
+        }
+
+        public Toffoli(Guid guid, int nodeCount, Matrix m)
+        {
+            this.setGuid(guid);
+            this.setNodeCount(nodeCount);
             this.setMatrix(m);
         }
 

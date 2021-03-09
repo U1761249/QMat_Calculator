@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QMat_Calculator.Matrices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -38,10 +39,16 @@ namespace QMat_Calculator.Circuits.Gates
             data[2, 3] = 1;
             data[3, 2] = 1;
 
-            Matrices.Matrix m = new Matrices.Matrix(4, 4, data);
+            Matrix m = new Matrix(4, 4, data);
             this.setMatrix(m);
         }
 
+        public CNOT(Guid guid, int nodeCount, Matrix m)
+        {
+            this.setGuid(guid);
+            this.setNodeCount(nodeCount);
+            this.setMatrix(m);
+        }
         public string GetGateLabel() { return "NOT"; }
     }
 }

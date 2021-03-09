@@ -34,6 +34,7 @@ namespace QMat_Calculator
         private static List<SolutionStep> solutionSteps = new List<SolutionStep>();
         private static Gate heldGate = null;
         private static Dictionary<string, Type> GateImage = null;
+        private static UserControl[,] finalAlignment = null;
 
         //Drag and Drop components
         private static UIElement ccDrag = null;
@@ -44,6 +45,8 @@ namespace QMat_Calculator
         public static CircuitComponent getSelectedGate() { return selectedGate; }
         public static void setSelectedControl(ControlQubit g) { selectedControl = g; }
         public static ControlQubit getSelectedControl() { return selectedControl; }
+        public static UserControl[,] getFinalAlignment() { return finalAlignment; }
+        public static void setFinalAlignment(UserControl[,] al) { finalAlignment = al; }
 
         public static int getMinQubitCount() { return minQubitCount; }
 
@@ -377,7 +380,7 @@ namespace QMat_Calculator
                     p = ((ControlQubit)component).getPoint();
                 }
 
-                if (p == new Point()) continue;
+                if (p == new Point() || mapping.ContainsKey(p)) continue;
                 mapping.Add(p, component);
                 sortedPoints.Add(p);
             }

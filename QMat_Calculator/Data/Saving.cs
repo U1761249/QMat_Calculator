@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using QMat_Calculator.Circuits;
+using QMat_Calculator.Circuits.Gates;
 using QMat_Calculator.Drawable;
 using QMat_Calculator.Interfaces;
 using QMat_Calculator.Matrices;
@@ -72,12 +73,27 @@ namespace QMat_Calculator.Data
         {
             StringBuilder s = new StringBuilder();
 
-            s.AppendLine("{\n\"QubitComponents\":");
+            s.AppendLine("{\n\"Canvas\":");
+            s.AppendLine(CanvasJson());
+            s.AppendLine(",\n\"QubitComponents\":");
             s.AppendLine(QubitComponentJson());
             s.AppendLine(",\n\"CircuitComponents\":");
             s.AppendLine(CircuitComponentJson());
             s.AppendLine("}\n");
 
+            return s.ToString();
+        }
+
+        private static string CanvasJson()
+        {
+            CircuitCanvas cc = Manager.getCircuitCanvas();
+
+            StringBuilder s = new StringBuilder();
+            s.AppendLine("{");
+            s.AppendLine($"\"Width\":\"{cc.ActualWidth}\",");
+            s.AppendLine($"\"Height\":\"{cc.ActualHeight}\",");
+            s.AppendLine($"\"MostPopulated\":\"{Manager.getMostPopulated()}\"");
+            s.AppendLine("}");
             return s.ToString();
         }
 
@@ -114,7 +130,8 @@ namespace QMat_Calculator.Data
                 CircuitComponent c = components[i];
                 s.AppendLine($"{{\n\"Gate\":{GateJson(c.getGate())},");
                 s.AppendLine($"\n\"ImageSource\":\"{c.getImagePath()}\",");
-                s.AppendLine($"\n\"Point\":{PointJson(c.getPoint())},");
+                //s.AppendLine($"\n\"Point\":{PointJson(c.getPoint())},");
+                s.AppendLine($"\n\"Position\":{PositionJson(c)},");
                 s.AppendLine($"\n\"ControlQubits\":[{ControlQubitJson(c.getControlQubits())}]}}");
 
                 //s.AppendLine($"\n\"Gate{i}\":{GateJson(c.getGate())},");
@@ -128,6 +145,38 @@ namespace QMat_Calculator.Data
             return s.ToString();
         }
 
+        private static string PositionJson(CircuitComponent c)
+        {
+            UserControl[,] alignment = Manager.getFinalAlignment();
+            if (c == null) { return "{}"; }
+
+            bool placed = false;
+            double x = 0;
+            double y = 0;
+
+            for (int row = 0; row < Manager.getQubitCount(); row++)
+            {
+                if (placed) break;
+
+                for (int col = 0; col < Manager.getMostPopulated(); col++)
+                {
+                    if (alignment[row, col] == c)
+                    {
+                        x = col;
+                        y = row;
+                        placed = true;
+                        break;
+                    }
+                }
+            }
+
+            StringBuilder s = new StringBuilder();
+            s.AppendLine("{");
+            s.AppendLine($"\"X\":\"{x}\",");
+            s.AppendLine($"\"Y\":\"{y}\"");
+            s.AppendLine("}");
+            return s.ToString();
+        }
 
         private static string ControlQubitJson(List<ControlQubit> qubits)
         {
@@ -204,7 +253,16 @@ namespace QMat_Calculator.Data
             if (g == null) { return "{}"; }
             StringBuilder s = new StringBuilder();
             s.AppendLine("{");
-            s.AppendLine($"\"Type\":\"{g.GetType()}\",");
+
+            if (g.GetType() != typeof(Pauli))
+            {
+                s.AppendLine($"\"Type\":\"{g.GetType()}\",");
+            }
+            else // Add the pauli type to the end of the string
+            {
+                s.AppendLine($"\"Type\":\"{g.GetType()}.{((Pauli)g).GetPauliType()}\",");
+            }
+
             s.AppendLine($"\"GUID\":\"{g.getGuid()}\",");
             s.AppendLine($"\"NodeCount\":\"{g.getNodeCount()}\",");
             s.AppendLine($"\"Matrix\":{MatrixJson(g.getMatrix())}");
@@ -234,7 +292,7 @@ namespace QMat_Calculator.Data
             { File.Delete(path); }
 
             File.WriteAllText(path, data);
-            Process.Start("notepad.exe", path);
+            Process.Start("notepad++.exe", path);
         }
     }
 }
