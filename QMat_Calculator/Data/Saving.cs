@@ -134,7 +134,7 @@ namespace QMat_Calculator.Data
                 s.AppendLine($"\n\"Point\":{PointJson(c.getPoint())},");
                 s.AppendLine($"\n\"Position\":{PositionJson(c)},");
 
-                s.AppendLine($"\n\"ControlQubits\":[{ControlQubitJson(c.getControlQubits())}]}}");
+                s.AppendLine($"\n\"ControlQubits\":{ControlQubitJson(c.getControlQubits())}}}");
 
                 //s.AppendLine($"\n\"Gate{i}\":{GateJson(c.getGate())},");
                 //s.AppendLine($"\n\"Point{i}\":{PointJson(c.getPoint())},");
@@ -182,18 +182,25 @@ namespace QMat_Calculator.Data
 
         private static string ControlQubitJson(List<ControlQubit> qubits)
         {
-            if (qubits == null) { return "{}"; }
+            if (qubits.Count == 0)
+            {
+                return ("null");
+            }
+
             StringBuilder s = new StringBuilder();
-            s.AppendLine("{");
+            s.AppendLine("[");
 
             for (int i = 0; i < qubits.Count; i++)
             {
-                s.AppendLine($"\"ControlQubit{i}\":{{}}");
+                s.AppendLine($"{{\"ControlQubit{i}\":{{");
+                s.AppendLine($"\"Point\":{PointJson(qubits[i].getPoint())}");
+                s.AppendLine("}}");
+
 
                 if (i < qubits.Count - 1) { s.Append(","); }
             }
 
-            s.AppendLine("}");
+            s.AppendLine("]");
             return s.ToString();
         }
         private static string QubitJson(Qubit q)

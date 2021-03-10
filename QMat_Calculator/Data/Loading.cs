@@ -50,6 +50,7 @@ namespace QMat_Calculator.Data
             oldWidth = (double)jObj["Canvas"]["Width"];
             mostPopulated = (double)jObj["Canvas"]["MostPopulated"] + 1;
 
+
             GetQubits();
             GetComponents();
 
@@ -71,7 +72,28 @@ namespace QMat_Calculator.Data
 
                 CircuitComponent comp = new CircuitComponent(g, imageSource, p);
                 ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children.Add(comp);
+
+                if (jObj["CircuitComponents"][i]["ControlQubits"].Count() > 0)
+                {
+                    GetControlQubits(jObj["CircuitComponents"][i]["ControlQubits"]);
+                }
             }
+        }
+
+        private static void GetControlQubits(JToken controlData)
+        {
+            if (controlData == null) return;
+
+            for (int i = 0; i < controlData.Count(); i++)
+            {
+                Point qp = GetPoint(controlData[i][$"ControlQubit{i}"]["Point"]);
+                if (qp != new Point())
+                {
+                    ControlQubit cq = new ControlQubit(qp);
+                    ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children.Add(cq);
+                }
+            }
+
         }
 
         private static void GetQubits()
@@ -225,7 +247,7 @@ namespace QMat_Calculator.Data
         /// <returns></returns>
         private static Point GetPoint(JToken pointData)
         {
-            //if (pointData == null) return new Point();
+            if (pointData == null) return new Point();
 
             double x = (double)pointData["X"];
             double y = (double)pointData["Y"];
