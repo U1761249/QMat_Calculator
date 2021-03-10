@@ -328,11 +328,15 @@ namespace QMat_Calculator.Interfaces
             {
                 for (int row = 0; row < qubitHeightValues.Count; row++)
                 {
-                    if (ClosestQubit(OrderedComponents[currentComponent], qubitHeightValues) != qubitHeightValues[row]) continue;
+                    try
+                    {
+                        if (ClosestQubit(OrderedComponents[currentComponent], qubitHeightValues) != qubitHeightValues[row]) continue;
 
-                    alignment[row, col] = OrderedComponents[currentComponent];
-                    currentComponent++;
-                    if (currentComponent == OrderedComponents.Count) break;
+                        alignment[row, col] = OrderedComponents[currentComponent];
+                        currentComponent++;
+                        if (currentComponent == OrderedComponents.Count) break;
+                    }
+                    catch (Exception e) { continue; }
                 }
             }
 
@@ -402,35 +406,39 @@ namespace QMat_Calculator.Interfaces
 
                     for (int row = 0; row < qubitHeightValues.Count; row++) // Order the alignment column into the final column(s)
                     {
-                        if (alignment[row, col] == null) continue;
-                        if (alignment[row, col].GetType() == typeof(CircuitComponent))
+                        try
                         {
-                            CircuitComponent value = (CircuitComponent)alignment[row, col];
-                            bool isControlled = value.getGate().getNodeCount() > 1;
-
-                            if (!isControlled) // The gate goes to it's default column
+                            if (alignment[row, col] == null) continue;
+                            if (alignment[row, col].GetType() == typeof(CircuitComponent))
                             {
-                                finalAlignment[row, col + colOffset] = alignment[row, col];
-                            }
+                                CircuitComponent value = (CircuitComponent)alignment[row, col];
+                                bool isControlled = value.getGate().getNodeCount() > 1;
 
-                            else // The gate needs to be moved
-                            {
-                                if (controlledGates > 0 && nonControlledGates == 0 && isFirst) // All bar the first controlled gates are in a new column.
+                                if (!isControlled) // The gate goes to it's default column
                                 {
-                                    if (colOffset > 0)
-                                    { colOffset -= 1; }
-                                    isFirst = false;
+                                    finalAlignment[row, col + colOffset] = alignment[row, col];
                                 }
 
-                                while (placedControlledIndex >= requiredColumns)
+                                else // The gate needs to be moved
                                 {
-                                    placedControlledIndex--;
-                                }
+                                    if (controlledGates > 0 && nonControlledGates == 0 && isFirst) // All bar the first controlled gates are in a new column.
+                                    {
+                                        if (colOffset > 0)
+                                        { colOffset -= 1; }
+                                        isFirst = false;
+                                    }
 
-                                finalAlignment[row, col + colOffset + placedControlledIndex] = alignment[row, col];
-                                placedControlledIndex += 1;
+                                    while (placedControlledIndex >= requiredColumns)
+                                    {
+                                        placedControlledIndex--;
+                                    }
+
+                                    finalAlignment[row, col + colOffset + placedControlledIndex] = alignment[row, col];
+                                    placedControlledIndex += 1;
+                                }
                             }
                         }
+                        catch (Exception e) { continue; }
                     }
                     colOffset += controlledGates;
 

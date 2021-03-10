@@ -65,7 +65,9 @@ namespace QMat_Calculator.Data
             {
                 Gate g = GetGate(jObj["CircuitComponents"][i]["Gate"]);
                 string imageSource = (String)jObj["CircuitComponents"][i]["ImageSource"];
-                Point p = GetPosition(jObj["CircuitComponents"][i]["Position"]);
+                Point p = GetPoint(jObj["CircuitComponents"][i]["Point"]);
+                //Point p = GetPosition(jObj["CircuitComponents"][i]["Position"]);
+
 
                 CircuitComponent comp = new CircuitComponent(g, imageSource, p);
                 ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.Children.Add(comp);
@@ -89,10 +91,10 @@ namespace QMat_Calculator.Data
 
                 Matrix m = GetMatrix(jObj["QubitComponents"][i]["Qubit"]["Matrix"]);
                 List<Gate> gates = GetGates(jObj["QubitComponents"][i]["Qubit"]["Gates"]);
-                //Point p = GetPoint(jObj["QubitComponents"][i]["Point"]);
+                Point p = GetPoint(jObj["QubitComponents"][i]["Point"]);
 
-                double height = (canvasHeight / (qubitCount + 1)) * (i + 1);
-                Point p = new Point(canvasWidth, height);
+                //double height = (canvasHeight / (qubitCount + 1)) * (i + 1);
+                //Point p = new Point(canvasWidth, height);
 
                 Qubit q = new Qubit(m, gates);
                 QubitComponent qc = new QubitComponent(q, p);
@@ -227,6 +229,12 @@ namespace QMat_Calculator.Data
 
             double x = (double)pointData["X"];
             double y = (double)pointData["Y"];
+
+            double width = ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.ActualWidth;
+            double height = ((CircuitCanvas)Manager.getCircuitCanvas()).MainCircuitCanvas.ActualHeight;
+
+            x = (x / oldWidth) * width;
+            y = (y / oldHeight) * height;
 
             return new Point(x, y);
         }

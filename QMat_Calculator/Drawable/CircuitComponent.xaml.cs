@@ -44,10 +44,11 @@ namespace QMat_Calculator.Drawable
             this.component.Height = 100;
             this.component.Width = 100;
 
-            Canvas.SetTop(this, p.Y - (this.ActualHeight / 2));
-            Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
             this.point = p;
             this.DataContext = this;
+
+            Canvas.SetTop(this, p.Y - (this.ActualHeight / 2));
+            Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
         }
         public CircuitComponent() { }
         public CircuitComponent(Gate gate, string imageSource, Point p)
@@ -56,12 +57,13 @@ namespace QMat_Calculator.Drawable
             this.component.Height = 100;
             this.component.Width = 100;
 
-            Canvas.SetTop(this, p.Y - (this.ActualHeight / 2));
-            Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
             this.point = p;
             this.gate = gate;
             this.source = imageSource;
             this.DataContext = this;
+
+            Canvas.SetTop(this, p.Y - (this.ActualHeight / 2));
+            Canvas.SetLeft(this, p.X - (this.ActualWidth / 2));
 
             this.setType(gate);
         }

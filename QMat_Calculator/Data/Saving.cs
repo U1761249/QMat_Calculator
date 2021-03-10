@@ -130,8 +130,10 @@ namespace QMat_Calculator.Data
                 CircuitComponent c = components[i];
                 s.AppendLine($"{{\n\"Gate\":{GateJson(c.getGate())},");
                 s.AppendLine($"\n\"ImageSource\":\"{c.getImagePath()}\",");
-                //s.AppendLine($"\n\"Point\":{PointJson(c.getPoint())},");
+
+                s.AppendLine($"\n\"Point\":{PointJson(c.getPoint())},");
                 s.AppendLine($"\n\"Position\":{PositionJson(c)},");
+
                 s.AppendLine($"\n\"ControlQubits\":[{ControlQubitJson(c.getControlQubits())}]}}");
 
                 //s.AppendLine($"\n\"Gate{i}\":{GateJson(c.getGate())},");
