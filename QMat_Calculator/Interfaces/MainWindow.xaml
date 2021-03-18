@@ -24,7 +24,6 @@
     <Grid x:Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -86,16 +85,22 @@
 
         <TabControl x:Name="tabControl" Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
             <TabItem Header="Design" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
-                <Border x:Name="circuitCanvasBorder" />
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border x:Name="circuitCanvasBorder" />
+                    <CR:CompoentRibbon Grid.Row="1" Background="AliceBlue"/>
+                </Grid>
+
             </TabItem>
             <TabItem Header="Matrix" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Border x:Name="matrixCanvasBorder" />
             </TabItem>
         </TabControl>
 
-        <CR:CompoentRibbon Grid.Row="2" Background="AliceBlue">
-
-        </CR:CompoentRibbon>
 
     </Grid>
 </Window>

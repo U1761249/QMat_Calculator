@@ -368,6 +368,7 @@ namespace QMat_Calculator
             List<Point> sortedPoints = new List<Point>();
             List<UserControl> sorted = new List<UserControl>();
 
+            // Get the point for each element (of each type) and map the point to the component.
             foreach (UserControl component in components)
             {
                 Point p = new Point();

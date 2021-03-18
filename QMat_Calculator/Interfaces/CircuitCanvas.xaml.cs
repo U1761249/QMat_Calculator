@@ -263,10 +263,23 @@ namespace QMat_Calculator.Interfaces
         /// <returns></returns>
         private Point getComponentPoint(UserControl component)
         {
-            if (component.GetType() == typeof(CircuitComponent)) return ((CircuitComponent)component).getPoint();
-            else if (component.GetType() == typeof(ControlQubit)) return ((ControlQubit)component).getPoint();
+            Point p = new Point(-1, -1);
+            double height = component.ActualHeight;
+            //double width = component.ActualWidth;
 
-            return new Point(-1, -1);
+            if (component.GetType() == typeof(CircuitComponent)) p = ((CircuitComponent)component).getPoint();
+            else if (component.GetType() == typeof(ControlQubit)) p = ((ControlQubit)component).getPoint();
+
+            //if (component.GetType() == typeof(CircuitComponent)) return ((CircuitComponent)component).getPoint();
+            //else if (component.GetType() == typeof(ControlQubit)) return ((ControlQubit)component).getPoint();
+
+            if (height > 0)//&& width > 0)
+            {
+                //p.X = p.X + (width / 2);
+                p.Y = p.Y + (height / 2);
+            }
+
+            return p;
         }
 
         /// <summary>
@@ -278,8 +291,10 @@ namespace QMat_Calculator.Interfaces
         private double ClosestQubit(UserControl component, List<double> qubitHeightValues)
         {
             Point p = getComponentPoint(component);
-            double target = p.Y + (component.ActualHeight / 2);
 
+            double target = p.Y;// + (component.ActualHeight / 2);
+
+            //TestEllipse(new Point(p.X, target));
 
             if (qubitHeightValues.Count == 0) return -1;
             else if (qubitHeightValues.Contains(target)) return target;
@@ -650,6 +665,24 @@ namespace QMat_Calculator.Interfaces
             }
 
             //MessageBox.Show(Manager.PrintGateLayout());
+        }
+
+        public void TestEllipse(Point p)
+        {
+            // Create a test ellipse.
+            Ellipse e = new Ellipse();
+            e.Height = 30;
+            e.Width = 30;
+            e.Fill = Brushes.Red;
+
+            // Centre the point to the middle of the ellipse
+            p.X -= e.ActualWidth / 2;
+            p.Y -= e.ActualHeight / 2;
+
+            // Add the ellipse to the screen and move it on the canvas.
+            MainCircuitCanvas.Children.Add(e);
+            Canvas.SetLeft(e, p.X);
+            Canvas.SetTop(e, p.Y);
         }
 
     }
