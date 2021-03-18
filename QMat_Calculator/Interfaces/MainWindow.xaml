@@ -19,6 +19,7 @@
         <KeyBinding Command="{Binding RemoveLastQubitCommand}" Key="Q" Modifiers="Ctrl"/>
         <KeyBinding Command="{Binding RemoveGateCommand}" Key="Delete"/>
         <KeyBinding Command="{Binding SolveCommand}" Key="S"/>
+        <KeyBinding Command="{Binding ShowDetailsCommand}" Key="D"/>
     </Window.InputBindings>
 
     <Grid x:Name="mainGrid">
@@ -79,8 +80,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_View" />
-            <MenuItem Header="_Preferences" />
+            <MenuItem Header="_View" >
+                <MenuItem Header="ToAdd">
+                    <MenuItem Header="Colours"/>
+                    <MenuItem Header="Layout"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Preferences" >
+                <MenuItem x:Name="toggleDetails" IsCheckable="true" Header="Show Details" Command="{Binding ShowDetails}"/>
+                <Separator/>
+                <MenuItem Header="ToAdd">
+                    <MenuItem Header="User Settigns"/>
+                    <MenuItem Header="Global Settings"/>
+                    <MenuItem Header="Matrix Solution Settings"/>
+                </MenuItem>
+            </MenuItem>
         </Menu>
 
         <TabControl x:Name="tabControl" Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">

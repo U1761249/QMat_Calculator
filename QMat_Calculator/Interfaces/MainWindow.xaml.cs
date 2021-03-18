@@ -70,6 +70,7 @@ namespace QMat_Calculator
             if (tabControl.SelectedIndex == 1)
                 Manager.Solve();
         }
+
     }
 
     /// <summary>
@@ -99,6 +100,10 @@ namespace QMat_Calculator
         public ICommand SolveCommand
         {
             get { return new SolveKey(); }
+        }
+        public ICommand ShowDetailsCommand
+        {
+            get { return new ShowDetailsKey(); }
         }
     }
 
@@ -178,6 +183,21 @@ namespace QMat_Calculator
         {
             Manager.Solve();
 
+        }
+    }
+
+    public class ShowDetailsKey : ICommand
+    {
+        public event EventHandler CanExecuteChanged;
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            //Manager.setDetails();
         }
     }
 }
