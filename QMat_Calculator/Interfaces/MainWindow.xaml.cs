@@ -35,7 +35,6 @@ namespace QMat_Calculator
     public partial class MainWindow : Window
     {
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -48,6 +47,7 @@ namespace QMat_Calculator
             Manager.setMatrixCanvas(mc);
             matrixCanvasBorder.Child = mc;
         }
+
 
 
 

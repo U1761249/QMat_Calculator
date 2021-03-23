@@ -315,29 +315,19 @@ namespace QMat_Calculator.Interfaces
         }
 
         /// <summary>
-        /// Move the gates on screen to even columns within the Qubit.
-        /// Gates with control bits reserve their own column per gate.
+        /// Get the current alignment of circuit components from the screen.
         /// </summary>
-        public void OrderComponents()
+        /// <param name="components"></param>
+        /// <param name="qubitHeightValues"></param>
+        /// <returns></returns>
+        private UserControl[,] GetAlignment(List<UserControl> components, List<double> qubitHeightValues)
         {
             int mostPopulated = Manager.getMostPopulated();
-
-            List<UserControl> components = new List<UserControl>();
-            List<QubitComponent> qubits = new List<QubitComponent>();
-
-            for (int i = 0; i < MainCircuitCanvas.Children.Count; i++)
-            {
-                if (MainCircuitCanvas.Children[i].GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)MainCircuitCanvas.Children[i]); }
-                else if (MainCircuitCanvas.Children[i].GetType() == typeof(ControlQubit)) { components.Add((ControlQubit)MainCircuitCanvas.Children[i]); }
-                else if (MainCircuitCanvas.Children[i].GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)MainCircuitCanvas.Children[i]); }
-            }
-
-            List<double> qubitHeightValues = qubits.GroupBy(x => x.GetPoint().Y).Select(x => x.First().GetPoint().Y).ToList(); // Get a list of all unique Qubit heights
 
             UserControl[,] alignment = new UserControl[qubitHeightValues.Count, mostPopulated]; // Create an array based on the order of each component on each qubit.
             List<UserControl> OrderedComponents = Manager.SortX(components);
             int currentComponent = 0;
-            if (components.Count == 0) return;
+            if (components.Count == 0) return null;
 
             for (int col = 0; col < mostPopulated; col++)
             {
@@ -391,9 +381,18 @@ namespace QMat_Calculator.Interfaces
                 else if (controlledGates == 0 && nonControlledGates == 0) { } // Do nothing
                 else { requiredColumns += 1; }
             }
+            return alignment;
+        }
 
-
-            // Create a final array with a new column for each 
+        /// <summary>
+        /// Get the final alignment of components on screen, adding columns where necessary.
+        /// </summary>
+        /// <param name="alignment"></param>
+        /// <param name="requiredColumns"></param>
+        /// <param name="qubitHeightValues"></param>
+        /// <returns></returns>
+        private UserControl[,] GetFinalAlignment(UserControl[,] alignment, int requiredColumns, List<double> qubitHeightValues)
+        {
             UserControl[,] finalAlignment = new UserControl[qubitHeightValues.Count, requiredColumns];
             if (finalAlignment.Length == alignment.Length) { finalAlignment = alignment; }
             else
@@ -461,6 +460,35 @@ namespace QMat_Calculator.Interfaces
 
                 finalAlignment = MigrateControlBits(alignment, finalAlignment, qubitHeightValues);
             }
+            return finalAlignment;
+        }
+
+        /// <summary>
+        /// Move the gates on screen to even columns within the Qubit.
+        /// Gates with control bits reserve their own column per gate.
+        /// </summary>
+        public void OrderComponents()
+        {
+            int mostPopulated = Manager.getMostPopulated();
+
+            List<UserControl> components = new List<UserControl>();
+            List<QubitComponent> qubits = new List<QubitComponent>();
+
+            for (int i = 0; i < MainCircuitCanvas.Children.Count; i++)
+            {
+                if (MainCircuitCanvas.Children[i].GetType() == typeof(CircuitComponent)) { components.Add((CircuitComponent)MainCircuitCanvas.Children[i]); }
+                else if (MainCircuitCanvas.Children[i].GetType() == typeof(ControlQubit)) { components.Add((ControlQubit)MainCircuitCanvas.Children[i]); }
+                else if (MainCircuitCanvas.Children[i].GetType() == typeof(QubitComponent)) { qubits.Add((QubitComponent)MainCircuitCanvas.Children[i]); }
+            }
+
+            List<double> qubitHeightValues = qubits.GroupBy(x => x.GetPoint().Y).Select(x => x.First().GetPoint().Y).ToList(); // Get a list of all unique Qubit heights
+
+            UserControl[,] alignment = GetAlignment(components, qubitHeightValues);
+            if (alignment == null) return;
+
+            // Create a final array with a new column for each 
+            int requiredColumns = alignment.Length / qubitHeightValues.Count;
+            UserControl[,] finalAlignment = GetFinalAlignment(alignment, requiredColumns, qubitHeightValues);
 
             Manager.setFinalAlignment(finalAlignment);
             MoveAll(ref finalAlignment, qubitHeightValues, qubitHeightValues.Count, requiredColumns);

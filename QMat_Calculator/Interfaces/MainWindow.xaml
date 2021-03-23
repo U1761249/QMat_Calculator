@@ -87,7 +87,9 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Preferences" >
-                <MenuItem x:Name="toggleDetails" IsCheckable="true" Header="Show Details" Command="{Binding ShowDetails}"/>
+                <MenuItem x:Name="toggleDetails" IsCheckable="true" 
+                          IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window},Path=_DoDetails}" 
+                          Header="Show Details" Command="{Binding ShowDetails}"/>
                 <Separator/>
                 <MenuItem Header="ToAdd">
                     <MenuItem Header="User Settigns"/>

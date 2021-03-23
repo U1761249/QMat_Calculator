@@ -33,6 +33,13 @@ namespace QMat_Calculator
         private static List<Qubit> qubits = new List<Qubit>();
         private static List<SolutionStep> solutionSteps = new List<SolutionStep>();
         private static Gate heldGate = null;
+        private static bool DoDetails = false;
+        public static void setDoDetails(bool value)
+        {
+            DoDetails = value;
+        }
+        public static bool getDoDetails() { return DoDetails; }
+
         private static Dictionary<string, Type> GateImage = null;
         private static UserControl[,] finalAlignment = null;
 
