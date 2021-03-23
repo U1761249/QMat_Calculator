@@ -34,6 +34,7 @@ namespace QMat_Calculator
         private static List<SolutionStep> solutionSteps = new List<SolutionStep>();
         private static Gate heldGate = null;
         private static bool DoDetails = false;
+        private static int requiredColumns = 1;
         public static void setDoDetails(bool value)
         {
             DoDetails = value;
@@ -54,7 +55,8 @@ namespace QMat_Calculator
         public static ControlQubit getSelectedControl() { return selectedControl; }
         public static UserControl[,] getFinalAlignment() { return finalAlignment; }
         public static void setFinalAlignment(UserControl[,] al) { finalAlignment = al; }
-
+        public static int getRequiredColumns() { return requiredColumns; }
+        public static void setRequiredColumns(int rc) { requiredColumns = rc; }
         public static int getMinQubitCount() { return minQubitCount; }
 
 

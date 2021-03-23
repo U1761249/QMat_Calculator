@@ -381,6 +381,7 @@ namespace QMat_Calculator.Interfaces
                 else if (controlledGates == 0 && nonControlledGates == 0) { } // Do nothing
                 else { requiredColumns += 1; }
             }
+            Manager.setRequiredColumns(requiredColumns);
             return alignment;
         }
 
@@ -391,9 +392,9 @@ namespace QMat_Calculator.Interfaces
         /// <param name="requiredColumns"></param>
         /// <param name="qubitHeightValues"></param>
         /// <returns></returns>
-        private UserControl[,] GetFinalAlignment(UserControl[,] alignment, int requiredColumns, List<double> qubitHeightValues)
+        private UserControl[,] GetFinalAlignment(UserControl[,] alignment, List<double> qubitHeightValues)
         {
-            UserControl[,] finalAlignment = new UserControl[qubitHeightValues.Count, requiredColumns];
+            UserControl[,] finalAlignment = new UserControl[qubitHeightValues.Count, Manager.getRequiredColumns()];
             if (finalAlignment.Length == alignment.Length) { finalAlignment = alignment; }
             else
             {
@@ -442,7 +443,7 @@ namespace QMat_Calculator.Interfaces
                                         isFirst = false;
                                     }
 
-                                    while (placedControlledIndex >= requiredColumns)
+                                    while (placedControlledIndex >= Manager.getRequiredColumns())
                                     {
                                         placedControlledIndex--;
                                     }
@@ -487,11 +488,10 @@ namespace QMat_Calculator.Interfaces
             if (alignment == null) return;
 
             // Create a final array with a new column for each 
-            int requiredColumns = alignment.Length / qubitHeightValues.Count;
-            UserControl[,] finalAlignment = GetFinalAlignment(alignment, requiredColumns, qubitHeightValues);
+            UserControl[,] finalAlignment = GetFinalAlignment(alignment, qubitHeightValues);
 
             Manager.setFinalAlignment(finalAlignment);
-            MoveAll(ref finalAlignment, qubitHeightValues, qubitHeightValues.Count, requiredColumns);
+            MoveAll(ref finalAlignment, qubitHeightValues, qubitHeightValues.Count, Manager.getRequiredColumns());
         }
 
         /// <summary>
@@ -557,7 +557,7 @@ namespace QMat_Calculator.Interfaces
         /// <param name="alignment"></param>
         private void MoveAll(ref UserControl[,] alignment, List<double> qubitHeightValues, double rowCount, double colCount)
         {
-            double spacing = MainCircuitCanvas.ActualWidth / (colCount + 1);
+            double spacing = MainCircuitCanvas.ActualWidth / (colCount + 1); // Last one is the edge of the screen.
             for (int row = 0; row < rowCount; row++)
             {
                 for (int col = 0; col < colCount; col++)
