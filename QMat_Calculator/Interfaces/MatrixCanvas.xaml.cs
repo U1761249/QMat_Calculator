@@ -39,6 +39,10 @@ namespace QMat_Calculator.Interfaces
             dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
             dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
             dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             DisplayMatrix(m);
             for (int i = 0; i < Manager.GetSolutionSteps().Count; i++)
@@ -140,8 +144,20 @@ namespace QMat_Calculator.Interfaces
             Label e = new Label();
             e.Content = step.getEquation();
 
+            Label i1 = new Label();
+            i1.Content = step.getInput1().ToString();
+
+            Label f = new Label();
+            f.Content = step.FunctionString();
+
+            Label i2 = new Label();
+            i2.Content = step.getInput2().ToString();
+
+            Label eq = new Label();
+            eq.Content = "=";
+
             Label s = new Label();
-            s.Content = step.ToString();
+            s.Content = step.getAnswer().ToString();
 
             Grid.SetRow(l, dataGrid.RowDefinitions.Count - 1);
             Grid.SetColumn(l, 0);
@@ -149,11 +165,27 @@ namespace QMat_Calculator.Interfaces
             Grid.SetRow(e, dataGrid.RowDefinitions.Count - 1);
             Grid.SetColumn(e, 1);
 
+            Grid.SetRow(i1, dataGrid.RowDefinitions.Count - 1);
+            Grid.SetColumn(i1, 2);
+
+            Grid.SetRow(f, dataGrid.RowDefinitions.Count - 1);
+            Grid.SetColumn(f, 3);
+
+            Grid.SetRow(i2, dataGrid.RowDefinitions.Count - 1);
+            Grid.SetColumn(i2, 4);
+
+            Grid.SetRow(eq, dataGrid.RowDefinitions.Count - 1);
+            Grid.SetColumn(eq, 5);
+
             Grid.SetRow(s, dataGrid.RowDefinitions.Count - 1);
-            Grid.SetColumn(s, 2);
+            Grid.SetColumn(s, 6);
 
             dataGrid.Children.Add(l);
             dataGrid.Children.Add(e);
+            dataGrid.Children.Add(i1);
+            dataGrid.Children.Add(f);
+            dataGrid.Children.Add(i2);
+            dataGrid.Children.Add(eq);
             dataGrid.Children.Add(s);
         }
 
