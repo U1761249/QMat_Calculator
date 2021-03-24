@@ -476,7 +476,10 @@ namespace QMat_Calculator
                 else
                 {
                     currentVal = m;
-                    solutionEquation = $"({tensorCalculations})";
+                    if (tensorCalculations.Contains("⊗"))
+                        solutionEquation = $"({tensorCalculations})";
+                    else
+                        solutionEquation = $"{tensorCalculations}";
                 }
             }
 
