@@ -166,13 +166,13 @@ namespace QMat_Calculator.Interfaces
             Grid.SetColumn(e, 1);
 
             Grid.SetRow(i1, dataGrid.RowDefinitions.Count - 1);
-            Grid.SetColumn(i1, 2);
+            Grid.SetColumn(i1, 4);
 
             Grid.SetRow(f, dataGrid.RowDefinitions.Count - 1);
             Grid.SetColumn(f, 3);
 
             Grid.SetRow(i2, dataGrid.RowDefinitions.Count - 1);
-            Grid.SetColumn(i2, 4);
+            Grid.SetColumn(i2, 2);
 
             Grid.SetRow(eq, dataGrid.RowDefinitions.Count - 1);
             Grid.SetColumn(eq, 5);
