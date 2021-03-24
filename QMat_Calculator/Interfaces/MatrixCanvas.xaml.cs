@@ -38,6 +38,7 @@ namespace QMat_Calculator.Interfaces
             dataGrid.Children.Clear();
             dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
             dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             DisplayMatrix(m);
             for (int i = 0; i < Manager.GetSolutionSteps().Count; i++)
@@ -136,15 +137,23 @@ namespace QMat_Calculator.Interfaces
             Label l = new Label();
             l.Content = ($"Step {stepNumber}: ");
 
+            Label e = new Label();
+            e.Content = step.getEquation();
+
             Label s = new Label();
             s.Content = step.ToString();
 
             Grid.SetRow(l, dataGrid.RowDefinitions.Count - 1);
             Grid.SetColumn(l, 0);
+
+            Grid.SetRow(e, dataGrid.RowDefinitions.Count - 1);
+            Grid.SetColumn(e, 1);
+
             Grid.SetRow(s, dataGrid.RowDefinitions.Count - 1);
             Grid.SetColumn(s, 2);
 
             dataGrid.Children.Add(l);
+            dataGrid.Children.Add(e);
             dataGrid.Children.Add(s);
         }
 

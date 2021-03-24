@@ -25,19 +25,23 @@ namespace QMat_Calculator.Matrices
         private MatrixFunction mf;      // Function used on the inputs.
         private Matrix input2 = null;   // Value of the second input.
         private Matrix answer = null;   // Value of the output from the calculation.
+        private string equation = null;  // String value for the step
 
         public Matrix getInput1() { return input1; }
         public MatrixFunction getFunction() { return mf; }
         public Matrix getInput2() { return input2; }
         public Matrix getAnswer() { return answer; }
+        public string getEquation() { return equation; }
 
-        public SolutionStep(Matrix input1, MatrixFunction mf, Matrix input2, Matrix answer)
+        public SolutionStep(Matrix input1, MatrixFunction mf, Matrix input2, Matrix answer, string equation = "unknown")
         {
             this.input1 = input1;
             this.mf = mf;
             this.input2 = input2;
             this.answer = answer;
+            this.equation = equation;
         }
+
 
         /// <summary>
         /// Print the contents of the step - including inputs, outputs and functions - in a formatted layout.

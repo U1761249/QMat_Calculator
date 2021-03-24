@@ -48,6 +48,11 @@ namespace QMat_Calculator.Circuits
             return matrix.getPreceder();
         }
 
+        public string GetGateLabel()
+        {
+            return (string)this.GetType().InvokeMember("GetGateLabel", System.Reflection.BindingFlags.InvokeMethod, null, this, null);
+        }
+
     }
 
 

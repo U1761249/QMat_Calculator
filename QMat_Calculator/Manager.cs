@@ -428,6 +428,7 @@ namespace QMat_Calculator
             //Console.WriteLine("Solving");
             Matrix currentVal = null; // Current value of the circuit Matrix.
             solutionSteps = new List<SolutionStep>();
+            string solutionEquation = "";
 
             List<CircuitComponent> components = new List<CircuitComponent>();
             foreach (var element in circuitCanvas.MainCircuitCanvas.Children)
@@ -450,26 +451,32 @@ namespace QMat_Calculator
 
             for (int x = xValues.Count - 1; x >= 0; x--)
             {
+                string tensorCalculations = "";
                 // Get a list of all gates at the current X value.
                 List<Gate> currentGates = components.Where(c => c.getPoint().X == xValues[x]).Select(c => c.getGate()).ToList();
                 // Calculate the tensor product of all matrices of the current gates.
                 Matrix m = currentGates[0].getMatrix();
+                if (tensorCalculations == "") tensorCalculations = currentGates[0].GetGateLabel();
                 for (int i = 1; i < currentGates.Count; i++)
                 {
                     Matrix result = Matrix.Tensor(m, currentGates[i].getMatrix());
-                    solutionSteps.Add(new SolutionStep(m, SolutionStep.MatrixFunction.Tensor, currentGates[i].getMatrix(), result));
+                    tensorCalculations = CalculateEquation(tensorCalculations, currentGates[i]);
+                    solutionSteps.Add(new SolutionStep(m, SolutionStep.MatrixFunction.Tensor, currentGates[i].getMatrix(), result, tensorCalculations));
                     m = result;
                 }
+
 
                 if (currentVal != null)                // Multiply the overall matrix by the current tensor product.
                 {
                     Matrix result = Matrix.Multiply(currentVal, m);
-                    solutionSteps.Add(new SolutionStep(currentVal, SolutionStep.MatrixFunction.Multiply, m, result));
+                    solutionEquation = CalculateEquation(solutionEquation, tensorCalculations);
+                    solutionSteps.Add(new SolutionStep(currentVal, SolutionStep.MatrixFunction.Multiply, m, result, solutionEquation));
                     currentVal = result;
                 }
                 else
                 {
                     currentVal = m;
+                    solutionEquation = $"({tensorCalculations})";
                 }
             }
 
@@ -478,6 +485,34 @@ namespace QMat_Calculator
             if (currentVal != null)
                 matrixCanvas.DisplaySolution(currentVal);
             //MessageBox.Show(PrintGateLayout());
+        }
+
+        /// <summary>
+        /// Calculate the new multiplication within the equation.
+        /// </summary>
+        /// <param name="solutionEquation"></param>
+        /// <param name="tensorCalculations"></param>
+        /// <returns></returns>
+        private static string CalculateEquation(string solutionEquation, string tensorCalculations)
+        {
+            // Add parentheses if there is a ⊗
+            if (tensorCalculations.Contains("⊗"))
+                return $"({tensorCalculations}) * {solutionEquation}";
+
+            return $"{tensorCalculations} * {solutionEquation}";
+
+        }
+
+        /// <summary>
+        /// Calculate the new tensor product within the equation.
+        /// </summary>
+        /// <param name="tensorCalculations"></param>
+        /// <param name="gate"></param>
+        /// <returns></returns>
+        private static string CalculateEquation(string tensorCalculations, Gate gate)
+        {
+            return $"{gate.GetGateLabel()} ⊗ {tensorCalculations}";
+
         }
     }
 }
