@@ -42,7 +42,20 @@ namespace QMat_Calculator.Matrices
             this.equation = equation;
         }
 
+        /// <summary>
+        /// Get the number of preceders within the current step.
+        /// </summary>
+        /// <returns></returns>
+        public int getPreceederCount()
+        {
+            int preceders = 0;
 
+            if (input1.getPreceder() != -1) preceders++;
+            if (input2.getPreceder() != -1) preceders++;
+            if (answer.getPreceder() != -1) preceders++;
+
+            return preceders;
+        }
         public string FunctionString()
         {
             switch (mf)

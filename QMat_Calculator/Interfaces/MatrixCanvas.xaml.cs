@@ -33,15 +33,13 @@ namespace QMat_Calculator.Interfaces
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Control the display matrix functionality.
+        /// </summary>
+        /// <param name="m"></param>
         public void DisplaySolution(Matrices.Matrix m)
         {
             dataGrid.Children.Clear();
-            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
             dataGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             DisplayMatrix(m);
@@ -54,42 +52,72 @@ namespace QMat_Calculator.Interfaces
 
         }
 
+        /// <summary>
+        /// Display the solution matrix on the screen.
+        /// </summary>
+        /// <param name="m"></param>
         private void DisplayMatrix(Matrices.Matrix m)
         {
             dataGrid.RowDefinitions.Add(new RowDefinition());
-
             int row = dataGrid.RowDefinitions.Count - 1;
+            int rowCount = 2;
+            if (m.getPreceder() != -1) rowCount++;
 
-            AddLabel($"Solution: ", dataGrid, row, 0);
-            AddLabel(m.ToString(), dataGrid, row, 1);
-
+            Grid grid = NewGrid(dataGrid, row, rowCount);
 
             Border b = new Border();
             b.BorderThickness = new Thickness(2);
             b.BorderBrush = Brushes.Black;
+            Grid.SetRow(b, 0);
 
-            Grid.SetRow(b, dataGrid.RowDefinitions.Count - 1);
-            Grid.SetColumn(b, 1);
 
-            dataGrid.Children.Add(b);
+            AddLabel($"Solution: ", grid, row, 0);
+            if (m.getPreceder() != -1)
+            {
+                AddLabel(FractionConverter.Convert(m.getPreceder()), grid, row, 1);
+                AddLabel(m.ToString(), grid, row, 2);
+                Grid.SetColumn(b, 2);
+            }
+            else
+            {
+                AddLabel(m.ToString(), grid, row, 1);
+                Grid.SetColumn(b, 1);
+            }
 
+            grid.Children.Add(b);
         }
 
+        /// <summary>
+        /// Show the specified step on the screen.
+        /// </summary>
+        /// <param name="step"></param>
+        /// <param name="stepNumber"></param>
         private void DisplayStep(SolutionStep step, int stepNumber)
         {
             dataGrid.RowDefinitions.Add(new RowDefinition());
             int row = dataGrid.RowDefinitions.Count - 1;
+            Grid grid = NewGrid(dataGrid, row);
 
-            AddLabel($"Step {stepNumber}: ", dataGrid, row, 0);
-            AddLabel(step.getEquation(), dataGrid, row, 1);
-            AddLabel(step.getInput2().ToString(), dataGrid, row, 2);
-            AddLabel(step.FunctionString(), dataGrid, row, 3);
-            AddLabel(step.getInput1().ToString(), dataGrid, row, 4);
-            AddLabel("=", dataGrid, row, 5);
-            AddLabel(step.getAnswer().ToString(), dataGrid, row, 6);
+            AddLabel($"Step {stepNumber}: ", grid, 0, 0);
+            AddLabel(step.getEquation(), grid, 0, 1);
+
+            AddLabel(step.getInput2().ToString(), grid, 0, 2);
+            AddLabel(step.FunctionString(), grid, 0, 3);
+
+            AddLabel(step.getInput1().ToString(), grid, 0, 4);
+
+            AddLabel("=", grid, row, 5);
+            AddLabel(step.getAnswer().ToString(), grid, 0, 6);
 
         }
 
+        /// <summary>
+        /// Add a new label to the specified grid location.
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="grid"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
         private void AddLabel(string content, Grid grid, int row, int column)
         {
             Label label = new Label();
@@ -101,5 +129,19 @@ namespace QMat_Calculator.Interfaces
             grid.Children.Add(label);
         }
 
+        private Grid NewGrid(Grid grid, int row, int rowCount = 7)
+        {
+            Grid g = new Grid();
+            for (int i = 0; i < rowCount; i++)
+            {
+                g.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+
+            Grid.SetRow(g, row);
+            Grid.SetColumn(g, 0);
+            grid.Children.Add(g);
+
+            return g;
+        }
     }
 }
