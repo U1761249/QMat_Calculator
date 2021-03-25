@@ -96,18 +96,37 @@ namespace QMat_Calculator.Interfaces
         {
             dataGrid.RowDefinitions.Add(new RowDefinition());
             int row = dataGrid.RowDefinitions.Count - 1;
-            Grid grid = NewGrid(dataGrid, row);
+            int rowCount = 7 + +step.getPreceederCount();
+            Grid grid = NewGrid(dataGrid, row, rowCount);
+            int colOffset = 0;
 
             AddLabel($"Step {stepNumber}: ", grid, 0, 0);
             AddLabel(step.getEquation(), grid, 0, 1);
 
-            AddLabel(step.getInput2().ToString(), grid, 0, 2);
-            AddLabel(step.FunctionString(), grid, 0, 3);
+            if (step.getInput2().getPreceder() != -1)
+            {
+                AddLabel(FractionConverter.Convert(step.getInput2().getPreceder()), grid, 0, 2 + colOffset);
+                colOffset++;
+            }
+            AddLabel(step.getInput2().ToString(), grid, 0, 2 + colOffset);
+            AddLabel(step.FunctionString(), grid, 0, 3 + colOffset);
 
-            AddLabel(step.getInput1().ToString(), grid, 0, 4);
+            if (step.getInput1().getPreceder() != -1)
+            {
+                AddLabel(FractionConverter.Convert(step.getInput1().getPreceder()), grid, 0, 4 + colOffset);
+                colOffset++;
+            }
 
-            AddLabel("=", grid, row, 5);
-            AddLabel(step.getAnswer().ToString(), grid, 0, 6);
+            AddLabel(step.getInput1().ToString(), grid, 0, 4 + colOffset);
+            AddLabel("=", grid, row, 5 + colOffset);
+
+            if (step.getAnswer().getPreceder() != -1)
+            {
+                AddLabel(FractionConverter.Convert(step.getAnswer().getPreceder()), grid, 0, 6 + colOffset);
+                colOffset++;
+            }
+
+            AddLabel(step.getAnswer().ToString(), grid, 0, 6 + colOffset);
 
         }
 
