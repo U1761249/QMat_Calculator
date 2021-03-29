@@ -38,7 +38,6 @@ namespace QMat_Calculator.Drawable
             UpdateSize();
 
         }
-        public QubitComponent() { }
         public QubitComponent(Qubit q, Point p)
         {
             InitializeComponent();

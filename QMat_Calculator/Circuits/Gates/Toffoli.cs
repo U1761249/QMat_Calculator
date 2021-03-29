@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits.Gates
 {
-    class Toffoli : Gate
+    public class Toffoli : Gate
     {
         public Toffoli()
         {

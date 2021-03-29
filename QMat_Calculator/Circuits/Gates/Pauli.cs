@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits.Gates
 {
-    class Pauli : Gate
+    public class Pauli : Gate
     {
         public enum PauliType { X, Y, Z };
         private PauliType gateType;

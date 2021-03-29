@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits.Gates
 {
-    class SqrtNOT : Gate
+    public class SqrtNOT : Gate
     {
         public SqrtNOT()
         {

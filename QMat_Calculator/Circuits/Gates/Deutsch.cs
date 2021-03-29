@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits.Gates
 {
-    class Deutsch : Gate
+    public class Deutsch : Gate
     {
         //TODO: Find a matrix for the Deutsch gate.
     }

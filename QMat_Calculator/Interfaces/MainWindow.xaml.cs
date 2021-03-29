@@ -101,10 +101,6 @@ namespace QMat_Calculator
         {
             get { return new SolveKey(); }
         }
-        public ICommand ShowDetailsCommand
-        {
-            get { return new ShowDetailsKey(); }
-        }
     }
 
     /// <summary>
@@ -186,18 +182,4 @@ namespace QMat_Calculator
         }
     }
 
-    public class ShowDetailsKey : ICommand
-    {
-        public event EventHandler CanExecuteChanged;
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public void Execute(object parameter)
-        {
-            //Manager.setDetails();
-        }
-    }
 }

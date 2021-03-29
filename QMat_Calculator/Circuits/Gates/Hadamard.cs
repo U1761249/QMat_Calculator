@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits.Gates
 {
-    class Hadamard : Gate
+    public class Hadamard : Gate
     {
 
         public Hadamard()

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace QMat_Calculator.Circuits.Gates
 {
-    class CNOT : Gate
+    public class CNOT : Gate
     {
         public CNOT()
         {
