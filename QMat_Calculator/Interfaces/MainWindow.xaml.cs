@@ -46,6 +46,10 @@ namespace QMat_Calculator
             MatrixCanvas mc = new MatrixCanvas();
             Manager.setMatrixCanvas(mc);
             matrixCanvasBorder.Child = mc;
+
+            Matrix value = new Hadamard().getMatrix();
+            for (int i = 0; i < 4; i++) { value = Matrix.Tensor(value, new Hadamard().getMatrix()); }
+            Console.WriteLine(value.ToString());
         }
 
 

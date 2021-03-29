@@ -37,12 +37,56 @@ namespace QMat_Calculator.UnitTest
             return qubits;
         }
 
-
-        [SetUp]
-        public void Setup()
+        /// <summary>
+        /// Test the use of a 2x2 identity matrix on a hadamard gate  - Tensor I by H.
+        /// </summary>
+        [Test]
+        public void TestIdentityMatrix_HxI()
         {
+            Matrix value = Matrix.Tensor(new Hadamard().getMatrix(), Matrix.CreateIdentityMatrix(2));
+
+            Complex[,] data = new Complex[4, 4];
+            data[0, 0] = 1;
+            data[0, 2] = 1;
+            data[1, 1] = 1;
+            data[1, 3] = 1;
+            data[2, 0] = 1;
+            data[2, 2] = -1;
+            data[3, 1] = 1;
+            data[3, 3] = -1;
+
+            Matrix expected = new Matrix(4, 4, -1, data);
+
+            // Test the data as preceder value can be incorrect due to data rounding.
+            Assert.AreEqual(expected.getData(), value.getData());
 
         }
+
+        /// <summary>
+        /// Test the use of a 2x2 identity matrix on a hadamard gate - Tensor I by H.
+        /// </summary>
+        [Test]
+        public void TestIdentityMatrix_IxH()
+        {
+            Matrix value = Matrix.Tensor(Matrix.CreateIdentityMatrix(2), new Hadamard().getMatrix());
+
+            Complex[,] data = new Complex[4, 4];
+            data[0, 0] = 1;
+            data[0, 1] = 1;
+            data[1, 0] = 1;
+            data[1, 1] = -1;
+            data[2, 2] = 1;
+            data[2, 3] = 1;
+            data[3, 2] = 1;
+            data[3, 3] = -1;
+
+            Matrix expected = new Matrix(4, 4, -1, data);
+
+            // Test the data as preceder value can be incorrect due to data rounding.
+            Assert.AreEqual(expected.getData(), value.getData());
+
+        }
+
 
         /// <summary>
         /// Confirm that multiplying two Hadamard gates produces an expected output
@@ -202,5 +246,95 @@ namespace QMat_Calculator.UnitTest
             Assert.AreEqual(expected.getData(), value.getData());
         }
 
+        /// <summary>
+        /// Test the solution of the entire circuit defined above.
+        /// </summary>
+        [Test]
+        public void TestCircuitSolution()
+        {
+            List<Qubit> qubits = createCircuit();
+
+            Matrix[,] values = new Matrix[2, 3];
+            values[0, 0] = qubits[0].getGates()[0].getMatrix();
+            values[0, 1] = qubits[0].getGates()[1].getMatrix();
+            values[0, 2] = qubits[0].getGates()[2].getMatrix();
+            values[1, 0] = qubits[1].getGates()[0].getMatrix();
+            values[1, 1] = qubits[1].getGates()[1].getMatrix();
+            values[1, 2] = qubits[1].getGates()[2].getMatrix();
+
+            Matrix value = null;
+            for (int col = 0; col < 3; col++)
+            {
+                Matrix colVal = Matrix.Tensor(values[0, col], values[1, col]); // Calculate the tensor product of all gates in the column
+
+                // Assign the column value as the value, or multiply the current value with the column value.
+                if (value == null) value = colVal;
+                else value = Matrix.Multiply(value, colVal);
+            }
+
+            Complex[,] data = new Complex[4, 4];
+            data[0, 1] = new Complex(0, 4);
+            data[1, 0] = new Complex(0, -4);
+            data[2, 3] = new Complex(0, -4);
+            data[3, 2] = new Complex(0, 4);
+
+            Matrix expected = new Matrix(4, 4, -1, data);
+
+            // Test the data as preceder value can be incorrect due to data rounding.
+            Assert.AreEqual(expected.getData(), value.getData());
+        }
+
+        /// <summary>
+        /// Test the output of multiple tensor products, in this case 5 hadamard gates
+        /// </summary>
+        [Test]
+        public void TestTensorOf5Hadamard()
+        {
+            Matrix value = new Hadamard().getMatrix();
+            for (int i = 0; i < 4; i++) { value = Matrix.Tensor(value, new Hadamard().getMatrix()); }
+
+            Console.WriteLine(value.ToString());
+
+            Complex[,] data = new Complex[32, 32] { // This is a sin, but the easiest way to confirm the output.
+            {1 ,  1 ,  1 ,  1 ,  1 ,  1  , 1 ,  1 ,  1 ,  1 ,  1  , 1 ,  1  , 1  , 1  , 1 ,  1  , 1 ,  1 ,  1 ,  1 ,  1  , 1 ,  1 ,  1 ,  1 ,  1,   1,   1  , 1  , 1,   1   },
+            {1 ,  -1,  1 ,  -1,  1 ,  -1 ,1 ,  -1,  1 ,  -1,  1 ,  -1 , 1 ,  -1,  1  , -1 , 1 ,  -1 , 1 ,  -1,  1 ,  -1 , 1 ,  -1,  1 ,  -1 , 1 ,  -1 , 1  , -1 , 1  , -1  } ,
+            {1 ,  1 ,  -1,  -1,  1 ,  1  ,-1,  -1,  1 ,  1 ,  -1,  -1,  1 ,  1 ,  -1 , -1 , 1 ,  1  , -1,  -1,  1 ,  1  , -1,  -1,  1 ,  1  , -1,  -1 , 1  , 1  , -1 , -1  } ,
+            {1 ,  -1,  -1,  1 ,  1 ,  -1 ,-1,  1 ,  1 ,  -1,  -1,  1 ,  1 ,  -1,  -1 , 1  , 1 ,  -1 , -1,  1 ,  1 ,  -1 , -1,  1 ,  1 ,  -1 , -1,  1  , 1  , -1 , -1 , 1   } ,
+            {1 ,  1 ,  1 ,  1 ,  -1,  -1 ,-1,  -1,  1 ,  1 ,  1 ,  1 ,  -1,  -1,  -1 , -1 , 1 ,  1  , 1 ,  1 ,  -1,  -1 , -1,  -1,  1 ,  1  , 1 ,  1  , -1 , -1 , -1 , -1  } ,
+            {1 ,  -1,  1 ,  -1,  -1,  1  ,-1,  1 ,  1 ,  -1,  1 ,  -1,  -1,  1 ,  -1 , 1  , 1 ,  -1 , 1 ,  -1,  -1,  1  , -1,  1 ,  1 ,  -1 , 1 ,  -1 , -1 , 1  , -1 , 1   } ,
+            {1 ,  1 ,  -1,  -1,  -1,  -1 ,1 ,  1 ,  1 ,  1 ,  -1,  -1,  -1,  -1,  1  , 1  , 1 ,  1  , -1,  -1,  -1,  -1 , 1 ,  1 ,  1 ,  1  , -1,  -1 , -1 , -1 , 1  , 1   } ,
+            {1 ,  -1,  -1,  1 ,  -1,  1  ,1 ,  -1,  1 ,  -1,  -1,  1 ,  -1,  1 ,  1  , -1 , 1 ,  -1 , -1,  1 ,  -1,  1  , 1 ,  -1,  1 ,  -1 , -1,  1  , -1 , 1  , 1  , -1  } ,
+            {1 ,  1 ,  1 ,  1 ,  1 ,  1  ,1 ,  1 ,  -1,  -1,  -1,  -1,  -1,  -1,  -1 , -1 , 1 ,  1  , 1 ,  1 ,  1 ,  1  , 1 ,  1 ,  -1,  -1 , -1,  -1 , -1 , -1 , -1 , -1  } ,
+            {1 ,  -1,  1 ,  -1,  1 ,  -1 ,1 ,  -1,  -1,  1 ,  -1,  1 ,  -1,  1 ,  -1 , 1  , 1 ,  -1 , 1 ,  -1,  1 ,  -1 , 1 ,  -1,  -1,  1  , -1,  1  , -1 , 1  , -1 , 1   } ,
+            {1 ,  1 ,  -1,  -1,  1 ,  1  ,-1,  -1,  -1,  -1,  1 ,  1 ,  -1,  -1,  1  , 1  , 1 ,  1  , -1,  -1,  1 ,  1  , -1,  -1,  -1,  -1 , 1 ,  1  , -1 , -1 , 1  , 1   } ,
+            {1 ,  -1,  -1,  1 ,  1 ,  -1 ,-1,  1 ,  -1,  1 ,  1 ,  -1,  -1,  1 ,  1  , -1 , 1 ,  -1 , -1,  1 ,  1 ,  -1 , -1,  1 ,  -1,  1  , 1 ,  -1 , -1 , 1  , 1  , -1  } ,
+            {1 ,  1 ,  1 ,  1 ,  -1,  -1 ,-1,  -1,  -1,  -1,  -1,  -1,  1 ,  1 ,  1  , 1  , 1 ,  1  , 1 ,  1 ,  -1,  -1 , -1,  -1,  -1,  -1 , -1,  -1 , 1  , 1  , 1  , 1   } ,
+            {1 ,  -1,  1 ,  -1,  -1,  1  ,-1,  1 ,  -1,  1 ,  -1,  1 ,  1 ,  -1,  1  , -1 , 1 ,  -1 , 1 ,  -1,  -1,  1  , -1,  1 ,  -1,  1  , -1,  1  , 1  , -1 , 1  , -1  } ,
+            {1 ,  1 ,  -1,  -1,  -1,  -1 ,1 ,  1 ,  -1,  -1,  1 ,  1 ,  1 ,  1 ,  -1 , -1 , 1 ,  1  , -1,  -1,  -1,  -1 , 1 ,  1 ,  -1,  -1 , 1 ,  1  , 1  , 1  , -1 , -1  } ,
+            {1 ,  -1,  -1,  1 ,  -1,  1  ,1 ,  -1,  -1,  1 ,  1 ,  -1,  1 ,  -1,  -1 , 1  , 1 ,  -1 , -1,  1 ,  -1,  1  , 1 ,  -1,  -1,  1  , 1 ,  -1 , 1  , -1 , -1 , 1   } ,
+            {1 ,  1 ,  1 ,  1 ,  1 ,  1  ,1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1  , 1  , -1,  -1 , -1,  -1,  -1,  -1 , -1,  -1,  -1,  -1 , -1,  -1 , -1 , -1 , -1 , -1  } ,
+            {1 ,  -1,  1 ,  -1,  1 ,  -1 ,1 ,  -1,  1 ,  -1,  1 ,  -1,  1 ,  -1,  1  , -1 , -1,  1  , -1,  1 ,  -1,  1  , -1,  1 ,  -1,  1  , -1,  1  , -1 , 1  , -1 , 1   } ,
+            {1 ,  1 ,  -1,  -1,  1 ,  1  ,-1,  -1,  1 ,  1 ,  -1,  -1,  1 ,  1 ,  -1 , -1 , -1,  -1 , 1 ,  1 ,  -1,  -1 , 1 ,  1 ,  -1,  -1 , 1 ,  1  , -1 , -1 , 1  , 1   } ,
+            {1 ,  -1,  -1,  1 ,  1 ,  -1 ,-1,  1 ,  1 ,  -1,  -1,  1 ,  1 ,  -1,  -1 , 1  , -1,  1  , 1 ,  -1,  -1,  1  , 1 ,  -1,  -1,  1  , 1 ,  -1 , -1 , 1  , 1  , -1  } ,
+            {1 ,  1 ,  1 ,  1 ,  -1,  -1 ,-1,  -1,  1 ,  1 ,  1 ,  1 ,  -1,  -1,  -1 , -1 , -1,  -1 , -1,  -1,  1 ,  1  , 1 ,  1 ,  -1,  -1 , -1,  -1 , 1  , 1  , 1  , 1   } ,
+            {1 ,  -1,  1 ,  -1,  -1,  1  ,-1,  1 ,  1 ,  -1,  1 ,  -1,  -1,  1 ,  -1 , 1  , -1,  1  , -1,  1 ,  1 ,  -1 , 1 ,  -1,  -1,  1  , -1,  1  , 1  , -1 , 1  , -1  } ,
+            {1 ,  1 ,  -1,  -1,  -1,  -1 ,1 ,  1 ,  1 ,  1 ,  -1,  -1,  -1,  -1,  1  , 1  , -1,  -1 , 1 ,  1 ,  1 ,  1  , -1,  -1,  -1,  -1 , 1 ,  1  , 1  , 1  , -1 , -1  } ,
+            {1 ,  -1,  -1,  1 ,  -1,  1  ,1 ,  -1,  1 ,  -1,  -1,  1 ,  -1,  1 ,  1  , -1 , -1,  1  , 1 ,  -1,  1 ,  -1 , -1,  1 ,  -1,  1  , 1 ,  -1 , 1  , -1 , -1 , 1   } ,
+            {1 ,  1 ,  1 ,  1 ,  1 ,  1  ,1 ,  1 ,  -1,  -1,  -1,  -1,  -1,  -1,  -1 , -1 , -1,  -1 , -1,  -1,  -1,  -1 , -1,  -1,  1 ,  1  , 1 ,  1  , 1  , 1  , 1  , 1   } ,
+            {1 ,  -1,  1 ,  -1,  1 ,  -1 ,1 ,  -1,  -1,  1 ,  -1,  1 ,  -1,  1 ,  -1 , 1  , -1,  1  , -1,  1 ,  -1,  1  , -1,  1 ,  1 ,  -1 , 1 ,  -1 , 1  , -1 , 1  , -1  } ,
+            {1 ,  1 ,  -1,  -1,  1 ,  1  ,-1,  -1,  -1,  -1,  1 ,  1 ,  -1,  -1,  1  , 1  , -1,  -1 , 1 ,  1 ,  -1,  -1 , 1 ,  1 ,  1 ,  1  , -1,  -1 , 1  , 1  , -1 , -1  } ,
+            {1 ,  -1,  -1,  1 ,  1 ,  -1 ,-1,  1 ,  -1,  1 ,  1 ,  -1,  -1,  1 ,  1  , -1 , -1,  1  , 1 ,  -1,  -1,  1  , 1 ,  -1,  1 ,  -1 , -1,  1  , 1  , -1 , -1 , 1   } ,
+            {1 ,  1 ,  1 ,  1 ,  -1,  -1 ,-1,  -1,  -1,  -1,  -1,  -1,  1 ,  1 ,  1  , 1  , -1,  -1 , -1,  -1,  1 ,  1  , 1 ,  1 ,  1 ,  1  , 1 ,  1  , -1 , -1 , -1 , -1  } ,
+            {1 ,  -1,  1 ,  -1,  -1,  1  ,-1,  1 ,  -1,  1 ,  -1,  1 ,  1 ,  -1,  1  , -1 , -1,  1  , -1,  1 ,  1 ,  -1 , 1 ,  -1,  1 ,  -1 , 1 ,  -1 , -1 , 1  , -1 , 1   } ,
+            {1 ,  1 ,  -1,  -1,  -1,  -1 ,1 ,  1 ,  -1,  -1,  1 ,  1 ,  1 ,  1 ,  -1 , -1 , -1,  -1 , 1 ,  1 ,  1 ,  1  , -1,  -1,  1 ,  1  , -1,  -1 , -1 , -1 , 1  , 1   } ,
+            { 1 , -1,  -1,  1 ,  -1,  1  ,1 ,  -1,  -1,  1 ,  1 ,  -1,  1 ,  -1,  -1 , 1  , -1,  1  , 1 ,  -1,  1 ,  -1 , -1,  1 ,  1 ,  -1 , -1,  1  , -1 , 1  , 1  , -1 }
+            };
+
+
+            Matrix expected = new Matrix(4, 4, -1, data);
+
+            // Test the data as preceder value can be incorrect due to data rounding.
+            Assert.AreEqual(expected.getData(), value.getData());
+        }
     }
 }
