@@ -50,10 +50,7 @@ namespace QMat_Calculator.UnitTest
         [Test]
         public void TestCalculation_HxH()
         {
-            Hadamard H = new Hadamard();
-
-            Matrix M = H.getMatrix();
-            Matrix value = Matrix.Multiply(M, M);
+            Matrix value = Matrix.Multiply(new Hadamard().getMatrix(), new Hadamard().getMatrix());
 
             Complex[,] data = new Complex[2, 2];
             data[0, 0] = 2;
@@ -65,6 +62,31 @@ namespace QMat_Calculator.UnitTest
 
             // Test the data as preceder value can be incorrect due to data rounding.
             Assert.AreEqual(expected.getData(), value.getData());
+        }
+
+        /// <summary>
+        /// Confirm that Identity Matrices are correctly used to correct the size of a matrix for multiplication.
+        /// </summary>
+        [Test]
+        public void TestCalculation_HxToffoli()
+        {
+            Matrix value = Matrix.Multiply(new Hadamard().getMatrix(), new Toffoli().getMatrix());
+
+            Complex[,] data = new Complex[4, 4];
+            data[0, 0] = 1;
+            data[0, 2] = 1;
+            data[1, 1] = 1;
+            data[1, 3] = 1;
+            data[2, 0] = 1;
+            data[2, 2] = -1;
+            data[3, 1] = 1;
+            data[3, 3] = -1;
+
+            Matrix expected = new Matrix(4, 4, -1, data);
+
+            // Test the data as preceder value can be incorrect due to data rounding.
+            Assert.AreEqual(expected.getData(), value.getData());
+
         }
 
         /// <summary>
@@ -121,5 +143,64 @@ namespace QMat_Calculator.UnitTest
             // Test the data as preceder value can be incorrect due to data rounding.
             Assert.AreEqual(expected.getData(), value.getData());
         }
+
+        /// <summary>
+        /// Test the function of the Tensor Product on gates of matching size
+        /// </summary>
+        [Test]
+        public void TestTensorProduct()
+        {
+
+            Matrix value = Matrix.Tensor(new Hadamard(), new Pauli(Pauli.PauliType.Z));
+
+            Complex[,] data = new Complex[4, 4];
+            data[0, 0] = 1;
+            data[0, 2] = 1;
+            data[1, 1] = -1;
+            data[1, 3] = -1;
+            data[2, 0] = 1;
+            data[2, 2] = -1;
+            data[3, 1] = -1;
+            data[3, 3] = 1;
+
+            Matrix expected = new Matrix(4, 4, -1, data);
+
+            // Test the data as preceder value can be incorrect due to data rounding.
+            Assert.AreEqual(expected.getData(), value.getData());
+        }
+
+        /// <summary>
+        /// Test the function of the Tensor Product on gates of different sizes size
+        /// </summary>
+        [Test]
+        public void TestTensorProductDifferentSizes()
+        {
+
+            Matrix value = Matrix.Tensor(new Hadamard(), new Toffoli());
+
+            Complex[,] data = new Complex[8, 8];
+            data[0, 0] = 1;
+            data[0, 4] = 1;
+            data[1, 1] = 1;
+            data[1, 5] = 1;
+            data[2, 2] = 1;
+            data[2, 6] = 1;
+            data[3, 3] = 1;
+            data[3, 7] = 1;
+            data[4, 4] = -1;
+            data[4, 0] = 1;
+            data[5, 5] = -1;
+            data[5, 1] = 1;
+            data[6, 6] = -1;
+            data[6, 2] = 1;
+            data[7, 7] = -1;
+            data[7, 3] = 1;
+
+            Matrix expected = new Matrix(4, 4, -1, data);
+
+            // Test the data as preceder value can be incorrect due to data rounding.
+            Assert.AreEqual(expected.getData(), value.getData());
+        }
+
     }
 }
