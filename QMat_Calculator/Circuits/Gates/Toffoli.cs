@@ -41,7 +41,7 @@ namespace QMat_Calculator.Circuits.Gates
             data[6, 7] = 1;
             data[7, 6] = 1;
 
-            Matrix m = new Matrix(4, 4, data);
+            Matrix m = new Matrix(8, 8, data);
             this.setMatrix(m);
         }
 

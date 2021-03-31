@@ -137,7 +137,7 @@ namespace QMat_Calculator.UnitTest
         /// Test the multiplication of multiple matrices within gates on a qubit with no imaginary numbers
         /// </summary>
         [Test]
-        public void TestSolveQubit1()
+        public void TestSolveQubit_NoImaginary()
         {
             // NOTE: This is not how the circuit is solved, but a test of the maths for the solution process.
 
@@ -165,7 +165,7 @@ namespace QMat_Calculator.UnitTest
         /// Test the multiplication of multiple matrices within gates on a qubit including imaginary numbers
         /// </summary>
         [Test]
-        public void TestSolveQubit2()
+        public void TestSolveQubit_WithImaginary()
         {
 
             Qubit qubit = createCircuit()[1]; // Get the second Qubit of the circuit     H    Y    H

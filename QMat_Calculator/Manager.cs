@@ -426,7 +426,7 @@ namespace QMat_Calculator
         public static void Solve()
         {
             //Console.WriteLine("Solving");
-            Matrix currentVal = null; // Current value of the circuit Matrix.
+            Matrix totalMatrix = null; // Current value of the circuit Matrix.
             solutionSteps = new List<SolutionStep>();
             string solutionEquation = "";
 
@@ -455,27 +455,27 @@ namespace QMat_Calculator
                 // Get a list of all gates at the current X value.
                 List<Gate> currentGates = components.Where(c => c.getPoint().X == xValues[x]).Select(c => c.getGate()).ToList();
                 // Calculate the tensor product of all matrices of the current gates.
-                Matrix m = currentGates[0].getMatrix();
+                Matrix stepMatrix = currentGates[0].getMatrix();
                 if (tensorCalculations == "") tensorCalculations = currentGates[0].GetGateLabel();
                 for (int i = 1; i < currentGates.Count; i++)
                 {
-                    Matrix result = Matrix.Tensor(m, currentGates[i].getMatrix());
+                    Matrix result = Matrix.Tensor(stepMatrix, currentGates[i].getMatrix());
                     tensorCalculations = CalculateEquation(tensorCalculations, currentGates[i]);
-                    solutionSteps.Add(new SolutionStep(m, SolutionStep.MatrixFunction.Tensor, currentGates[i].getMatrix(), result, tensorCalculations));
-                    m = result;
+                    solutionSteps.Add(new SolutionStep(stepMatrix, SolutionStep.MatrixFunction.Tensor, currentGates[i].getMatrix(), result, tensorCalculations));
+                    stepMatrix = result;
                 }
 
 
-                if (currentVal != null)                // Multiply the overall matrix by the current tensor product.
+                if (totalMatrix != null)                // Multiply the overall matrix by the current tensor product.
                 {
-                    Matrix result = Matrix.Multiply(currentVal, m);
+                    Matrix result = Matrix.Multiply(totalMatrix, stepMatrix);
                     solutionEquation = CalculateEquation(solutionEquation, tensorCalculations);
-                    solutionSteps.Add(new SolutionStep(currentVal, SolutionStep.MatrixFunction.Multiply, m, result, solutionEquation));
-                    currentVal = result;
+                    solutionSteps.Add(new SolutionStep(totalMatrix, SolutionStep.MatrixFunction.Multiply, stepMatrix, result, solutionEquation));
+                    totalMatrix = result;
                 }
                 else
                 {
-                    currentVal = m;
+                    totalMatrix = stepMatrix;
                     if (tensorCalculations.Contains("⊗"))
                         solutionEquation = $"({tensorCalculations})";
                     else
@@ -485,8 +485,8 @@ namespace QMat_Calculator
 
             //Console.Write(currentVal.ToString(true));
 
-            if (currentVal != null)
-                matrixCanvas.DisplaySolution(currentVal);
+            if (totalMatrix != null)
+                matrixCanvas.DisplaySolution(totalMatrix);
             //MessageBox.Show(PrintGateLayout());
         }
 
