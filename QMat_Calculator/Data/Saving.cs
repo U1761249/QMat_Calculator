@@ -301,7 +301,7 @@ namespace QMat_Calculator.Data
             { File.Delete(path); }
 
             File.WriteAllText(path, data);
-            Process.Start("notepad++.exe", path);
+            //Process.Start("notepad++.exe", path);
         }
     }
 }
